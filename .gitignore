@@ -1,1 +1,6 @@
 a-env
+Amazon exports
+__pycache__
+build
+dist
+main_amazon.spec
