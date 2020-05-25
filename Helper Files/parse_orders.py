@@ -138,15 +138,23 @@ class ParseOrders():
             logging.warning(f'Error retrieving ship-country in order: {order}, returning empty string. Error: {e}')
             return ''
 
+    def get_output_dir(self):
+        '''returns target dir for output files'''
+        # pyinstaller sets 'frozen' attr to sys module, Identifying run-type .exe/.py
+        if getattr(sys, 'frozen', False):
+            curr_folder = os.path.dirname(sys.executable)
+        else:
+            curr_folder = os.path.dirname(os.path.abspath(__file__))
+        return get_level_up_abspath(curr_folder)
+
     def prepare_filepaths(self):
         '''creates cls variables of files abs paths to be created one dir above this script dir'''
-        curr_folder = os.path.dirname(os.path.abspath(__file__))
-        parent_dir = get_level_up_abspath(curr_folder)
+        output_dir = self.get_output_dir()
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
-        self.same_buyers_filename = os.path.join(parent_dir, f'Same Buyer Orders {date_stamp}.txt')
-        self.etonas_filename = os.path.join(parent_dir, f'Etonas-Amazon {date_stamp}.xlsx')
-        self.dpost_filename = os.path.join(parent_dir, f'DPost-Amazon {date_stamp}.csv')
-        self.ups_filename = os.path.join(parent_dir, f'UPS-Amazon {date_stamp}.csv')
+        self.same_buyers_filename = os.path.join(output_dir, f'Same Buyer Orders {date_stamp}.txt')
+        self.etonas_filename = os.path.join(output_dir, f'Etonas-Amazon {date_stamp}.xlsx')
+        self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
+        self.ups_filename = os.path.join(output_dir, f'UPS-Amazon {date_stamp}.csv')
 
     def export_dpost(self):
         if self.dpost_orders:

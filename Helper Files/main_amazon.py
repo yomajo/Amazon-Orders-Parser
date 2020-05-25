@@ -6,14 +6,18 @@ import sys
 import csv
 import os
 
-# Logging config:
-log_path = os.path.join(os.path.dirname(__file__), 'loading_amazon_orders.log') 
-logging.basicConfig(filename=log_path, level=logging.INFO)
 
 # GLOBAL VARIABLES
+TESTING = False
+EXPECTED_SYS_ARGS = 3
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
-EXPECTED_SYS_ARGS = 3
+TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\amzn2.txt'
+EXEC_DIR = os.path.dirname(__file__) if TESTING else os.path.dirname(sys.executable)
+
+# Logging config:
+log_path = os.path.join(EXEC_DIR, 'loading_amazon_orders.log')
+logging.basicConfig(filename=log_path, level=logging.INFO)
 
 
 def get_list_of_order_dicts(source_file, filter_order_id):
@@ -87,16 +91,6 @@ def main(testing, amazon_export_txt_path):
         sys.exit()
     logging.info(f'\nRUN ENDED: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
     
-def compile_correct_path():
-    if getattr(sys, 'frozen', False):
-        application_path = sys._MEIPASS
-    else:
-        application_path = os.path.dirname(os.path.abspath(__file__))
-    return application_path
 
 if __name__ == "__main__":
-    TESTING = False
-    txt_path = r'C:\Coding\Amazon Orders Parser\Amazon exports\amzn2.txt'
-    executable_path = compile_correct_path()
-    logging.info(f'EXECUTABLE PATH: {executable_path}')
-    main(TESTING, txt_path)
+    main(TESTING, TEST_AMZN_EXPORT_TXT)
