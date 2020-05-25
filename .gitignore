@@ -4,3 +4,4 @@ __pycache__
 build
 dist
 main_amazon.spec
+loading_amazon_orders.log
