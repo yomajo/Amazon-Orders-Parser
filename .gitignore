@@ -5,3 +5,6 @@ build
 dist
 main_amazon.spec
 loading_amazon_orders.log
+amzn_orders.db
+amzn_orders_b4lrun.db
+amzn_orders_lrun.db
