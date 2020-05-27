@@ -1,6 +1,7 @@
+from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir
 from amzn_parser_constants import DPOST_HEADERS, DPOST_HEADERS_MAPPING, DPOST_FIXED_VALUES
-from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price
 from etonas_xlsx_exporter import EtonasExporter
+from orders_db import OrdersDB
 from datetime import datetime
 import logging
 import sys
@@ -17,7 +18,10 @@ DPOST_REF_CHARLIMIT_PER_CELL = 28
 
 
 class ParseOrders():
-    '''Input: orders as list of dicts, outputs csv, xlsx files based on shipment method'''
+    '''Input: orders as list of dicts, outputs csv, xlsx files based on shipment method
+    
+    export_orders(testing=False) : main method, sorts orders by shipment company, if testing flag is False,
+    exports files with appropriate orders data and adds all passed orders when creating class to database'''
     
     def __init__(self, all_orders : list):
         self.all_orders = all_orders
@@ -138,18 +142,9 @@ class ParseOrders():
             logging.warning(f'Error retrieving ship-country in order: {order}, returning empty string. Error: {e}')
             return ''
 
-    def get_output_dir(self):
-        '''returns target dir for output files'''
-        # pyinstaller sets 'frozen' attr to sys module, Identifying run-type .exe/.py
-        if getattr(sys, 'frozen', False):
-            curr_folder = os.path.dirname(sys.executable)
-        else:
-            curr_folder = os.path.dirname(os.path.abspath(__file__))
-        return get_level_up_abspath(curr_folder)
-
-    def prepare_filepaths(self):
+    def _prepare_filepaths(self):
         '''creates cls variables of files abs paths to be created one dir above this script dir'''
-        output_dir = self.get_output_dir()
+        output_dir = get_output_dir()
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'Same Buyer Orders {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'Etonas-Amazon {date_stamp}.xlsx')
@@ -172,19 +167,26 @@ class ParseOrders():
         if self.etonas_orders:
             EtonasExporter(self.etonas_orders, self.etonas_filename).export()
             logging.info(f'XLSX {self.etonas_filename} created. Orders inside: {len(self.etonas_orders)}')
+    
+    def push_orders_to_db(self):
+        '''adds all orders in this class to orders table in db'''
+        orders_db = OrdersDB(self.all_orders)
+        orders_db.add_orders_to_db()
+        logging.info(f'Total of {len(self.all_orders)} new orders have been added to database, after exports were completed')
 
     def export_orders(self, testing=False):
         '''Summing up tasks inside ParseOrders class'''
-        self.prepare_filepaths()
+        self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         self.export_same_buyer_details()
         if testing:
             logging.info(f'Suspended export of orders due to flag testing value: {testing}')
-            print(f'Suspended export of orders due to flag testing value: {testing}')
+            print(f'Suspended export and transfer to DB of orders due to flag testing value: {testing}')
             return
         self.export_dpost()
         self.export_ups()
         self.export_etonas()
+        self.push_orders_to_db()
 
 if __name__ == "__main__":
     pass
