@@ -1,5 +1,6 @@
 from etonas_xlsx_exporter import EtonasExporter
 from parse_orders import ParseOrders
+from orders_db import OrdersDB
 from datetime import datetime
 import logging
 import sys
@@ -63,6 +64,13 @@ def parse_txt_file(data_file):
         logging.critical(f'Error reading txt source {e}')
         sys.exit()
 
+def get_new_orders(orders:list) -> list:
+    '''returns a list of order dicts (same as passed data structure) that are not yet in database, requiring further processing'''
+    orders_db = OrdersDB(orders)
+    new_orders = orders_db.get_new_orders_only()
+    logging.info(f'Loaded txt contains: {len(orders)}. Further processing: {len(new_orders)} orders')
+    return new_orders
+
 def parse_args():
     if len(sys.argv) == EXPECTED_SYS_ARGS:
         txt_path, filter_order_id = sys.argv[1], sys.argv[2]
@@ -83,7 +91,8 @@ def main(testing, amazon_export_txt_path):
     if os.path.exists(txt_path):
         logging.info('file exists, continuing to processing...')
         orders = get_list_of_order_dicts(txt_path, filter_order_id)
-        ParseOrders(orders).export_orders(testing)
+        new_orders = get_new_orders(orders)
+        ParseOrders(new_orders).export_orders(testing)
         print(VBA_OK)
     else:
         logging.critical(f'Provided file {txt_path} does not exist.')
