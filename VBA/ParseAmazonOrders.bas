@@ -23,7 +23,8 @@ PythonScriptExe = ThisWorkbook.Path & "\Helper" & " " & "Files\main_amazon.exe"
 TxtFilePath = GetTXTFile
 
 'Prompt user for order-id input (second param for python)
-OrderID = GetFilterOrderID
+'OrderID = GetFilterOrderID         'Disabling user input
+OrderID = ""
 
 'Open shell with stdout listening, execute py script, pass along picked txt file, filtering orderID value
 'Handling of errors and completion messages inside sub-module:
@@ -60,7 +61,7 @@ Set objShell = Nothing
 
 'No new orders provided with OrderID case
 If InStr(1, sOutputStr, "NO NEW JOB") > 0 Then
-    MsgBox "No new orders since provided order: " & OrderID, vbInformation, "No new Amazon Orders"
+    MsgBox "All orders in file '" & Dir(TxtFilePath) & "' have been processed already", vbInformation, "No new Amazon Orders"
     Exit Sub
 End If
 
