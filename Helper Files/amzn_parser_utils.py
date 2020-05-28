@@ -1,6 +1,7 @@
 from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
 import logging
 import sys
+import os
 
 # GLOBAL VARIABLES
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -37,7 +38,16 @@ def get_total_price(order_dict : dict):
         logging.critical(f"Could not convert item-price or shipping-price to float. Both values: {order_dict['item-price']}; {order_dict['shipping-price']} Error: {e}")
         print(VBA_ERROR_ALERT)
         sys.exit()
-        
+
+def get_output_dir(client_file=True):
+    '''returns target dir for output files depending on execution type (.exe/.py) and file type (client/systemic)'''
+    # pyinstaller sets 'frozen' attr to sys module when compiling
+    if getattr(sys, 'frozen', False):
+        curr_folder = os.path.dirname(sys.executable)
+    else:
+        curr_folder = os.path.dirname(os.path.abspath(__file__))
+    return get_level_up_abspath(curr_folder) if client_file else curr_folder
+
 
 if __name__ == "__main__":
     pass
