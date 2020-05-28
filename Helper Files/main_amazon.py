@@ -1,4 +1,5 @@
 from etonas_xlsx_exporter import EtonasExporter
+from amzn_parser_utils import get_output_dir
 from parse_orders import ParseOrders
 from orders_db import OrdersDB
 from datetime import datetime
@@ -13,12 +14,12 @@ TESTING = False
 EXPECTED_SYS_ARGS = 3
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
-TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\amzn2.txt'
-EXEC_DIR = os.path.dirname(__file__) if TESTING else os.path.dirname(sys.executable)
+TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\run1.txt'
+# r'C:\Coding\Amazon Orders Parser\Amazon exports\amzn2.txt' ; r'C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21510106877018387.txt'
 
 # Logging config:
-log_path = os.path.join(EXEC_DIR, 'loading_amazon_orders.log')
-logging.basicConfig(filename=log_path, level=logging.INFO)
+log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
+logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.DEBUG)
 
 
 def get_list_of_order_dicts(source_file, filter_order_id):
@@ -87,7 +88,8 @@ def main(testing, amazon_export_txt_path):
     if not testing:
         txt_path, filter_order_id = parse_args()
     else:
-        txt_path, filter_order_id = amazon_export_txt_path, '305-1937192-5680315'
+        print('RUNNING IN TESTING MODE')
+        txt_path, filter_order_id = amazon_export_txt_path, ''  #, '305-1937192-5680315'
     if os.path.exists(txt_path):
         logging.info('file exists, continuing to processing...')
         orders = get_list_of_order_dicts(txt_path, filter_order_id)
@@ -99,7 +101,7 @@ def main(testing, amazon_export_txt_path):
         print(VBA_ERROR_ALERT)
         sys.exit()
     logging.info(f'\nRUN ENDED: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
-    
+
 
 if __name__ == "__main__":
     main(TESTING, TEST_AMZN_EXPORT_TXT)
