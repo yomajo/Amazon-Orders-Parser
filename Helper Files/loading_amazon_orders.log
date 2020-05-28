@@ -1,0 +1,638 @@
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:22
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21295705043018375.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 0 entries
+INFO:root:Returning 366/366 new/loaded orders for further processing
+DEBUG:root:Database currently holds 0 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 366. Further processing: 366 orders
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.22.txt and being showed to client
+INFO:root:Order with key CUST_REF and value Clémence Clémence (Chez Jeannie MENSCH) triggered VBA warning for charlimit in DPost
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.22.csv created. Orders inside: 317
+INFO:root:Order with key CUST_REF and value Mafalda Sofia dos Santos Soares triggered VBA warning for charlimit in DPost
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.22.csv created. Orders inside: 8
+INFO:root:recipient-name seems to be one word, without a need to unpack. Error: not enough values to unpack (expected 2, got 1). recipient-name: G.Robinson. Returning empty last_name
+INFO:root:Order with key Address_line_1 and value 15 Saint Dennis House, Manor Close triggered VBA warning for charlimit set by Etonas
+INFO:root:Order with key Address_line_1 and value Green Block 05 Flat 08 Weston Hall Of Residence triggered VBA warning for charlimit set by Etonas
+INFO:root:Order with key Address_line_1 and value N210 JUBILEE HOUSE 1 KERNEL COURT WALNUT TREE CLOSE triggered VBA warning for charlimit set by Etonas
+INFO:root:Order with key Address_line_1 and value 26 BAMEL WAY NEXUS II GLOUCESTER BUSINESS PARK triggered VBA warning for charlimit set by Etonas
+INFO:root:Order with key Address_line_1 and value FOURHILLS NURSING HOME 8 HAZLITT STREET triggered VBA warning for charlimit set by Etonas
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.22.xlsx created. Orders inside: 41
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:22 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
+DEBUG:root:Returning new run id: 1
+DEBUG:root:Order 203-5514747-5052368 added to db successfully; run: 1 buyer: Glenn Robinson
+DEBUG:root:Order 402-9209436-6709939 added to db successfully; run: 1 buyer: Watrin
+DEBUG:root:Order 304-5915486-7101107 added to db successfully; run: 1 buyer: Julia Schröder
+DEBUG:root:Order 171-2463346-7231558 added to db successfully; run: 1 buyer: Yolanda Ruiz Aguilar
+DEBUG:root:Order 402-7086434-1413147 added to db successfully; run: 1 buyer: Inglis Johanna
+DEBUG:root:Order 206-4914247-2121959 added to db successfully; run: 1 buyer: Dana Stanescu
+DEBUG:root:Order 403-7316555-0533146 added to db successfully; run: 1 buyer: Tur Marion
+DEBUG:root:Order 302-7150468-9621115 added to db successfully; run: 1 buyer: Rhea Noakes
+WARNING:root:Multi-item / multi-line order 302-7150468-9621115. Already in database.
+DEBUG:root:Order 402-9861385-1718719 added to db successfully; run: 1 buyer: rouxel élodie
+DEBUG:root:Order 408-9135000-5554730 added to db successfully; run: 1 buyer: billon
+DEBUG:root:Order 403-2772416-6657112 added to db successfully; run: 1 buyer: BRUSTEL FABIENNE
+DEBUG:root:Order 205-7468449-0400342 added to db successfully; run: 1 buyer: Marina Chatzistavrou
+DEBUG:root:Order 403-4356484-5713922 added to db successfully; run: 1 buyer: BRUSTEL FABIENNE
+WARNING:root:Multi-item / multi-line order 403-4356484-5713922. Already in database.
+DEBUG:root:Order 406-7650767-9325938 added to db successfully; run: 1 buyer: jose carriles
+DEBUG:root:Order 404-5975255-8589925 added to db successfully; run: 1 buyer: Naamar Marjorie
+DEBUG:root:Order 204-7500049-6141121 added to db successfully; run: 1 buyer: GEMMA DIAZ NIETO
+DEBUG:root:Order 204-4069453-1802760 added to db successfully; run: 1 buyer: daniela serra
+DEBUG:root:Order 206-3891634-3183558 added to db successfully; run: 1 buyer: jo crawford
+DEBUG:root:Order 406-6246441-2857903 added to db successfully; run: 1 buyer: Evgenia
+DEBUG:root:Order 303-5712283-6593957 added to db successfully; run: 1 buyer: Nancy Hubl
+DEBUG:root:Order 304-1336890-9122742 added to db successfully; run: 1 buyer: Claudia Fuoco-Fulajtar
+DEBUG:root:Order 028-4054273-0309143 added to db successfully; run: 1 buyer: Tobias Tiemann
+DEBUG:root:Order 402-0984999-7424356 added to db successfully; run: 1 buyer: Richard
+DEBUG:root:Order 408-2908208-2907511 added to db successfully; run: 1 buyer: Amelie AUZIAS
+DEBUG:root:Order 171-5065335-6381959 added to db successfully; run: 1 buyer: justine tricot
+DEBUG:root:Order 305-0360960-9622772 added to db successfully; run: 1 buyer: Heiko Ruff
+DEBUG:root:Order 303-5992550-6003555 added to db successfully; run: 1 buyer: Tobias Fetzer
+DEBUG:root:Order 171-1880401-0870746 added to db successfully; run: 1 buyer: Delval Marilyne
+DEBUG:root:Order 302-3059562-2767557 added to db successfully; run: 1 buyer: Marnie R. Walsh
+DEBUG:root:Order 203-5120758-0368321 added to db successfully; run: 1 buyer: Dean Addams
+DEBUG:root:Order 403-0664828-6358761 added to db successfully; run: 1 buyer: Katelina Ivanova
+DEBUG:root:Order 408-8999219-8027551 added to db successfully; run: 1 buyer: Ludovic PERRIN
+DEBUG:root:Order 302-3540604-5838701 added to db successfully; run: 1 buyer: Oli Kinski
+DEBUG:root:Order 403-3604428-2168314 added to db successfully; run: 1 buyer: BRUSTEL FABIENNE
+DEBUG:root:Order 408-9856480-6098721 added to db successfully; run: 1 buyer: SANTIAGO PEREZ
+DEBUG:root:Order 402-6955638-7761157 added to db successfully; run: 1 buyer: Ravaz Allison
+DEBUG:root:Order 403-0755165-1509163 added to db successfully; run: 1 buyer: Norlan El Misionario
+DEBUG:root:Order 408-9718648-2813935 added to db successfully; run: 1 buyer: Thomas
+DEBUG:root:Order 405-5679138-3069142 added to db successfully; run: 1 buyer: VIARD Rachel
+DEBUG:root:Order 403-6495802-3186736 added to db successfully; run: 1 buyer: zabahi dehe djedje
+DEBUG:root:Order 026-8369895-6745901 added to db successfully; run: 1 buyer: Patrick Morgan
+DEBUG:root:Order 407-8820358-6605940 added to db successfully; run: 1 buyer: tisne
+DEBUG:root:Order 404-3450620-8637108 added to db successfully; run: 1 buyer: Dorothée Delangle
+WARNING:root:Multi-item / multi-line order 404-3450620-8637108. Already in database.
+DEBUG:root:Order 403-1208846-8121113 added to db successfully; run: 1 buyer: LE SAUX Nicolas
+DEBUG:root:Order 407-9810307-8123544 added to db successfully; run: 1 buyer: Roberto Cordova
+DEBUG:root:Order 408-1255334-1686734 added to db successfully; run: 1 buyer: PIMONT
+DEBUG:root:Order 402-0951720-1739516 added to db successfully; run: 1 buyer: mariko yaguchi
+DEBUG:root:Order 302-6731065-8348308 added to db successfully; run: 1 buyer: EMANUELE MARIETTI
+DEBUG:root:Order 203-0026174-6514749 added to db successfully; run: 1 buyer: S J MCLATCHIE
+DEBUG:root:Order 203-3733018-7534722 added to db successfully; run: 1 buyer: zoumengqi
+DEBUG:root:Order 205-1478126-7573106 added to db successfully; run: 1 buyer: Daniela
+DEBUG:root:Order 404-8937828-2268308 added to db successfully; run: 1 buyer: Dupays Anne-Gaëlle
+DEBUG:root:Order 408-7687893-0681911 added to db successfully; run: 1 buyer: julie julie
+WARNING:root:Multi-item / multi-line order 408-7687893-0681911. Already in database.
+DEBUG:root:Order 304-8750974-7025924 added to db successfully; run: 1 buyer: Antje Kampa
+DEBUG:root:Order 306-5320235-6949155 added to db successfully; run: 1 buyer: Giulia Fagni
+DEBUG:root:Order 206-0915908-8625920 added to db successfully; run: 1 buyer: sam
+DEBUG:root:Order 303-5659718-7005955 added to db successfully; run: 1 buyer: Cornelia Kreitzberg
+DEBUG:root:Order 408-6640968-8598744 added to db successfully; run: 1 buyer: pourchier annnabelle
+DEBUG:root:Order 404-8342118-2256323 added to db successfully; run: 1 buyer: Maouche leila
+DEBUG:root:Order 026-6653399-0773108 added to db successfully; run: 1 buyer: Monica Sanduleanu
+DEBUG:root:Order 406-3073145-6809102 added to db successfully; run: 1 buyer: bertout pascaline
+DEBUG:root:Order 304-9706177-9383568 added to db successfully; run: 1 buyer: Manuela Arnet
+DEBUG:root:Order 403-9765295-1757966 added to db successfully; run: 1 buyer: Julien Jessica
+DEBUG:root:Order 306-1167214-1788358 added to db successfully; run: 1 buyer: Marvin Feja
+DEBUG:root:Order 405-9168911-4565126 added to db successfully; run: 1 buyer: Nathalie Bourdon
+DEBUG:root:Order 405-4470445-9858769 added to db successfully; run: 1 buyer: Mafa
+DEBUG:root:Order 408-6302389-4158738 added to db successfully; run: 1 buyer: Marie-Line
+DEBUG:root:Order 405-8478527-9322701 added to db successfully; run: 1 buyer: Juan Pablo Cruces
+DEBUG:root:Order 306-6301036-0938710 added to db successfully; run: 1 buyer: Corven Hauck
+DEBUG:root:Order 303-6224135-5219534 added to db successfully; run: 1 buyer: Wirsching Petra
+DEBUG:root:Order 306-0612537-6792367 added to db successfully; run: 1 buyer: Lars E.
+DEBUG:root:Order 407-6792905-0387558 added to db successfully; run: 1 buyer: Dias
+DEBUG:root:Order 202-4995395-7408337 added to db successfully; run: 1 buyer: Cee jay
+DEBUG:root:Order 306-8142753-0904359 added to db successfully; run: 1 buyer: el angelito
+DEBUG:root:Order 306-2650862-8062746 added to db successfully; run: 1 buyer: alan
+DEBUG:root:Order 306-8073020-8464357 added to db successfully; run: 1 buyer: Anja Reinhardt
+DEBUG:root:Order 403-0817422-1885120 added to db successfully; run: 1 buyer: Morgan Bernadet
+DEBUG:root:Order 402-0105870-9373156 added to db successfully; run: 1 buyer: roman
+DEBUG:root:Order 407-6797439-2338720 added to db successfully; run: 1 buyer: Caroline Sarret
+DEBUG:root:Order 028-5901747-6612337 added to db successfully; run: 1 buyer: Sonja Marth-Cuka
+DEBUG:root:Order 408-3588355-2283525 added to db successfully; run: 1 buyer: Cecile
+DEBUG:root:Order 205-5360005-0091561 added to db successfully; run: 1 buyer: Simon Melroy
+DEBUG:root:Order 303-0809118-4851505 added to db successfully; run: 1 buyer: Stefanie Clauß
+DEBUG:root:Order 403-8593179-6158741 added to db successfully; run: 1 buyer: CHAIR
+DEBUG:root:Order 305-7473221-8218723 added to db successfully; run: 1 buyer: Dmitrij
+DEBUG:root:Order 306-0994547-8209943 added to db successfully; run: 1 buyer: Holger von Heissen
+DEBUG:root:Order 404-5521897-3528309 added to db successfully; run: 1 buyer: josemariabarbado
+DEBUG:root:Order 302-1953302-2993964 added to db successfully; run: 1 buyer: Philipp Heinz
+DEBUG:root:Order 305-1147057-8046717 added to db successfully; run: 1 buyer: bettina besler
+DEBUG:root:Order 408-5791204-2239522 added to db successfully; run: 1 buyer: Jean Sylvie
+DEBUG:root:Order 304-6373080-6006765 added to db successfully; run: 1 buyer: Lena Ihl
+DEBUG:root:Order 026-3331715-7157907 added to db successfully; run: 1 buyer: paula mcinulty
+DEBUG:root:Order 408-1481333-0051540 added to db successfully; run: 1 buyer: Rana
+DEBUG:root:Order 403-4047715-7511566 added to db successfully; run: 1 buyer: Gambari Laure
+DEBUG:root:Order 402-7452813-1281951 added to db successfully; run: 1 buyer: coffinet
+DEBUG:root:Order 028-9998064-7001957 added to db successfully; run: 1 buyer: Fabian Stasch
+WARNING:root:Multi-item / multi-line order 028-9998064-7001957. Already in database.
+DEBUG:root:Order 403-1651374-7311527 added to db successfully; run: 1 buyer: Daumas Jean
+DEBUG:root:Order 407-3244321-2626711 added to db successfully; run: 1 buyer: María del Sol Aranda Torres
+DEBUG:root:Order 407-2237097-3181941 added to db successfully; run: 1 buyer: Maria Reina
+DEBUG:root:Order 205-6148504-8250724 added to db successfully; run: 1 buyer: Moira Graham
+DEBUG:root:Order 405-2325140-2893106 added to db successfully; run: 1 buyer: D ABUNDO VALENTIN Nadine
+DEBUG:root:Order 206-1503514-3251556 added to db successfully; run: 1 buyer: Paula Torrance
+DEBUG:root:Order 304-1774179-0360348 added to db successfully; run: 1 buyer: Miriam Schiesser
+DEBUG:root:Order 203-6171289-0386734 added to db successfully; run: 1 buyer: Hyojeong Kang
+DEBUG:root:Order 408-2735768-0133113 added to db successfully; run: 1 buyer: montels
+DEBUG:root:Order 407-8938826-1645912 added to db successfully; run: 1 buyer: BOTZ Vincent
+DEBUG:root:Order 406-6733511-9421950 added to db successfully; run: 1 buyer: marie Baslé
+DEBUG:root:Order 403-7291845-7164362 added to db successfully; run: 1 buyer: Luna
+DEBUG:root:Order 408-4376537-9311500 added to db successfully; run: 1 buyer: MORERE
+DEBUG:root:Order 203-2311025-1238766 added to db successfully; run: 1 buyer: Colleen Shepherd
+DEBUG:root:Order 203-8449641-2021963 added to db successfully; run: 1 buyer: Colleen Shepherd
+DEBUG:root:Order 407-0806807-3819560 added to db successfully; run: 1 buyer: Guilbert sabrina
+DEBUG:root:Order 404-9945374-0309945 added to db successfully; run: 1 buyer: Pau Reollo Mañé
+DEBUG:root:Order 404-3060797-3493125 added to db successfully; run: 1 buyer: BODINI CHRISTELLE
+DEBUG:root:Order 402-6821122-8286743 added to db successfully; run: 1 buyer: MICHELE VALERIANI
+DEBUG:root:Order 303-8149726-3991541 added to db successfully; run: 1 buyer: Kevin
+DEBUG:root:Order 205-1017515-2719516 added to db successfully; run: 1 buyer: Mariana
+DEBUG:root:Order 306-7558986-4890710 added to db successfully; run: 1 buyer: Viktorija Krpuljevic
+DEBUG:root:Order 406-1542607-0912351 added to db successfully; run: 1 buyer: LORENZI CELINE
+DEBUG:root:Order 406-2470184-6428325 added to db successfully; run: 1 buyer: Juliana
+DEBUG:root:Order 171-2100584-0771527 added to db successfully; run: 1 buyer: Strauss
+DEBUG:root:Order 303-9874956-7701912 added to db successfully; run: 1 buyer: Cornelia Freiert
+DEBUG:root:Order 302-0861024-9047568 added to db successfully; run: 1 buyer: Ingrid Grunwald
+WARNING:root:Multi-item / multi-line order 302-0861024-9047568. Already in database.
+DEBUG:root:Order 408-5040753-1628365 added to db successfully; run: 1 buyer: Bosch Delphine
+DEBUG:root:Order 404-1612158-3480356 added to db successfully; run: 1 buyer: amelie
+DEBUG:root:Order 406-4868703-8769925 added to db successfully; run: 1 buyer: Daniel
+DEBUG:root:Order 407-3914476-4701122 added to db successfully; run: 1 buyer: julie maréchal
+DEBUG:root:Order 408-9176612-3704330 added to db successfully; run: 1 buyer: COTTET Sandrine
+DEBUG:root:Order 403-2260228-1790724 added to db successfully; run: 1 buyer: BILHAUT AMELIE
+DEBUG:root:Order 407-4779865-3960339 added to db successfully; run: 1 buyer: Magda de León
+DEBUG:root:Order 408-7263932-2121137 added to db successfully; run: 1 buyer: julie maréchal
+WARNING:root:Multi-item / multi-line order 408-7263932-2121137. Already in database.
+DEBUG:root:Order 405-6115556-4991508 added to db successfully; run: 1 buyer: MAUPETIT Arnaud
+DEBUG:root:Order 403-5009096-3797155 added to db successfully; run: 1 buyer: Zoé
+DEBUG:root:Order 406-0459410-8051504 added to db successfully; run: 1 buyer: Elisabeth Nguyen
+DEBUG:root:Order 407-8570792-0353123 added to db successfully; run: 1 buyer: Pamela
+DEBUG:root:Order 405-3715635-8746767 added to db successfully; run: 1 buyer: DASYLVA Titina
+DEBUG:root:Order 302-8857006-5264347 added to db successfully; run: 1 buyer: Tanja Maier
+DEBUG:root:Order 403-6127714-8315524 added to db successfully; run: 1 buyer: SALA
+DEBUG:root:Order 171-8715313-6837115 added to db successfully; run: 1 buyer: BRANDON
+DEBUG:root:Order 408-5631124-7555562 added to db successfully; run: 1 buyer: Ricard Marie-Anaïs
+DEBUG:root:Order 204-1871708-9645153 added to db successfully; run: 1 buyer: graeme hogg
+DEBUG:root:Order 305-9348752-3027542 added to db successfully; run: 1 buyer: Anna
+DEBUG:root:Order 403-9109007-7394739 added to db successfully; run: 1 buyer: Daniel Rodríguez Goya
+DEBUG:root:Order 402-0317786-4166747 added to db successfully; run: 1 buyer: rouxel élodie
+DEBUG:root:Order 407-1377402-6917130 added to db successfully; run: 1 buyer: STEPHANE  RESNIKOW
+DEBUG:root:Order 304-2602960-7604326 added to db successfully; run: 1 buyer: Ralf Appel
+DEBUG:root:Order 304-7330821-5718737 added to db successfully; run: 1 buyer: Maria Arndt
+DEBUG:root:Order 028-4328941-2709114 added to db successfully; run: 1 buyer: Carmen Berrio
+DEBUG:root:Order 171-3963957-4055514 added to db successfully; run: 1 buyer: guenael bonnabesse
+DEBUG:root:Order 026-8418510-7362764 added to db successfully; run: 1 buyer: Marisa
+DEBUG:root:Order 304-0318275-3298706 added to db successfully; run: 1 buyer: Victor Morelli
+DEBUG:root:Order 303-0414278-6449132 added to db successfully; run: 1 buyer: Tim Seitz
+DEBUG:root:Order 407-4607253-8585928 added to db successfully; run: 1 buyer: Eva
+DEBUG:root:Order 202-8794060-1030764 added to db successfully; run: 1 buyer: Jessica
+DEBUG:root:Order 404-9464860-3057907 added to db successfully; run: 1 buyer: Dumont Léonie
+DEBUG:root:Order 404-2844302-4911567 added to db successfully; run: 1 buyer: Dumont Léonie
+DEBUG:root:Order 303-7126662-5418725 added to db successfully; run: 1 buyer: Tavi Meran
+DEBUG:root:Order 402-4688720-7329167 added to db successfully; run: 1 buyer: rouxel élodie
+DEBUG:root:Order 407-0863893-6629904 added to db successfully; run: 1 buyer: Olga
+DEBUG:root:Order 203-8684241-7392319 added to db successfully; run: 1 buyer: Katalina Haritova
+DEBUG:root:Order 404-0663096-2753900 added to db successfully; run: 1 buyer: Mousli Sabrina
+DEBUG:root:Order 171-9649984-3597117 added to db successfully; run: 1 buyer: GEMMA DIAZ NIETO
+DEBUG:root:Order 402-0898503-0927515 added to db successfully; run: 1 buyer: nicolas franco
+DEBUG:root:Order 206-3253303-9708301 added to db successfully; run: 1 buyer: Helen louise west
+DEBUG:root:Order 402-3022697-0511535 added to db successfully; run: 1 buyer: Michelle Rey
+DEBUG:root:Order 403-2973812-6926728 added to db successfully; run: 1 buyer: Juan Pablo Cruces
+DEBUG:root:Order 202-8610718-4028352 added to db successfully; run: 1 buyer: Eszter Musui
+DEBUG:root:Order 408-7879739-8029147 added to db successfully; run: 1 buyer: Carvalho
+DEBUG:root:Order 302-8091977-5088340 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 407-5629932-5998704 added to db successfully; run: 1 buyer: Le Darz
+WARNING:root:Multi-item / multi-line order 407-5629932-5998704. Already in database.
+DEBUG:root:Order 171-2993606-0403520 added to db successfully; run: 1 buyer: Sonia Le Chenadec
+DEBUG:root:Order 302-4078717-8214714 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 404-8027602-4148361 added to db successfully; run: 1 buyer: Virginia Bauve
+DEBUG:root:Order 202-0556715-1045133 added to db successfully; run: 1 buyer: Kitty Ford
+DEBUG:root:Order 408-7065420-5690709 added to db successfully; run: 1 buyer: menetrier
+DEBUG:root:Order 171-2229539-8390724 added to db successfully; run: 1 buyer: gemma
+DEBUG:root:Order 405-0638216-6249113 added to db successfully; run: 1 buyer: Mireille BENE
+DEBUG:root:Order 202-1398467-8786712 added to db successfully; run: 1 buyer: JIA NING XU
+DEBUG:root:Order 407-7485196-0047553 added to db successfully; run: 1 buyer: Le Darz
+DEBUG:root:Order 404-5985959-2197132 added to db successfully; run: 1 buyer: Rostoll Marianna
+DEBUG:root:Order 403-9835645-0817164 added to db successfully; run: 1 buyer: laurence marty
+DEBUG:root:Order 305-2817927-8421113 added to db successfully; run: 1 buyer: Judith Wyssmann Howald
+DEBUG:root:Order 405-0382936-4115518 added to db successfully; run: 1 buyer: laurent
+DEBUG:root:Order 405-4036356-9900340 added to db successfully; run: 1 buyer: PATRICE GENEVA
+DEBUG:root:Order 402-1036901-0315531 added to db successfully; run: 1 buyer: florence martin
+DEBUG:root:Order 403-2730304-0666745 added to db successfully; run: 1 buyer: beck sylvie
+DEBUG:root:Order 405-6250048-3144338 added to db successfully; run: 1 buyer: Meniri
+DEBUG:root:Order 404-3696909-8012350 added to db successfully; run: 1 buyer: leblanc
+DEBUG:root:Order 404-2069361-1991561 added to db successfully; run: 1 buyer: guenael bonnabesse
+DEBUG:root:Order 402-4965124-3169163 added to db successfully; run: 1 buyer: DUVIVIER géraldine
+DEBUG:root:Order 171-3666525-4615557 added to db successfully; run: 1 buyer: Sara Drici
+DEBUG:root:Order 306-2912926-8857108 added to db successfully; run: 1 buyer: nancy schröder
+DEBUG:root:Order 171-8894170-6373926 added to db successfully; run: 1 buyer: del mastro
+DEBUG:root:Order 171-4533675-2480367 added to db successfully; run: 1 buyer: jose duran serrano
+DEBUG:root:Order 305-5575537-1726749 added to db successfully; run: 1 buyer: W.C. Mulders
+DEBUG:root:Order 304-0706053-2322724 added to db successfully; run: 1 buyer: Dr. Faez-Georg Chahoud
+DEBUG:root:Order 403-1644620-3332310 added to db successfully; run: 1 buyer: Christèle HACHETTE
+DEBUG:root:Order 405-5260420-2697943 added to db successfully; run: 1 buyer: ghisolfi thierry
+DEBUG:root:Order 407-0712644-4256335 added to db successfully; run: 1 buyer: Marie-Louise PINEL
+DEBUG:root:Order 403-8580140-4706735 added to db successfully; run: 1 buyer: Miguel Barthelery
+DEBUG:root:Order 404-1063881-9725903 added to db successfully; run: 1 buyer: djanga caroline
+DEBUG:root:Order 302-1847426-4867543 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 406-8404309-2459543 added to db successfully; run: 1 buyer: bernard
+DEBUG:root:Order 171-1420894-2485919 added to db successfully; run: 1 buyer: CHRISTINE TORRIERO DISDET
+DEBUG:root:Order 202-3954933-7098710 added to db successfully; run: 1 buyer: Mr Jim Armour
+DEBUG:root:Order 303-5180176-9033159 added to db successfully; run: 1 buyer: Katerina Hobi
+DEBUG:root:Order 405-3634247-6907550 added to db successfully; run: 1 buyer: Dumont Léonie
+DEBUG:root:Order 405-4503391-5361945 added to db successfully; run: 1 buyer: aurelie puginier
+DEBUG:root:Order 405-4240403-7866738 added to db successfully; run: 1 buyer: aurelie puginier
+DEBUG:root:Order 402-4269378-4386745 added to db successfully; run: 1 buyer: lecomte
+DEBUG:root:Order 408-3501099-6833969 added to db successfully; run: 1 buyer: choukri léa
+DEBUG:root:Order 204-6842425-1289116 added to db successfully; run: 1 buyer: AmazonUK Business
+DEBUG:root:Order 408-6307138-0618700 added to db successfully; run: 1 buyer: Aline Harmsen
+DEBUG:root:Order 408-1962461-0068367 added to db successfully; run: 1 buyer: Carvalho nunes
+DEBUG:root:Order 404-9564195-9597104 added to db successfully; run: 1 buyer: MINEUR alain
+DEBUG:root:Order 408-7416936-9525132 added to db successfully; run: 1 buyer: saba ajdari
+DEBUG:root:Order 408-3876800-5789104 added to db successfully; run: 1 buyer: Iris
+DEBUG:root:Order 171-1540509-7356331 added to db successfully; run: 1 buyer: Juan Pablo Cruces
+DEBUG:root:Order 408-6566880-3192329 added to db successfully; run: 1 buyer: David Marques
+DEBUG:root:Order 171-8523723-8209918 added to db successfully; run: 1 buyer: ROMINA BASSIGNANI
+DEBUG:root:Order 407-5739440-5791561 added to db successfully; run: 1 buyer: Ines Coca
+DEBUG:root:Order 407-3076909-4777923 added to db successfully; run: 1 buyer: Marc Everaere
+DEBUG:root:Order 206-0094092-0866719 added to db successfully; run: 1 buyer: aran flanagan
+DEBUG:root:Order 304-2577736-9573138 added to db successfully; run: 1 buyer: Waldemar
+DEBUG:root:Order 406-5853190-7317926 added to db successfully; run: 1 buyer: Isabelle GRIFFON
+DEBUG:root:Order 408-0173315-1167518 added to db successfully; run: 1 buyer: COTTET Sandrine
+DEBUG:root:Order 402-4495593-1258732 added to db successfully; run: 1 buyer: CANONICI Carol
+DEBUG:root:Order 408-7424967-0442729 added to db successfully; run: 1 buyer: raquel
+DEBUG:root:Order 405-0380141-4902713 added to db successfully; run: 1 buyer: SINTES
+DEBUG:root:Order 404-1888631-0814749 added to db successfully; run: 1 buyer: brouste judith
+DEBUG:root:Order 303-3632825-4105919 added to db successfully; run: 1 buyer: Dirk Michael Piplack
+DEBUG:root:Order 202-4627478-2277938 added to db successfully; run: 1 buyer: Sophie McCartney
+DEBUG:root:Order 408-3498713-0230723 added to db successfully; run: 1 buyer: Inés
+DEBUG:root:Order 303-6984897-4654718 added to db successfully; run: 1 buyer: readOmat
+DEBUG:root:Order 402-0079594-6440373 added to db successfully; run: 1 buyer: Julian Jesus Esteban Colon
+DEBUG:root:Order 028-6652215-0734738 added to db successfully; run: 1 buyer: Leo Primavesi
+DEBUG:root:Order 305-1526376-8421945 added to db successfully; run: 1 buyer: Jutta Heinrich
+DEBUG:root:Order 202-9107418-6593939 added to db successfully; run: 1 buyer: Fynn Riseborough
+DEBUG:root:Order 028-2202838-2680325 added to db successfully; run: 1 buyer: Jochen Riexinger
+DEBUG:root:Order 403-7806436-5786718 added to db successfully; run: 1 buyer: Barroux
+WARNING:root:Multi-item / multi-line order 403-7806436-5786718. Already in database.
+DEBUG:root:Order 407-7917456-9385157 added to db successfully; run: 1 buyer: Estelle ROLANDO
+DEBUG:root:Order 206-2177866-7414750 added to db successfully; run: 1 buyer: MR IAN DREVER
+DEBUG:root:Order 405-0041727-7994730 added to db successfully; run: 1 buyer: manuela
+DEBUG:root:Order 304-9428607-7553901 added to db successfully; run: 1 buyer: Abigale Ornevik
+DEBUG:root:Order 205-5416474-7411537 added to db successfully; run: 1 buyer: Kiltrena Connolly
+DEBUG:root:Order 404-0460645-7373921 added to db successfully; run: 1 buyer: Esteves Raffalli Veronique
+DEBUG:root:Order 305-7949908-5433950 added to db successfully; run: 1 buyer: Dudley Stefanie
+DEBUG:root:Order 402-0972618-7034726 added to db successfully; run: 1 buyer: sabine escach
+DEBUG:root:Order 026-3361462-0213917 added to db successfully; run: 1 buyer: Ms Tamsin James
+DEBUG:root:Order 408-6695528-3758745 added to db successfully; run: 1 buyer: Alexandre Osche
+DEBUG:root:Order 404-5408457-6074769 added to db successfully; run: 1 buyer: chaibdraa
+DEBUG:root:Order 205-4732105-1856337 added to db successfully; run: 1 buyer: Ophelia
+DEBUG:root:Order 302-3430967-8027550 added to db successfully; run: 1 buyer: Jacqueline Harder
+DEBUG:root:Order 408-9291531-4720322 added to db successfully; run: 1 buyer: Carvalho
+DEBUG:root:Order 403-5340222-1257908 added to db successfully; run: 1 buyer: stéphanie DARGENT
+DEBUG:root:Order 407-9454124-7099566 added to db successfully; run: 1 buyer: marco antonio
+DEBUG:root:Order 028-9648460-4294757 added to db successfully; run: 1 buyer: Martin Sowa
+DEBUG:root:Order 204-0356462-0181134 added to db successfully; run: 1 buyer: wesley mccance
+DEBUG:root:Order 303-1965700-2621154 added to db successfully; run: 1 buyer: Susanna Dorloff
+DEBUG:root:Order 302-5967176-6157905 added to db successfully; run: 1 buyer: Alexanderkoehnen@gmx.de
+DEBUG:root:Order 028-5468546-5971551 added to db successfully; run: 1 buyer: Dr. Jahnke, Matthias
+DEBUG:root:Order 404-2457121-6041937 added to db successfully; run: 1 buyer: ERIC FONCILLAS
+DEBUG:root:Order 404-9659681-8131527 added to db successfully; run: 1 buyer: Jurgita
+DEBUG:root:Order 026-2377764-2251544 added to db successfully; run: 1 buyer: zhaozichucherry@sina.com
+DEBUG:root:Order 403-6653833-9403522 added to db successfully; run: 1 buyer: BRUSTEL FABIENNE
+DEBUG:root:Order 203-9145235-9110743 added to db successfully; run: 1 buyer: chris
+DEBUG:root:Order 404-4689621-1078709 added to db successfully; run: 1 buyer: Drouvin
+DEBUG:root:Order 304-5072604-6789135 added to db successfully; run: 1 buyer: Sandra Curcio
+DEBUG:root:Order 405-4334638-4955510 added to db successfully; run: 1 buyer: MORERE
+DEBUG:root:Order 402-1055440-9451518 added to db successfully; run: 1 buyer: Angela Assens
+DEBUG:root:Order 306-6332672-4096304 added to db successfully; run: 1 buyer: nata
+DEBUG:root:Order 306-3539885-3542768 added to db successfully; run: 1 buyer: Ugur Sürücü
+DEBUG:root:Order 403-1549422-2333944 added to db successfully; run: 1 buyer: Alexa PATRAS
+DEBUG:root:Order 403-1268146-0435525 added to db successfully; run: 1 buyer: veronique delannoy
+DEBUG:root:Order 306-5455149-8655527 added to db successfully; run: 1 buyer: Charlotte Thelen-Hunecke
+DEBUG:root:Order 406-1240289-9559555 added to db successfully; run: 1 buyer: samsara aissaoui
+DEBUG:root:Order 306-3328901-6689927 added to db successfully; run: 1 buyer: Haituc  Mariana
+WARNING:root:Multi-item / multi-line order 306-3328901-6689927. Already in database.
+DEBUG:root:Order 302-4715389-8729919 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 302-9410762-1258736 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 028-2383937-0606736 added to db successfully; run: 1 buyer: Frank Huiskes
+DEBUG:root:Order 407-9900570-3147540 added to db successfully; run: 1 buyer: agostino marcellino
+DEBUG:root:Order 405-1314850-0451568 added to db successfully; run: 1 buyer: Mezani
+WARNING:root:Multi-item / multi-line order 405-1314850-0451568. Already in database.
+DEBUG:root:Order 405-2819354-1341925 added to db successfully; run: 1 buyer: tony
+WARNING:root:Multi-item / multi-line order 405-2819354-1341925. Already in database.
+DEBUG:root:Order 028-6552021-3189943 added to db successfully; run: 1 buyer: Jasmin Huber
+DEBUG:root:Order 406-5465057-6028330 added to db successfully; run: 1 buyer: kubiczek
+DEBUG:root:Order 406-2691647-6477918 added to db successfully; run: 1 buyer: MISS A SIFI
+DEBUG:root:Order 171-6787269-0013138 added to db successfully; run: 1 buyer: Clemence Charon ou Jean Hennequin
+DEBUG:root:Order 406-7873241-1957110 added to db successfully; run: 1 buyer: guenael bonnabesse
+DEBUG:root:Order 171-0377517-4092328 added to db successfully; run: 1 buyer: elise monnier
+DEBUG:root:Order 402-0779580-1724318 added to db successfully; run: 1 buyer: Fátima
+DEBUG:root:Order 306-5413788-1246703 added to db successfully; run: 1 buyer: Karin Kniesel
+DEBUG:root:Order 205-0087134-2361152 added to db successfully; run: 1 buyer: Elizabeth Wilcox
+DEBUG:root:Order 206-5909306-1412300 added to db successfully; run: 1 buyer: ugne
+DEBUG:root:Order 302-6972829-8229923 added to db successfully; run: 1 buyer: Servus Souza da Silva
+DEBUG:root:Order 406-7756639-9588341 added to db successfully; run: 1 buyer: sophie ciarlet
+DEBUG:root:Order 302-7732396-1414737 added to db successfully; run: 1 buyer: Bianca Wich
+DEBUG:root:Order 171-0297432-6264318 added to db successfully; run: 1 buyer: Anabel Fambuena
+DEBUG:root:Order 304-8906718-9665930 added to db successfully; run: 1 buyer: Birte auf der Heidt
+DEBUG:root:Order 404-6617102-9417149 added to db successfully; run: 1 buyer: Jimenez
+DEBUG:root:Order 402-1332428-0225945 added to db successfully; run: 1 buyer: sandra lebihan
+DEBUG:root:Order 404-6653176-8874739 added to db successfully; run: 1 buyer: Lorena
+DEBUG:root:Order 303-0074228-7526769 added to db successfully; run: 1 buyer: Ronald Felsch
+DEBUG:root:Order 302-9642258-2585104 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 305-8971198-5881105 added to db successfully; run: 1 buyer: Astrid Le Cerf
+DEBUG:root:Order 171-9011837-4134766 added to db successfully; run: 1 buyer: chatagnier adeline
+DEBUG:root:Order 205-9508332-3185127 added to db successfully; run: 1 buyer: Andrea Dexter
+DEBUG:root:Order 408-2640733-6953137 added to db successfully; run: 1 buyer: christopher gosc
+DEBUG:root:Order 406-3111531-5810707 added to db successfully; run: 1 buyer: stephanie couturier
+DEBUG:root:Order 403-4283151-2777915 added to db successfully; run: 1 buyer: havel julie
+DEBUG:root:Order 306-7181166-9785134 added to db successfully; run: 1 buyer: Keksbrause
+DEBUG:root:Order 304-3045191-5701919 added to db successfully; run: 1 buyer: Maximilian Kaiser
+DEBUG:root:Order 171-7975806-7214726 added to db successfully; run: 1 buyer: Sarahvane
+DEBUG:root:Order 402-2021770-8974749 added to db successfully; run: 1 buyer: devaux
+DEBUG:root:Order 171-8607475-7012354 added to db successfully; run: 1 buyer: Maria Victoria Moreno
+DEBUG:root:Order 402-7231969-2983505 added to db successfully; run: 1 buyer: Ana belen
+DEBUG:root:Order 404-4138843-2843520 added to db successfully; run: 1 buyer: maria papadopaulo
+DEBUG:root:Order 402-0603897-9033932 added to db successfully; run: 1 buyer: nicolas franco
+DEBUG:root:Order 408-0486299-4308356 added to db successfully; run: 1 buyer: Virginie Piatti
+DEBUG:root:Order 303-4075112-7096356 added to db successfully; run: 1 buyer: ebru atamturk
+DEBUG:root:Order 302-0594753-7469121 added to db successfully; run: 1 buyer: Christoph Pelczer
+DEBUG:root:Order 028-9116507-6566721 added to db successfully; run: 1 buyer: Bastian
+DEBUG:root:Order 028-5874037-0373110 added to db successfully; run: 1 buyer: Elke Dunker-Eden
+DEBUG:root:Order 407-5877170-5160344 added to db successfully; run: 1 buyer: Atik ben yedder
+DEBUG:root:Order 202-7009134-0673910 added to db successfully; run: 1 buyer: Julie Karll Drejstel
+DEBUG:root:Order 302-5127886-3433123 added to db successfully; run: 1 buyer: Kevin Ziegler
+DEBUG:root:Order 407-5900032-2927509 added to db successfully; run: 1 buyer: Eugénie Merle
+DEBUG:root:Order 302-3148584-8611550 added to db successfully; run: 1 buyer: G.Baur
+DEBUG:root:Order 171-6730834-2522762 added to db successfully; run: 1 buyer: anne-sophie schweitzer
+DEBUG:root:Order 404-1688974-4299527 added to db successfully; run: 1 buyer: Saltalamacchia maria
+DEBUG:root:Order 406-3804621-9826728 added to db successfully; run: 1 buyer: Darya
+DEBUG:root:Order 402-8666087-5359560 added to db successfully; run: 1 buyer: olivier
+DEBUG:root:Order 405-8865059-7306748 added to db successfully; run: 1 buyer: decaunes
+DEBUG:root:Order 402-7489240-5083542 added to db successfully; run: 1 buyer: Inès
+DEBUG:root:Order 407-6446056-6614709 added to db successfully; run: 1 buyer: Antoine Coumont
+DEBUG:root:Order 408-4425765-8318751 added to db successfully; run: 1 buyer: WUYLENS Manon
+DEBUG:root:Order 203-4343040-1223524 added to db successfully; run: 1 buyer: Anita
+DEBUG:root:Order 026-4096832-3253954 added to db successfully; run: 1 buyer: Rachel
+DEBUG:root:Order 302-1645511-9213118 added to db successfully; run: 1 buyer: Darius Kurpiers
+DEBUG:root:Order 028-2882185-4816328 added to db successfully; run: 1 buyer: Jelja Fegyveres
+DEBUG:root:Order 406-2959693-3406708 added to db successfully; run: 1 buyer: Maria Lafallisse
+DEBUG:root:Order 305-2686330-1473953 added to db successfully; run: 1 buyer: Barbora Eisebraun
+DEBUG:root:Order 306-8216400-2846732 added to db successfully; run: 1 buyer: Alexander Schurr
+DEBUG:root:Order 406-6983527-3068322 added to db successfully; run: 1 buyer: Isabel
+DEBUG:root:Order 306-4294257-9771515 added to db successfully; run: 1 buyer: Olga
+DEBUG:root:Order 407-6906411-8314754 added to db successfully; run: 1 buyer: delzongle
+DEBUG:root:Order 302-7270927-7179538 added to db successfully; run: 1 buyer: Viktor Messerle
+DEBUG:root:Order 203-4719832-2742736 added to db successfully; run: 1 buyer: justine Rainer
+DEBUG:root:Order 405-4576125-2646701 added to db successfully; run: 1 buyer: katia blevin
+WARNING:root:Multi-item / multi-line order 405-4576125-2646701. Already in database.
+DEBUG:root:Order 028-1495758-6459562 added to db successfully; run: 1 buyer: ptitsnous
+DEBUG:root:Order 206-3310874-4693167 added to db successfully; run: 1 buyer: Anna Warner
+DEBUG:root:Order 205-0953191-8221950 added to db successfully; run: 1 buyer: Angela Malcolm
+DEBUG:root:Order 403-2370006-0116367 added to db successfully; run: 1 buyer: Blanca Vidao
+DEBUG:root:Order 026-2118644-5149923 added to db successfully; run: 1 buyer: Miss A C Paixao
+INFO:root:366 new orders were successfully added to database at run: 1
+DEBUG:root:Identified old run ids: [], added more than 14 days ago
+INFO:root:Deleted old orders (cascade) from orders table where run_id = []
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:22 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:Created backup amzn_orders_lrun.db after adding orders
+DEBUG:root:add_orders_to_db finished successfully. Both backups created.
+INFO:root:Connection to DB closed
+INFO:root:Total of 366 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2020.05.28 16:22
+
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:23
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21311262852018375.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 353 entries
+INFO:root:Returning 0/89 new/loaded orders for further processing
+DEBUG:root:Database currently holds 353 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 89. Further processing: 0 orders
+INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:23
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21321372750018376.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 353 entries
+INFO:root:Returning 43/355 new/loaded orders for further processing
+DEBUG:root:Database currently holds 353 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 355. Further processing: 43 orders
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.23.txt and being showed to client
+INFO:root:Order with key CUST_REF and value raquel silvia escudero bautista triggered VBA warning for charlimit in DPost
+INFO:root:Order with key CUST_REF and value GOUIRAND SANDRINE ou LUCE Richard triggered VBA warning for charlimit in DPost
+INFO:root:Order with key CUST_REF and value Concepción Contreras Corraliza triggered VBA warning for charlimit in DPost
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.23.csv created. Orders inside: 31
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.23.csv created. Orders inside: 3
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.23.xlsx created. Orders inside: 9
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:23 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
+DEBUG:root:Returning new run id: 2
+DEBUG:root:Order 404-3784360-6297955 added to db successfully; run: 2 buyer: Clain Olivier
+DEBUG:root:Order 203-3291741-1350706 added to db successfully; run: 2 buyer: Colleen Shepherd
+DEBUG:root:Order 408-4118054-5705103 added to db successfully; run: 2 buyer: PONGE ROGER
+DEBUG:root:Order 205-3342261-2593151 added to db successfully; run: 2 buyer: Rosie English
+DEBUG:root:Order 408-4570362-6858733 added to db successfully; run: 2 buyer: Sarrazin Chantal
+DEBUG:root:Order 408-9803663-9282729 added to db successfully; run: 2 buyer: raquel silvia
+DEBUG:root:Order 206-5816320-7925917 added to db successfully; run: 2 buyer: clotilde riveiro boullosa
+DEBUG:root:Order 204-4311825-2037901 added to db successfully; run: 2 buyer: Christopher
+DEBUG:root:Order 403-2690545-5687529 added to db successfully; run: 2 buyer: Marie SOUCHARD
+DEBUG:root:Order 028-2150050-6031541 added to db successfully; run: 2 buyer: Aleks Ilic
+DEBUG:root:Order 403-2523128-8755513 added to db successfully; run: 2 buyer: rudy oliva
+DEBUG:root:Order 302-7571214-3065962 added to db successfully; run: 2 buyer: Lucas Sielemann
+DEBUG:root:Order 202-7643399-2080303 added to db successfully; run: 2 buyer: mr j w glinsman
+DEBUG:root:Order 407-0729230-8522749 added to db successfully; run: 2 buyer: VIALLE
+DEBUG:root:Order 206-8552927-4574725 added to db successfully; run: 2 buyer: ms k a everett
+DEBUG:root:Order 304-0705592-7485932 added to db successfully; run: 2 buyer: Lukas Neumann
+DEBUG:root:Order 403-5849236-8034705 added to db successfully; run: 2 buyer: Barroux
+DEBUG:root:Order 206-5817599-8896335 added to db successfully; run: 2 buyer: Rik Stevenson
+DEBUG:root:Order 306-5373769-7369969 added to db successfully; run: 2 buyer: Antonina Kuznetsova
+DEBUG:root:Order 205-5261517-6276309 added to db successfully; run: 2 buyer: Mirka
+DEBUG:root:Order 408-3620965-5265943 added to db successfully; run: 2 buyer: Anna
+DEBUG:root:Order 402-6396745-4061941 added to db successfully; run: 2 buyer: Noellie Salgueira
+DEBUG:root:Order 202-1653260-7329906 added to db successfully; run: 2 buyer: miss natasha smith
+DEBUG:root:Order 406-1189638-0126720 added to db successfully; run: 2 buyer: SANDRINE GOUIRAND
+DEBUG:root:Order 403-9284874-1917918 added to db successfully; run: 2 buyer: agathe RINUY
+WARNING:root:Multi-item / multi-line order 403-9284874-1917918. Already in database.
+DEBUG:root:Order 304-5407885-4374719 added to db successfully; run: 2 buyer: Dorian Tadday
+DEBUG:root:Order 402-9666160-8927559 added to db successfully; run: 2 buyer: Darcq
+DEBUG:root:Order 305-5490239-7745928 added to db successfully; run: 2 buyer: Marcel Katscher
+DEBUG:root:Order 203-0471620-7233139 added to db successfully; run: 2 buyer: Katalina Haritova
+DEBUG:root:Order 171-2094388-8107511 added to db successfully; run: 2 buyer: jorge
+DEBUG:root:Order 404-1416563-6125934 added to db successfully; run: 2 buyer: Alcaraz
+DEBUG:root:Order 404-1316031-4705932 added to db successfully; run: 2 buyer: sonja ed
+DEBUG:root:Order 306-6094876-7839535 added to db successfully; run: 2 buyer: Almute Zwiener
+DEBUG:root:Order 408-7747716-0349906 added to db successfully; run: 2 buyer: Antonio Silva Contreras
+DEBUG:root:Order 402-1268051-0141908 added to db successfully; run: 2 buyer: Maria Luisa Sanchez Bleda
+DEBUG:root:Order 406-0323000-5868373 added to db successfully; run: 2 buyer: Emma Fernandez
+DEBUG:root:Order 028-4302314-4807520 added to db successfully; run: 2 buyer: Monika Mueller-Zurlinden
+DEBUG:root:Order 026-4300356-3973169 added to db successfully; run: 2 buyer: Janet Neubecker
+WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
+WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
+WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
+DEBUG:root:Order 302-9747311-3504363 added to db successfully; run: 2 buyer: Nadia Matuschek
+INFO:root:43 new orders were successfully added to database at run: 2
+DEBUG:root:Identified old run ids: [], added more than 14 days ago
+INFO:root:Deleted old orders (cascade) from orders table where run_id = []
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:23 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:Created backup amzn_orders_lrun.db after adding orders
+DEBUG:root:add_orders_to_db finished successfully. Both backups created.
+INFO:root:Connection to DB closed
+INFO:root:Total of 43 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2020.05.28 16:23
+
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:24
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21362797044018379.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 392 entries
+INFO:root:Returning 76/264 new/loaded orders for further processing
+DEBUG:root:Database currently holds 392 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 264. Further processing: 76 orders
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.24.txt and being showed to client
+INFO:root:Order with key CUST_REF and value Ana Filipa Alexandre de Figueiredo triggered VBA warning for charlimit in DPost
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.24.csv created. Orders inside: 62
+INFO:root:Order with key CUST_REF and value AGENCE VARENNE /CAROLINE GUERRIER triggered VBA warning for charlimit in DPost
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.24.csv created. Orders inside: 2
+INFO:root:Order with key Address_line_1 and value Flat 8 Marsom House, Provost Estate triggered VBA warning for charlimit set by Etonas
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.24.xlsx created. Orders inside: 12
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:24 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
+DEBUG:root:Returning new run id: 3
+DEBUG:root:Order 303-4841026-5865153 added to db successfully; run: 3 buyer: Lilli Weinberger
+DEBUG:root:Order 202-3049351-7494727 added to db successfully; run: 3 buyer: Stefanie Harms
+DEBUG:root:Order 406-2645037-2329947 added to db successfully; run: 3 buyer: Daniel
+DEBUG:root:Order 302-9850035-2102765 added to db successfully; run: 3 buyer: Simone Früh
+DEBUG:root:Order 303-9531033-9836363 added to db successfully; run: 3 buyer: Urte Waldrich
+DEBUG:root:Order 304-5294520-4380354 added to db successfully; run: 3 buyer: Katrin Windssus
+DEBUG:root:Order 406-8938443-0925906 added to db successfully; run: 3 buyer: manuel
+DEBUG:root:Order 406-7973442-9121127 added to db successfully; run: 3 buyer: Charlotta Zaar Böll
+DEBUG:root:Order 202-6323896-9505955 added to db successfully; run: 3 buyer: Idoya
+DEBUG:root:Order 306-8457422-8401161 added to db successfully; run: 3 buyer: Maria Berket
+DEBUG:root:Order 402-3041973-9492300 added to db successfully; run: 3 buyer: Mar Garcia
+DEBUG:root:Order 171-5396128-9180308 added to db successfully; run: 3 buyer: Adrianna
+DEBUG:root:Order 303-2148880-8959561 added to db successfully; run: 3 buyer: Carla Schmit
+DEBUG:root:Order 028-2163135-2752333 added to db successfully; run: 3 buyer: Tanja Göttmann
+DEBUG:root:Order 402-4001681-4214738 added to db successfully; run: 3 buyer: Santiago Sanchez
+DEBUG:root:Order 306-8056518-2357963 added to db successfully; run: 3 buyer: JuRim Kaiser
+DEBUG:root:Order 202-7041351-3971563 added to db successfully; run: 3 buyer: Elena Nikon
+DEBUG:root:Order 402-7186334-2247545 added to db successfully; run: 3 buyer: Greg James
+DEBUG:root:Order 407-8561914-5126766 added to db successfully; run: 3 buyer: vasquez
+WARNING:root:Multi-item / multi-line order 407-8561914-5126766. Already in database.
+DEBUG:root:Order 203-1669254-8629102 added to db successfully; run: 3 buyer: Lorna Donnelly
+DEBUG:root:Order 403-4518497-9387545 added to db successfully; run: 3 buyer: Pilar Lou Martin
+DEBUG:root:Order 402-4355423-8594705 added to db successfully; run: 3 buyer: Dorin Marie
+DEBUG:root:Order 404-4158890-0886741 added to db successfully; run: 3 buyer: Guerrier
+DEBUG:root:Order 202-4079307-8286715 added to db successfully; run: 3 buyer: cotymoon
+DEBUG:root:Order 305-4778674-3327560 added to db successfully; run: 3 buyer: Cornelia Kara
+DEBUG:root:Order 407-7948658-2665961 added to db successfully; run: 3 buyer: anissa
+DEBUG:root:Order 028-9299122-6094727 added to db successfully; run: 3 buyer: Mouadh Taamallah
+DEBUG:root:Order 408-0818766-3601129 added to db successfully; run: 3 buyer: Sylvestre Jessica
+DEBUG:root:Order 404-1698968-0973111 added to db successfully; run: 3 buyer: dworniczak william
+DEBUG:root:Order 405-6735087-2452316 added to db successfully; run: 3 buyer: Marc Hoogendoorn
+DEBUG:root:Order 304-3424697-5479539 added to db successfully; run: 3 buyer: Kohlen
+DEBUG:root:Order 305-5640422-6417106 added to db successfully; run: 3 buyer: Maria Gollan
+DEBUG:root:Order 404-3460614-8117902 added to db successfully; run: 3 buyer: dominique girardot
+DEBUG:root:Order 408-6389913-0029901 added to db successfully; run: 3 buyer: laura
+DEBUG:root:Order 404-3361559-7373100 added to db successfully; run: 3 buyer: Massa Sara
+DEBUG:root:Order 406-4088239-9650704 added to db successfully; run: 3 buyer: Mark Randall
+DEBUG:root:Order 403-3565392-1285137 added to db successfully; run: 3 buyer: lecerf damien
+DEBUG:root:Order 406-4532859-3730749 added to db successfully; run: 3 buyer: Liline Lit
+DEBUG:root:Order 028-4934912-7070717 added to db successfully; run: 3 buyer: Karina Scholz
+DEBUG:root:Order 204-8814001-2005900 added to db successfully; run: 3 buyer: Miss Rachael Neall
+DEBUG:root:Order 302-7341182-8250742 added to db successfully; run: 3 buyer: Oliver
+DEBUG:root:Order 406-0315114-7868348 added to db successfully; run: 3 buyer: Marine Gubellini
+DEBUG:root:Order 405-8421699-7225160 added to db successfully; run: 3 buyer: Christine courtes
+DEBUG:root:Order 206-9569422-8665122 added to db successfully; run: 3 buyer: Zoe Pollock
+DEBUG:root:Order 306-7476659-2427550 added to db successfully; run: 3 buyer: Karel Berkers
+DEBUG:root:Order 402-2758959-5526739 added to db successfully; run: 3 buyer: natario sabine
+DEBUG:root:Order 206-6841844-5695510 added to db successfully; run: 3 buyer: Dwight Hayletts
+DEBUG:root:Order 305-2397138-2454701 added to db successfully; run: 3 buyer: Dr. Gerhard Wagner
+DEBUG:root:Order 305-2795593-1988361 added to db successfully; run: 3 buyer: Rita Heyn
+DEBUG:root:Order 202-4896791-0612359 added to db successfully; run: 3 buyer: Elizabeth  smith
+DEBUG:root:Order 404-3828347-1225117 added to db successfully; run: 3 buyer: Ma del mar Budia Amador
+DEBUG:root:Order 403-2822888-4553968 added to db successfully; run: 3 buyer: ROBERT Soïg
+DEBUG:root:Order 202-2496979-9885902 added to db successfully; run: 3 buyer: Machteld Spoor
+DEBUG:root:Order 306-5756890-7164338 added to db successfully; run: 3 buyer: Zlatan
+DEBUG:root:Order 305-4591202-2402726 added to db successfully; run: 3 buyer: Julia
+DEBUG:root:Order 302-4424385-8687507 added to db successfully; run: 3 buyer: Ku'uhiaonani McDaniels
+DEBUG:root:Order 404-4121032-0956334 added to db successfully; run: 3 buyer: prime
+DEBUG:root:Order 306-7723551-4649956 added to db successfully; run: 3 buyer: Jan Paul Bernert Dr.
+DEBUG:root:Order 303-9711835-5249960 added to db successfully; run: 3 buyer: Anželika
+DEBUG:root:Order 303-6494682-3440303 added to db successfully; run: 3 buyer: Valeria Zaitseva
+DEBUG:root:Order 171-6696175-2039502 added to db successfully; run: 3 buyer: Mary Melero Ceprian
+DEBUG:root:Order 303-6597371-8967503 added to db successfully; run: 3 buyer: Tim Seitz
+DEBUG:root:Order 306-8944100-7494758 added to db successfully; run: 3 buyer: BrunoPedro
+DEBUG:root:Order 403-1896431-4761165 added to db successfully; run: 3 buyer: Filipa Figueiredo
+DEBUG:root:Order 407-9193103-1781936 added to db successfully; run: 3 buyer: Natalia Contell Castillo
+DEBUG:root:Order 405-9421699-9996337 added to db successfully; run: 3 buyer: gabriel dabadie
+DEBUG:root:Order 402-7117374-5000310 added to db successfully; run: 3 buyer: Mihaela GALITA
+DEBUG:root:Order 206-2189675-5563538 added to db successfully; run: 3 buyer: marie chilvers
+DEBUG:root:Order 408-1745129-8713915 added to db successfully; run: 3 buyer: Digiluc
+DEBUG:root:Order 305-1814966-3252327 added to db successfully; run: 3 buyer: Veronika Triebler
+DEBUG:root:Order 206-6145765-8660320 added to db successfully; run: 3 buyer: Roberta
+DEBUG:root:Order 305-7519067-5585926 added to db successfully; run: 3 buyer: maryam
+DEBUG:root:Order 203-7144798-5601150 added to db successfully; run: 3 buyer: Vikki
+WARNING:root:Multi-item / multi-line order 203-7144798-5601150. Already in database.
+DEBUG:root:Order 305-1009564-6401968 added to db successfully; run: 3 buyer: Hellmut Raum
+INFO:root:76 new orders were successfully added to database at run: 3
+DEBUG:root:Identified old run ids: [], added more than 14 days ago
+INFO:root:Deleted old orders (cascade) from orders table where run_id = []
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:24 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:Created backup amzn_orders_lrun.db after adding orders
+DEBUG:root:add_orders_to_db finished successfully. Both backups created.
+INFO:root:Connection to DB closed
+INFO:root:Total of 76 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2020.05.28 16:24
+
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:37
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21311262852018375.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 466 entries
+INFO:root:Returning 0/89 new/loaded orders for further processing
+DEBUG:root:Database currently holds 466 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 89. Further processing: 0 orders
+INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
+INFO:root:
+ NEW RUN STARTING: 2020.05.28 16:37
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21295705043018375.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 466 entries
+INFO:root:Returning 0/366 new/loaded orders for further processing
+DEBUG:root:Database currently holds 466 order records
+INFO:root:Connection to DB closed
+INFO:root:Loaded txt contains: 366. Further processing: 0 orders
+INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
