@@ -39,14 +39,14 @@ def get_total_price(order_dict : dict):
         print(VBA_ERROR_ALERT)
         sys.exit()
 
-def get_output_dir():
-    '''returns target dir for output files depending on execution type (.exe/.py)'''
+def get_output_dir(client_file=True):
+    '''returns target dir for output files depending on execution type (.exe/.py) and file type (client/systemic)'''
     # pyinstaller sets 'frozen' attr to sys module when compiling
     if getattr(sys, 'frozen', False):
         curr_folder = os.path.dirname(sys.executable)
     else:
         curr_folder = os.path.dirname(os.path.abspath(__file__))
-    return get_level_up_abspath(curr_folder)
+    return get_level_up_abspath(curr_folder) if client_file else curr_folder
 
 
 if __name__ == "__main__":
