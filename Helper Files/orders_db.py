@@ -11,6 +11,7 @@ ORDERS_ARCHIVE_DAYS = 14
 DATABASE_PATH = 'amzn_orders.db'
 BACKUP_DB_BEFORE_NAME = 'amzn_orders_b4lrun.db'
 BACKUP_DB_AFTER_NAME = 'amzn_orders_lrun.db'
+VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 
 class OrdersDB:
     '''SQLite Database Management of Orders Flow. Takes list (list of dicts structure) of orders
@@ -199,15 +200,23 @@ class OrdersDB:
 
     def add_orders_to_db(self):
         '''adds all cls orders to db, flushes old records, performs backups before and after changes to db'''
-        self._backup_db(self.db_backup_b4_path)
-        # Adding new orders:
-        self._insert_new_run(self.get_today_weekday_int(), run_time_default=True)
-        new_run_id = self._get_current_run_id()
-        self.insert_multiple_orders(self.orders, new_run_id)
-        # House keeping
-        self._flush_old_orders(ORDERS_ARCHIVE_DAYS)
-        self._backup_db(self.db_backup_after_path)
-        self.con.close()
+        try:
+            self._backup_db(self.db_backup_b4_path)
+            logging.info(f'Created backup {os.path.basename(self.db_backup_b4_path)} before adding orders')
+            # Adding new orders:
+            self._insert_new_run(self.get_today_weekday_int(), run_time_default=True)
+            new_run_id = self._get_current_run_id()
+            self.insert_multiple_orders(self.orders, new_run_id)
+            # House keeping
+            self._flush_old_orders(ORDERS_ARCHIVE_DAYS)
+            self._backup_db(self.db_backup_after_path)
+            logging.info(f'Created backup {os.path.basename(self.db_backup_after_path)} after adding orders')
+            logging.debug('add_orders_to_db finished successfully. Both backups created.')
+        except Exception as e:
+            logging.critical(f'Unknown error when inserting new orders. Error: {e}. Alerting VBA side about errors')
+            print(VBA_ERROR_ALERT)
+        finally:
+            self.con.close()
 
 
 if __name__ == "__main__":
