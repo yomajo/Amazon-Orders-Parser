@@ -27,11 +27,12 @@ class OrdersDB:
         # database setup
         self.__get_db_paths()
         self.con = sqlite3.connect(self.db_path)
-        self.con.execute("PRAGMA foreign_keys = 1")
+        self.con.execute("PRAGMA foreign_keys = 1;")
+        self.con.execute('PRAGMA encoding="UTF-8";')
         self.__create_schema()
     
     def __get_db_paths(self):
-        output_dir = get_output_dir()
+        output_dir = get_output_dir(client_file=False)
         self.db_path = os.path.join(output_dir, DATABASE_PATH)
         self.db_backup_b4_path = os.path.join(output_dir, BACKUP_DB_BEFORE_NAME)
         self.db_backup_after_path = os.path.join(output_dir, BACKUP_DB_AFTER_NAME)
@@ -117,7 +118,6 @@ class OrdersDB:
             payments_date = order_dict['payments-date']
             buyer = order_dict['buyer-name']
             self.insert_new_order(order_id, purchase_date, payments_date, buyer, date_added, run_id)
-            logging.debug(f'Successfully added order: {order_id} to database. Buyer: {buyer}, purchase_date {purchase_date}')
         logging.info(f'{len(orders)} new orders were successfully added to database at run: {run_id}')
 
     def insert_new_order(self, order_id, purchase_date, payments_date, buyer_name, date_added, run_id):
@@ -131,6 +131,8 @@ class OrdersDB:
             logging.debug(f'Order {order_id} added to db successfully; run: {run_id} buyer: {buyer_name}')
         except sqlite3.OperationalError as e:
             logging.error(f'Order {order_id} insertion failed. Syntax error: {e}')
+        except sqlite3.IntegrityError as e:
+            logging.warning(f'Multi-item / multi-line order {order_id}. Already in database.')
         except Exception as e:
             logging.error(f'Unknown error while inserting order {order_id} data to orders table. Error: {e}')
 
@@ -196,6 +198,7 @@ class OrdersDB:
         logging.info(f'Returning {len(new_orders)}/{len(self.orders)} new/loaded orders for further processing')
         logging.debug(f'Database currently holds {len(orders_in_db)} order records')
         self.con.close()
+        logging.info('Connection to DB closed')
         return new_orders
 
     def add_orders_to_db(self):
@@ -217,6 +220,7 @@ class OrdersDB:
             print(VBA_ERROR_ALERT)
         finally:
             self.con.close()
+            logging.info('Connection to DB closed')
 
 
 if __name__ == "__main__":
