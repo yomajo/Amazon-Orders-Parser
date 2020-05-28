@@ -178,11 +178,12 @@ class ParseOrders():
         '''Summing up tasks inside ParseOrders class'''
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
-        self.export_same_buyer_details()
         if testing:
-            logging.info(f'Suspended export of orders due to flag testing value: {testing}')
-            print(f'Suspended export and transfer to DB of orders due to flag testing value: {testing}')
+            logging.info(f'Suspended export of orders due to flag testing value: {testing}. Still adding orders to db though')
+            self.push_orders_to_db()
+            print(f'Finished. File exports suspended, orders added to DB due to flag testing value: {testing}')
             return
+        self.export_same_buyer_details()
         self.export_dpost()
         self.export_ups()
         self.export_etonas()
