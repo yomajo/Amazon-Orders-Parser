@@ -1,32 +1,28 @@
 INFO:root:
- NEW RUN STARTING: 2020.05.28 16:22
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21295705043018375.txt, filter_order_id: 
+ NEW RUN STARTING: 2020.05.29 18:07
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\run1.txt, filter_order_id: 
 INFO:root:file exists, continuing to processing...
 DEBUG:root:database tables are in place and ready to be used
 DEBUG:root:Before inserting new orders, orders table contains 0 entries
 INFO:root:Returning 366/366 new/loaded orders for further processing
 DEBUG:root:Database currently holds 0 order records
-INFO:root:Connection to DB closed
 INFO:root:Loaded txt contains: 366. Further processing: 366 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.22.txt and being showed to client
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.29 18.07.txt and being showed to client
 INFO:root:Order with key CUST_REF and value Clémence Clémence (Chez Jeannie MENSCH) triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.22.csv created. Orders inside: 317
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.29 18.07.csv created. Orders inside: 317
 INFO:root:Order with key CUST_REF and value Mafalda Sofia dos Santos Soares triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.22.csv created. Orders inside: 8
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.29 18.07.csv created. Orders inside: 8
 INFO:root:recipient-name seems to be one word, without a need to unpack. Error: not enough values to unpack (expected 2, got 1). recipient-name: G.Robinson. Returning empty last_name
 INFO:root:Order with key Address_line_1 and value 15 Saint Dennis House, Manor Close triggered VBA warning for charlimit set by Etonas
 INFO:root:Order with key Address_line_1 and value Green Block 05 Flat 08 Weston Hall Of Residence triggered VBA warning for charlimit set by Etonas
 INFO:root:Order with key Address_line_1 and value N210 JUBILEE HOUSE 1 KERNEL COURT WALNUT TREE CLOSE triggered VBA warning for charlimit set by Etonas
 INFO:root:Order with key Address_line_1 and value 26 BAMEL WAY NEXUS II GLOUCESTER BUSINESS PARK triggered VBA warning for charlimit set by Etonas
 INFO:root:Order with key Address_line_1 and value FOURHILLS NURSING HOME 8 HAZLITT STREET triggered VBA warning for charlimit set by Etonas
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.22.xlsx created. Orders inside: 41
-DEBUG:root:program_runs table already created. Error: table program_runs already exists
-DEBUG:root:orders table already created. Error: table orders already exists
-DEBUG:root:database tables are in place and ready to be used
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:22 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.29 18.07.xlsx created. Orders inside: 41
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-29 18:07 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
 INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
-DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
-DEBUG:root:Returning new run id: 1
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 5
+INFO:root:Current program_runs id: 1
 DEBUG:root:Order 203-5514747-5052368 added to db successfully; run: 1 buyer: Glenn Robinson
 DEBUG:root:Order 402-9209436-6709939 added to db successfully; run: 1 buyer: Watrin
 DEBUG:root:Order 304-5915486-7101107 added to db successfully; run: 1 buyer: Julia Schröder
@@ -396,17 +392,17 @@ DEBUG:root:Order 026-2118644-5149923 added to db successfully; run: 1 buyer: Mis
 INFO:root:366 new orders were successfully added to database at run: 1
 DEBUG:root:Identified old run ids: [], added more than 14 days ago
 INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:22 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-29 18:07 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
 INFO:root:Created backup amzn_orders_lrun.db after adding orders
 DEBUG:root:add_orders_to_db finished successfully. Both backups created.
-INFO:root:Connection to DB closed
+INFO:root:Connection to DB in session with file run1.txt closed
 INFO:root:Total of 366 new orders have been added to database, after exports were completed
 INFO:root:
-RUN ENDED: 2020.05.28 16:22
+RUN ENDED: 2020.05.29 18:07
 
 INFO:root:
- NEW RUN STARTING: 2020.05.28 16:23
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21311262852018375.txt, filter_order_id: 
+ NEW RUN STARTING: 2020.05.29 18:08
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\run2.txt, filter_order_id: 
 INFO:root:file exists, continuing to processing...
 DEBUG:root:program_runs table already created. Error: table program_runs already exists
 DEBUG:root:orders table already created. Error: table orders already exists
@@ -414,12 +410,12 @@ DEBUG:root:database tables are in place and ready to be used
 DEBUG:root:Before inserting new orders, orders table contains 353 entries
 INFO:root:Returning 0/89 new/loaded orders for further processing
 DEBUG:root:Database currently holds 353 order records
-INFO:root:Connection to DB closed
 INFO:root:Loaded txt contains: 89. Further processing: 0 orders
 INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
+INFO:root:Connection to DB in session with file run2.txt closed
 INFO:root:
- NEW RUN STARTING: 2020.05.28 16:23
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21321372750018376.txt, filter_order_id: 
+ NEW RUN STARTING: 2020.05.29 18:08
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\run3.txt, filter_order_id: 
 INFO:root:file exists, continuing to processing...
 DEBUG:root:program_runs table already created. Error: table program_runs already exists
 DEBUG:root:orders table already created. Error: table orders already exists
@@ -427,22 +423,18 @@ DEBUG:root:database tables are in place and ready to be used
 DEBUG:root:Before inserting new orders, orders table contains 353 entries
 INFO:root:Returning 43/355 new/loaded orders for further processing
 DEBUG:root:Database currently holds 353 order records
-INFO:root:Connection to DB closed
 INFO:root:Loaded txt contains: 355. Further processing: 43 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.23.txt and being showed to client
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.29 18.08.txt and being showed to client
 INFO:root:Order with key CUST_REF and value raquel silvia escudero bautista triggered VBA warning for charlimit in DPost
 INFO:root:Order with key CUST_REF and value GOUIRAND SANDRINE ou LUCE Richard triggered VBA warning for charlimit in DPost
 INFO:root:Order with key CUST_REF and value Concepción Contreras Corraliza triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.23.csv created. Orders inside: 31
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.23.csv created. Orders inside: 3
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.23.xlsx created. Orders inside: 9
-DEBUG:root:program_runs table already created. Error: table program_runs already exists
-DEBUG:root:orders table already created. Error: table orders already exists
-DEBUG:root:database tables are in place and ready to be used
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:23 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.29 18.08.csv created. Orders inside: 31
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.29 18.08.csv created. Orders inside: 3
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.29 18.08.xlsx created. Orders inside: 9
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-29 18:08 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
 INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
-DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
-DEBUG:root:Returning new run id: 2
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 5
+INFO:root:Current program_runs id: 2
 DEBUG:root:Order 404-3784360-6297955 added to db successfully; run: 2 buyer: Clain Olivier
 DEBUG:root:Order 203-3291741-1350706 added to db successfully; run: 2 buyer: Colleen Shepherd
 DEBUG:root:Order 408-4118054-5705103 added to db successfully; run: 2 buyer: PONGE ROGER
@@ -489,17 +481,30 @@ DEBUG:root:Order 302-9747311-3504363 added to db successfully; run: 2 buyer: Nad
 INFO:root:43 new orders were successfully added to database at run: 2
 DEBUG:root:Identified old run ids: [], added more than 14 days ago
 INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:23 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-29 18:08 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
 INFO:root:Created backup amzn_orders_lrun.db after adding orders
 DEBUG:root:add_orders_to_db finished successfully. Both backups created.
-INFO:root:Connection to DB closed
+INFO:root:Connection to DB in session with file run3.txt closed
 INFO:root:Total of 43 new orders have been added to database, after exports were completed
 INFO:root:
-RUN ENDED: 2020.05.28 16:23
+RUN ENDED: 2020.05.29 18:08
 
 INFO:root:
- NEW RUN STARTING: 2020.05.28 16:24
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21362797044018379.txt, filter_order_id: 
+ NEW RUN STARTING: 2020.05.29 18:08
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\run3.txt, filter_order_id: 
+INFO:root:file exists, continuing to processing...
+DEBUG:root:program_runs table already created. Error: table program_runs already exists
+DEBUG:root:orders table already created. Error: table orders already exists
+DEBUG:root:database tables are in place and ready to be used
+DEBUG:root:Before inserting new orders, orders table contains 392 entries
+INFO:root:Returning 0/355 new/loaded orders for further processing
+DEBUG:root:Database currently holds 392 order records
+INFO:root:Loaded txt contains: 355. Further processing: 0 orders
+INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
+INFO:root:Connection to DB in session with file run3.txt closed
+INFO:root:
+ NEW RUN STARTING: 2020.05.29 18:08
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\run4.txt, filter_order_id: 
 INFO:root:file exists, continuing to processing...
 DEBUG:root:program_runs table already created. Error: table program_runs already exists
 DEBUG:root:orders table already created. Error: table orders already exists
@@ -507,22 +512,18 @@ DEBUG:root:database tables are in place and ready to be used
 DEBUG:root:Before inserting new orders, orders table contains 392 entries
 INFO:root:Returning 76/264 new/loaded orders for further processing
 DEBUG:root:Database currently holds 392 order records
-INFO:root:Connection to DB closed
 INFO:root:Loaded txt contains: 264. Further processing: 76 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.28 16.24.txt and being showed to client
+INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.05.29 18.08.txt and being showed to client
 INFO:root:Order with key CUST_REF and value Ana Filipa Alexandre de Figueiredo triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.28 16.24.csv created. Orders inside: 62
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.05.29 18.08.csv created. Orders inside: 62
 INFO:root:Order with key CUST_REF and value AGENCE VARENNE /CAROLINE GUERRIER triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.28 16.24.csv created. Orders inside: 2
+INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.05.29 18.08.csv created. Orders inside: 2
 INFO:root:Order with key Address_line_1 and value Flat 8 Marsom House, Provost Estate triggered VBA warning for charlimit set by Etonas
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.28 16.24.xlsx created. Orders inside: 12
-DEBUG:root:program_runs table already created. Error: table program_runs already exists
-DEBUG:root:orders table already created. Error: table orders already exists
-DEBUG:root:database tables are in place and ready to be used
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-28 16:24 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.05.29 18.08.xlsx created. Orders inside: 12
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-05-29 18:08 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
 INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
-DEBUG:root:Added new run to program_runs table. Inserted with weekday: 4
-DEBUG:root:Returning new run id: 3
+DEBUG:root:Added new run to program_runs table. Inserted with weekday: 5
+INFO:root:Current program_runs id: 3
 DEBUG:root:Order 303-4841026-5865153 added to db successfully; run: 3 buyer: Lilli Weinberger
 DEBUG:root:Order 202-3049351-7494727 added to db successfully; run: 3 buyer: Stefanie Harms
 DEBUG:root:Order 406-2645037-2329947 added to db successfully; run: 3 buyer: Daniel
@@ -602,37 +603,11 @@ DEBUG:root:Order 305-1009564-6401968 added to db successfully; run: 3 buyer: Hel
 INFO:root:76 new orders were successfully added to database at run: 3
 DEBUG:root:Identified old run ids: [], added more than 14 days ago
 INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-28 16:24 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-05-29 18:08 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
 INFO:root:Created backup amzn_orders_lrun.db after adding orders
 DEBUG:root:add_orders_to_db finished successfully. Both backups created.
-INFO:root:Connection to DB closed
+INFO:root:Connection to DB in session with file run4.txt closed
 INFO:root:Total of 76 new orders have been added to database, after exports were completed
 INFO:root:
-RUN ENDED: 2020.05.28 16:24
+RUN ENDED: 2020.05.29 18:08
 
-INFO:root:
- NEW RUN STARTING: 2020.05.28 16:37
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21311262852018375.txt, filter_order_id: 
-INFO:root:file exists, continuing to processing...
-DEBUG:root:program_runs table already created. Error: table program_runs already exists
-DEBUG:root:orders table already created. Error: table orders already exists
-DEBUG:root:database tables are in place and ready to be used
-DEBUG:root:Before inserting new orders, orders table contains 466 entries
-INFO:root:Returning 0/89 new/loaded orders for further processing
-DEBUG:root:Database currently holds 466 order records
-INFO:root:Connection to DB closed
-INFO:root:Loaded txt contains: 89. Further processing: 0 orders
-INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
-INFO:root:
- NEW RUN STARTING: 2020.05.28 16:37
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21295705043018375.txt, filter_order_id: 
-INFO:root:file exists, continuing to processing...
-DEBUG:root:program_runs table already created. Error: table program_runs already exists
-DEBUG:root:orders table already created. Error: table orders already exists
-DEBUG:root:database tables are in place and ready to be used
-DEBUG:root:Before inserting new orders, orders table contains 466 entries
-INFO:root:Returning 0/366 new/loaded orders for further processing
-DEBUG:root:Database currently holds 466 order records
-INFO:root:Connection to DB closed
-INFO:root:Loaded txt contains: 366. Further processing: 0 orders
-INFO:root:No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.
