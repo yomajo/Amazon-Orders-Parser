@@ -1,4 +1,4 @@
-from amzn_parser_utils import get_output_dir
+from amzn_parser_utils import get_output_dir, file_to_binary, recreate_txt_file
 from datetime import datetime
 import sqlite3
 import logging
@@ -13,17 +13,19 @@ BACKUP_DB_BEFORE_NAME = 'amzn_orders_b4lrun.db'
 BACKUP_DB_AFTER_NAME = 'amzn_orders_lrun.db'
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 
+
 class OrdersDB:
     '''SQLite Database Management of Orders Flow. Takes list (list of dicts structure) of orders
-    Two main methods designed to work on separate instances (different list of orders):
+    Two main methods:
 
     get_new_orders_only() - from passed orders to cls returns only ones, not yet in database.
 
-    add_orders_to_db() - pushes new orders data selected data to database, performs backups before and after each run,
-    periodic flushing of old entries'''
+    add_orders_to_db() - pushes new orders (return orders of get_new_orders_only() method) data
+    selected data to database, performs backups before and after each run, periodic flushing of old entries'''
     
-    def __init__(self, orders:list):
+    def __init__(self, orders:list, txt_file_path:str):
         self.orders = orders
+        self.txt_file_path = txt_file_path
         # database setup
         self.__get_db_paths()
         self.con = sqlite3.connect(self.db_path)
@@ -43,7 +45,9 @@ class OrdersDB:
             with self.con:
                 self.con.execute('''CREATE TABLE program_runs (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                     run_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                                    weekday INTEGER);''')
+                                                    weekday INTEGER,
+                                                    fname TEXT DEFAULT 'No Fname Provided',
+                                                    source_file BLOB);''')
         except sqlite3.OperationalError as e:
             logging.debug(f'program_runs table already created. Error: {e}')
 
@@ -79,18 +83,16 @@ class OrdersDB:
         '''returns integer for provided date (defaults to today). Monday - 1, ..., Sunday - 7'''
         return datetime.weekday(date_arg) + 1
 
-    def _insert_new_run(self, weekday, run_time_default = True):
-        '''run_time_default = True adds SQL timestamp in db automatically. However manual timestamp in format:
-        'YYYY-MM-DD HH:MM:SS' could be added'''
+    def _insert_new_run(self, weekday):
+        '''Inserts new run (id, run_time, weekday, loaded filename and binary source) to program_runs table'''
+        loaded_binary_file = file_to_binary(self.txt_file_path)
         try:
             with self.con:
-                if run_time_default == True:
-                    self.con.execute('''INSERT INTO program_runs (weekday) VALUES (:weekday)''', {'weekday' : weekday})
-                    logging.debug(f'Added new run to program_runs table. Inserted with weekday: {weekday}')
-                else:
-                    self.con.execute('''INSERT INTO program_runs (run_time, weekday) VALUES (
-                            :run_time, :weekday)''', {'run_time' : run_time_default, 'weekday' : weekday})
-                    logging.debug(f'Added new run to program_runs with hardcoded run_time: {run_time_default}. Inserted with weekday: {weekday}')                
+                self.con.execute('''INSERT INTO program_runs (weekday, fname, source_file) VALUES (:weekday, :fname, :source_file)''',
+                                {'weekday' : weekday,
+                                'fname' : os.path.basename(self.txt_file_path),
+                                'source_file' : loaded_binary_file})
+                logging.debug(f'Added new run to program_runs table. Inserted with weekday: {weekday}')
         except Exception as e:
             logging.critical(f'Failed to insert new run to program_runs table. Error: {e}')
 
@@ -104,7 +106,7 @@ class OrdersDB:
                 run_time_date = run_time.split(' ')[0]
                 # Validaring the new run was made today (miliseconds before)
                 assert run_time_date == datetime.today().strftime('%Y-%m-%d'), f'fetched run_time ({run_time_date}) date is not today'
-                logging.debug(f'Returning new run id: {run_id}')
+                logging.info(f'Current program_runs id: {run_id}')
                 return run_id
         except sqlite3.OperationalError as e:
             logging.error(f'Syntax error in query trying to fetch current run id. Error: {e}')
@@ -180,6 +182,28 @@ class OrdersDB:
         except sqlite3.OperationalError as e:
             logging.error(f'Failed to retrieve ids from program_runs table. Syntax error: {e}')
 
+    def _extract_file_to(self, output_dir:str, fname_in_db:str):
+        '''recreates file from db table program runs where fname = fname_in_db, outputs file to output_dir'''
+        output_abs_fpath = os.path.join(output_dir, fname_in_db)
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                cur.execute('''SELECT source_file from program_runs WHERE fname = :fname_in_db''', {'fname_in_db':fname_in_db})
+                sqlite_output = cur.fetchone()
+            if sqlite_output == None:
+                print(f'No database entry in program_runs table where fname = {fname_in_db}')
+                self.close_connection()
+                sys.exit()
+            fetched_f_bin_data = sqlite_output[0]
+            recreate_txt_file(output_abs_fpath, fetched_f_bin_data)
+            print(f'Successfully recreated file {os.path.basename(output_abs_fpath)} from db to {output_abs_fpath}')
+        except Exception as e:
+            print(f'Unknown error encountered while retrieving file {fname_in_db} from db. Err: {e}')
+        finally:
+            print('Closing connection')
+            self.close_connection()
+
+
     def _backup_db(self, backup_db_path):
         '''if everything is ok, backups could be performed weekly adding conditional:
         if self.get_today_weekday_int() == 5:'''
@@ -189,27 +213,30 @@ class OrdersDB:
         back_con.close()
         logging.info(f"New database backup {os.path.basename(backup_db_path)} created on: "
                     f"{datetime.today().strftime('%Y-%m-%d %H:%M')} location: {backup_db_path}")
+    
+    def close_connection(self):
+        self.con.close()
+        logging.info(f'Connection to DB in session with file {os.path.basename(self.txt_file_path)} closed')
 
 
     def get_new_orders_only(self):
         '''From passed orders to cls, returns only ones NOT YET in database'''
         orders_in_db = self._get_order_ids_in_db()
-        new_orders = [order_data for order_data in self.orders if order_data['order-id'] not in orders_in_db]
-        logging.info(f'Returning {len(new_orders)}/{len(self.orders)} new/loaded orders for further processing')
+        self.new_orders = [order_data for order_data in self.orders if order_data['order-id'] not in orders_in_db]
+        logging.info(f'Returning {len(self.new_orders)}/{len(self.orders)} new/loaded orders for further processing')
         logging.debug(f'Database currently holds {len(orders_in_db)} order records')
-        self.con.close()
-        logging.info('Connection to DB closed')
-        return new_orders
+        return self.new_orders
 
     def add_orders_to_db(self):
-        '''adds all cls orders to db, flushes old records, performs backups before and after changes to db'''
+        '''adds all cls orders to db, flushes old records, performs backups before and after changes to db,
+        returns number of orders added to db'''
         try:
             self._backup_db(self.db_backup_b4_path)
             logging.info(f'Created backup {os.path.basename(self.db_backup_b4_path)} before adding orders')
             # Adding new orders:
-            self._insert_new_run(self.get_today_weekday_int(), run_time_default=True)
+            self._insert_new_run(self.get_today_weekday_int())
             new_run_id = self._get_current_run_id()
-            self.insert_multiple_orders(self.orders, new_run_id)
+            self.insert_multiple_orders(self.new_orders, new_run_id)
             # House keeping
             self._flush_old_orders(ORDERS_ARCHIVE_DAYS)
             self._backup_db(self.db_backup_after_path)
@@ -219,8 +246,8 @@ class OrdersDB:
             logging.critical(f'Unknown error when inserting new orders. Error: {e}. Alerting VBA side about errors')
             print(VBA_ERROR_ALERT)
         finally:
-            self.con.close()
-            logging.info('Connection to DB closed')
+            self.close_connection()
+        return len(self.new_orders)
 
 
 if __name__ == "__main__":
