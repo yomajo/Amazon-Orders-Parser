@@ -65,12 +65,12 @@ def parse_txt_file(data_file):
         logging.critical(f'Error reading txt source {e}')
         sys.exit()
 
-def get_new_orders(orders:list) -> list:
-    '''returns a list of order dicts (same as passed data structure) that are not yet in database, requiring further processing'''
-    orders_db = OrdersDB(orders)
-    new_orders = orders_db.get_new_orders_only()
-    logging.info(f'Loaded txt contains: {len(orders)}. Further processing: {len(new_orders)} orders')
-    return new_orders
+def parse_export_orders(testing:bool, cleaned_source_orders:list, loaded_txt:str):
+    '''interacts with classes (ParseOrders, OrdersDB) to filter new orders, export desired files and push new orders to db'''
+    db_client = OrdersDB(cleaned_source_orders, loaded_txt)
+    new_orders = db_client.get_new_orders_only()
+    logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
+    ParseOrders(new_orders, db_client).export_orders(testing)
 
 def parse_args():
     if len(sys.argv) == EXPECTED_SYS_ARGS:
@@ -92,9 +92,8 @@ def main(testing, amazon_export_txt_path):
         txt_path, filter_order_id = amazon_export_txt_path, ''  #, '305-1937192-5680315'
     if os.path.exists(txt_path):
         logging.info('file exists, continuing to processing...')
-        orders = get_list_of_order_dicts(txt_path, filter_order_id)
-        new_orders = get_new_orders(orders)
-        ParseOrders(new_orders).export_orders(testing)
+        cleaned_source_orders = get_list_of_order_dicts(txt_path, filter_order_id)
+        parse_export_orders(testing, cleaned_source_orders, amazon_export_txt_path)
         print(VBA_OK)
     else:
         logging.critical(f'Provided file {txt_path} does not exist.')
@@ -104,4 +103,4 @@ def main(testing, amazon_export_txt_path):
 
 
 if __name__ == "__main__":
-    main(TESTING, TEST_AMZN_EXPORT_TXT)
+    main(testing=TESTING, amazon_export_txt_path=TEST_AMZN_EXPORT_TXT)

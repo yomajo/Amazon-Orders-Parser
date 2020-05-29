@@ -1,7 +1,6 @@
 from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir
 from amzn_parser_constants import DPOST_HEADERS, DPOST_HEADERS_MAPPING, DPOST_FIXED_VALUES
 from etonas_xlsx_exporter import EtonasExporter
-from orders_db import OrdersDB
 from datetime import datetime
 import logging
 import sys
@@ -23,8 +22,9 @@ class ParseOrders():
     export_orders(testing=False) : main method, sorts orders by shipment company, if testing flag is False,
     exports files with appropriate orders data and adds all passed orders when creating class to database'''
     
-    def __init__(self, all_orders : list):
+    def __init__(self, all_orders : list, db_client : object):
         self.all_orders = all_orders
+        self.db_client = db_client
         self.dpost_orders = []
         self.etonas_orders = []
         self.ups_orders = []
@@ -115,27 +115,28 @@ class ParseOrders():
     def exit_no_new_orders(self):
         if not self.etonas_orders and not self.dpost_orders and not self.ups_orders:
             logging.info(f'No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.')
+            self.db_client.close_connection()
             print(VBA_NO_NEW_JOB)
             sys.exit()
 
-    @staticmethod
-    def _get_order_ship_price(order):
+    def _get_order_ship_price(self, order):
         try:
             return float(order['shipping-price'])
         except KeyError:
             logging.critical(f'Could not find column: \'shipping-price\' in data source. Exiting on order: {order}')
+            self.db_client.close_connection()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
             logging.warning(f'Error retrieving shipping-price in order: {order}, returning 0 (integer). Error: {e}')
             return 0
     
-    @staticmethod
-    def _get_order_ship_country(order):
+    def _get_order_ship_country(self, order):
         try:
             return order['ship-country'].upper()
         except KeyError:
             logging.critical(f'Could not find column: \'ship-country\' in data source. Exiting on order: {order}')
+            self.db_client.close_connection()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
@@ -170,9 +171,8 @@ class ParseOrders():
     
     def push_orders_to_db(self):
         '''adds all orders in this class to orders table in db'''
-        orders_db = OrdersDB(self.all_orders)
-        orders_db.add_orders_to_db()
-        logging.info(f'Total of {len(self.all_orders)} new orders have been added to database, after exports were completed')
+        count_added_to_db = self.db_client.add_orders_to_db()
+        logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
     def export_orders(self, testing=False):
         '''Summing up tasks inside ParseOrders class'''

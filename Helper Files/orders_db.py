@@ -15,12 +15,12 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 
 class OrdersDB:
     '''SQLite Database Management of Orders Flow. Takes list (list of dicts structure) of orders
-    Two main methods designed to work on separate instances (different list of orders):
+    Two main methods:
 
     get_new_orders_only() - from passed orders to cls returns only ones, not yet in database.
 
-    add_orders_to_db() - pushes new orders data selected data to database, performs backups before and after each run,
-    periodic flushing of old entries'''
+    add_orders_to_db() - pushes new orders (return orders of get_new_orders_only() method) data
+    selected data to database, performs backups before and after each run, periodic flushing of old entries'''
     
     def __init__(self, orders:list, txt_file_path:str):
         self.orders = orders
@@ -192,27 +192,30 @@ class OrdersDB:
         back_con.close()
         logging.info(f"New database backup {os.path.basename(backup_db_path)} created on: "
                     f"{datetime.today().strftime('%Y-%m-%d %H:%M')} location: {backup_db_path}")
+    
+    def close_connection(self):
+        self.con.close()
+        logging.info('Connection to DB closed')
 
 
     def get_new_orders_only(self):
         '''From passed orders to cls, returns only ones NOT YET in database'''
         orders_in_db = self._get_order_ids_in_db()
-        new_orders = [order_data for order_data in self.orders if order_data['order-id'] not in orders_in_db]
-        logging.info(f'Returning {len(new_orders)}/{len(self.orders)} new/loaded orders for further processing')
+        self.new_orders = [order_data for order_data in self.orders if order_data['order-id'] not in orders_in_db]
+        logging.info(f'Returning {len(self.new_orders)}/{len(self.orders)} new/loaded orders for further processing')
         logging.debug(f'Database currently holds {len(orders_in_db)} order records')
-        self.con.close()
-        logging.info('Connection to DB closed')
-        return new_orders
+        return self.new_orders
 
     def add_orders_to_db(self):
-        '''adds all cls orders to db, flushes old records, performs backups before and after changes to db'''
+        '''adds all cls orders to db, flushes old records, performs backups before and after changes to db,
+        returns number of orders added to db'''
         try:
             self._backup_db(self.db_backup_b4_path)
             logging.info(f'Created backup {os.path.basename(self.db_backup_b4_path)} before adding orders')
             # Adding new orders:
             self._insert_new_run(self.get_today_weekday_int(), run_time_default=True)
             new_run_id = self._get_current_run_id()
-            self.insert_multiple_orders(self.orders, new_run_id)
+            self.insert_multiple_orders(self.new_orders, new_run_id)
             # House keeping
             self._flush_old_orders(ORDERS_ARCHIVE_DAYS)
             self._backup_db(self.db_backup_after_path)
@@ -222,8 +225,8 @@ class OrdersDB:
             logging.critical(f'Unknown error when inserting new orders. Error: {e}. Alerting VBA side about errors')
             print(VBA_ERROR_ALERT)
         finally:
-            self.con.close()
-            logging.info('Connection to DB closed')
+            self.close_connection()
+        return len(self.new_orders)
 
 
 if __name__ == "__main__":
