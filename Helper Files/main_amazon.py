@@ -92,7 +92,7 @@ def main(testing, amazon_export_txt_path):
     if os.path.exists(txt_path):
         logging.info('file exists, continuing to processing...')
         cleaned_source_orders = get_list_of_order_dicts(txt_path, filter_order_id)
-        parse_export_orders(testing, cleaned_source_orders, amazon_export_txt_path)
+        parse_export_orders(testing, cleaned_source_orders, txt_path)
         print(VBA_OK)
     else:
         logging.critical(f'Provided file {txt_path} does not exist.')
