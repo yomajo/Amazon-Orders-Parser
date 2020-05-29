@@ -22,8 +22,9 @@ class OrdersDB:
     add_orders_to_db() - pushes new orders data selected data to database, performs backups before and after each run,
     periodic flushing of old entries'''
     
-    def __init__(self, orders:list):
+    def __init__(self, orders:list, txt_file_path:str):
         self.orders = orders
+        self.txt_file_path = txt_file_path
         # database setup
         self.__get_db_paths()
         self.con = sqlite3.connect(self.db_path)
@@ -43,7 +44,9 @@ class OrdersDB:
             with self.con:
                 self.con.execute('''CREATE TABLE program_runs (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                     run_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                                    weekday INTEGER);''')
+                                                    weekday INTEGER
+                                                    fname TEXT DEFAULT 'No Fname Provided'
+                                                    source_file BLOB);''')
         except sqlite3.OperationalError as e:
             logging.debug(f'program_runs table already created. Error: {e}')
 
