@@ -48,6 +48,24 @@ def get_output_dir(client_file=True):
         curr_folder = os.path.dirname(os.path.abspath(__file__))
     return get_level_up_abspath(curr_folder) if client_file else curr_folder
 
+def file_to_binary(abs_fpath:str):
+    '''returns binary data for file'''
+    try:
+        with open(abs_fpath, 'rb') as f:
+            bfile = f.read()
+        return bfile
+    except FileNotFoundError as e:
+        print(f'file_to_binary func got arg: {abs_fpath}; resulting in error: {e}')
+        return None
+
+def recreate_txt_file(abs_fpath:str, binary_data):
+    '''outputs a file from given binary data'''
+    try:
+        with open(abs_fpath, 'wb') as f:
+            f.write(binary_data)
+    except TypeError:
+        print(f'Expected binary when writing contents to file {abs_fpath}')
+
 
 if __name__ == "__main__":
     pass
