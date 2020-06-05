@@ -15,7 +15,7 @@ EXPECTED_SYS_ARGS = 2
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
-TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\run1.txt'
+TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\sample_amzn_export.txt'
 
 # Logging config:
 log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
