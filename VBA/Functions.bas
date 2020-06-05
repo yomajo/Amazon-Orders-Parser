@@ -30,18 +30,3 @@ ReturnVal = fd.SelectedItems(1)
 GetTXTFile = ReturnVal
 
 End Function
-
-Function GetFilterOrderID() As String
-'Prompts user for Order ID input for Amazon export txt file orders filtering
-Dim HelperDialogText As String
-
-HelperDialogText = "Enter Amazon order-id from which you want to export orders" & vbCrLf & vbCrLf & "Leave blank to export all orders"
-OrderID = InputBox(HelperDialogText, "Enter Order-ID")
-If OrderID = "" Then
-    GetFilterOrderID = ""
-    Exit Function
-Else
-    GetFilterOrderID = OrderID
-    Exit Function
-End If
-End Function

@@ -22,25 +22,21 @@ PythonScriptExe = ThisWorkbook.Path & "\Helper" & " " & "Files\main_amazon.exe"
 'Open dialog box to pick txt file for parsing (check if exists)
 TxtFilePath = GetTXTFile
 
-'Prompt user for order-id input (second param for python)
-'OrderID = GetFilterOrderID         'Disabling user input
-OrderID = ""
-
 'Open shell with stdout listening, execute py script, pass along picked txt file, filtering orderID value
 'Handling of errors and completion messages inside sub-module:
-Call ParseAmazonWithPython(PythonScriptExe, TxtFilePath, OrderID)
+Call ParseAmazonWithPython(PythonScriptExe, TxtFilePath)
 
 Application.ScreenUpdating = True
 End Sub
 
-Sub ParseAmazonWithPython(PythonScriptExe As String, TxtFilePath As Variant, OrderID As String)
+Sub ParseAmazonWithPython(PythonScriptExe As String, TxtFilePath As Variant)
 'Wrapper function to launch compiled python executable (.exe) parser (with provided args and listen to Py output in console
 
 'Reset variable
 sOutputStr = ""
 
 'Cmd command to be executed:
-oCmd = """" & PythonScriptExe & """" & " " & """" & TxtFilePath & """" & " " & """" & OrderID & """" & " "
+oCmd = """" & PythonScriptExe & """" & " " & """" & TxtFilePath & """"
 
 'Creating and start shell:
 Set objShell = VBA.CreateObject("Wscript.Shell")
