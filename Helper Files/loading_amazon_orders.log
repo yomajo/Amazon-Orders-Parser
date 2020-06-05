@@ -1,99 +1,20 @@
 INFO:root:
- NEW RUN STARTING: 2020.06.05 10:26
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21295705043018375.txt
+ NEW RUN STARTING: 2020.06.05 11:59
+INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\sample_amzn_export.txt
 INFO:root:file exists, continuing to processing...
-INFO:root:Returning 366/366 new/loaded orders for further processing
-INFO:root:Loaded txt contains: 366. Further processing: 366 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.06.05 10.26.txt and being showed to client
-INFO:root:Order with key CUST_REF and value Clémence Clémence (Chez Jeannie MENSCH) triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.06.05 10.26.csv created. Orders inside: 317
-INFO:root:Order with key CUST_REF and value Mafalda Sofia dos Santos Soares triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.06.05 10.26.csv created. Orders inside: 8
-INFO:root:recipient-name seems to be one word, without a need to unpack. Error: not enough values to unpack (expected 2, got 1). recipient-name: G.Robinson. Returning empty last_name
-INFO:root:Order with key Address_line_1 and value 15 Saint Dennis House, Manor Close triggered VBA warning for charlimit set by Etonas
-INFO:root:Order with key Address_line_1 and value Green Block 05 Flat 08 Weston Hall Of Residence triggered VBA warning for charlimit set by Etonas
-INFO:root:Order with key Address_line_1 and value N210 JUBILEE HOUSE 1 KERNEL COURT WALNUT TREE CLOSE triggered VBA warning for charlimit set by Etonas
-INFO:root:Order with key Address_line_1 and value 26 BAMEL WAY NEXUS II GLOUCESTER BUSINESS PARK triggered VBA warning for charlimit set by Etonas
-INFO:root:Order with key Address_line_1 and value FOURHILLS NURSING HOME 8 HAZLITT STREET triggered VBA warning for charlimit set by Etonas
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.06.05 10.26.xlsx created. Orders inside: 41
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-06-05 10:26 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
+INFO:root:Returning 1/1 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 1. Further processing: 1 orders
+INFO:root:No orders by same person in this batch. Skipping export to txt
+INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.06.05 11.59.csv created. Orders inside: 1
+INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-06-05 11:59 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
 INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
 INFO:root:Current program_runs id: 1
-WARNING:root:Multi-item / multi-line order 302-7150468-9621115. Already in database.
-WARNING:root:Multi-item / multi-line order 403-4356484-5713922. Already in database.
-WARNING:root:Multi-item / multi-line order 404-3450620-8637108. Already in database.
-WARNING:root:Multi-item / multi-line order 408-7687893-0681911. Already in database.
-WARNING:root:Multi-item / multi-line order 028-9998064-7001957. Already in database.
-WARNING:root:Multi-item / multi-line order 302-0861024-9047568. Already in database.
-WARNING:root:Multi-item / multi-line order 408-7263932-2121137. Already in database.
-WARNING:root:Multi-item / multi-line order 407-5629932-5998704. Already in database.
-WARNING:root:Multi-item / multi-line order 403-7806436-5786718. Already in database.
-WARNING:root:Multi-item / multi-line order 306-3328901-6689927. Already in database.
-WARNING:root:Multi-item / multi-line order 405-1314850-0451568. Already in database.
-WARNING:root:Multi-item / multi-line order 405-2819354-1341925. Already in database.
-WARNING:root:Multi-item / multi-line order 405-4576125-2646701. Already in database.
-INFO:root:366 new orders were successfully added to database at run: 1
+INFO:root:1 new orders were successfully added to database at run: 1
 INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-06-05 10:26 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
+INFO:root:New database backup amzn_orders_lrun.db created on: 2020-06-05 11:59 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
 INFO:root:Created backup amzn_orders_lrun.db after adding orders
-INFO:root:Connection to DB in session with file 21295705043018375.txt closed
-INFO:root:Total of 366 new orders have been added to database, after exports were completed
+INFO:root:Connection to DB in session with file sample_amzn_export.txt closed
+INFO:root:Total of 1 new orders have been added to database, after exports were completed
 INFO:root:
-RUN ENDED: 2020.06.05 10:26
-
-INFO:root:
- NEW RUN STARTING: 2020.06.05 10:26
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21321372750018376.txt
-INFO:root:file exists, continuing to processing...
-INFO:root:Returning 43/355 new/loaded orders for further processing
-INFO:root:Loaded txt contains: 355. Further processing: 43 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.06.05 10.26.txt and being showed to client
-INFO:root:Order with key CUST_REF and value raquel silvia escudero bautista triggered VBA warning for charlimit in DPost
-INFO:root:Order with key CUST_REF and value GOUIRAND SANDRINE ou LUCE Richard triggered VBA warning for charlimit in DPost
-INFO:root:Order with key CUST_REF and value Concepción Contreras Corraliza triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.06.05 10.26.csv created. Orders inside: 31
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.06.05 10.26.csv created. Orders inside: 3
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.06.05 10.26.xlsx created. Orders inside: 9
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-06-05 10:26 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
-INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
-INFO:root:Current program_runs id: 2
-WARNING:root:Multi-item / multi-line order 403-9284874-1917918. Already in database.
-WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
-WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
-WARNING:root:Multi-item / multi-line order 026-4300356-3973169. Already in database.
-INFO:root:43 new orders were successfully added to database at run: 2
-INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-06-05 10:26 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
-INFO:root:Created backup amzn_orders_lrun.db after adding orders
-INFO:root:Connection to DB in session with file 21321372750018376.txt closed
-INFO:root:Total of 43 new orders have been added to database, after exports were completed
-INFO:root:
-RUN ENDED: 2020.06.05 10:26
-
-INFO:root:
- NEW RUN STARTING: 2020.06.05 10:27
-INFO:root:Accepted sys args on launch: txt_path: C:\Coding\Amazon Orders Parser\Amazon exports\Collected exports\21362797044018379.txt
-INFO:root:file exists, continuing to processing...
-INFO:root:Returning 76/264 new/loaded orders for further processing
-INFO:root:Loaded txt contains: 264. Further processing: 76 orders
-INFO:root:Same Buyer Orders have been written to C:\Coding\Amazon Orders Parser\Same Buyer Orders 2020.06.05 10.27.txt and being showed to client
-INFO:root:Order with key CUST_REF and value Ana Filipa Alexandre de Figueiredo triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\DPost-Amazon 2020.06.05 10.27.csv created. Orders inside: 62
-INFO:root:Order with key CUST_REF and value AGENCE VARENNE /CAROLINE GUERRIER triggered VBA warning for charlimit in DPost
-INFO:root:CSV C:\Coding\Amazon Orders Parser\UPS-Amazon 2020.06.05 10.27.csv created. Orders inside: 2
-INFO:root:Order with key Address_line_1 and value Flat 8 Marsom House, Provost Estate triggered VBA warning for charlimit set by Etonas
-INFO:root:XLSX C:\Coding\Amazon Orders Parser\Etonas-Amazon 2020.06.05 10.27.xlsx created. Orders inside: 12
-INFO:root:New database backup amzn_orders_b4lrun.db created on: 2020-06-05 10:27 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_b4lrun.db
-INFO:root:Created backup amzn_orders_b4lrun.db before adding orders
-INFO:root:Current program_runs id: 3
-WARNING:root:Multi-item / multi-line order 407-8561914-5126766. Already in database.
-WARNING:root:Multi-item / multi-line order 203-7144798-5601150. Already in database.
-INFO:root:76 new orders were successfully added to database at run: 3
-INFO:root:Deleted old orders (cascade) from orders table where run_id = []
-INFO:root:New database backup amzn_orders_lrun.db created on: 2020-06-05 10:27 location: C:\Coding\Amazon Orders Parser\Helper Files\amzn_orders_lrun.db
-INFO:root:Created backup amzn_orders_lrun.db after adding orders
-INFO:root:Connection to DB in session with file 21362797044018379.txt closed
-INFO:root:Total of 76 new orders have been added to database, after exports were completed
-INFO:root:
-RUN ENDED: 2020.06.05 10:27
+RUN ENDED: 2020.06.05 11:59
 
