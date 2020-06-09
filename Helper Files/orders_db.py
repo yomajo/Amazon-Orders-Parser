@@ -81,7 +81,7 @@ class OrdersDB:
     @staticmethod
     def get_today_weekday_int(date_arg=datetime.today()):
         '''returns integer for provided date (defaults to today). Monday - 1, ..., Sunday - 7'''
-        return datetime.weekday(date_arg) + 1
+        return datetime.isoweekday(date_arg)
 
     def _insert_new_run(self, weekday):
         '''Inserts new run (id, run_time, weekday, loaded filename and binary source) to program_runs table'''
