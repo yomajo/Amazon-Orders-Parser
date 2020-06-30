@@ -149,7 +149,8 @@ class ParseOrders():
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'Same Buyer Orders {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'Etonas-Amazon {date_stamp}.xlsx')
-        self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
+        self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon-Export.csv')
+        # self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
         self.ups_filename = os.path.join(output_dir, f'UPS-Amazon {date_stamp}.csv')
 
     def export_dpost(self):
@@ -179,9 +180,13 @@ class ParseOrders():
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         if testing:
+            print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING DPOST CSV instead.')
             logging.info(f'Suspended export of orders due to flag testing value: {testing}. Still adding orders to db though')
-            self.push_orders_to_db()
-            print(f'Finished. File exports suspended, orders added to DB due to flag testing value: {testing}')
+            self.export_dpost()
+            print('Closing db connection, The end.')
+            self.db_client.close_connection()
+            # self.push_orders_to_db()
+            # print(f'Finished. File exports suspended, orders added to DB due to flag testing value: {testing}')
             return
         self.export_same_buyer_details()
         self.export_dpost()
