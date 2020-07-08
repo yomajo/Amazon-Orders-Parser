@@ -122,6 +122,7 @@ class ParseOrders():
         '''replaces middle names with abbreviations. Example input: Jose Inarritu Gonzallez Ima La Piena Hugo
         Output: Jose I. G. I. L. P. Hugo'''
         shortened_seq_lst = []
+        long_seq = long_seq.replace('-',' ')    # Treatment of dashes inside name string
         try:
             words_inside = long_seq.split()
             for idx, word in enumerate(words_inside):
@@ -145,16 +146,32 @@ class ParseOrders():
 
     @staticmethod
     def __reorg_dpost_order_addr(order_dict : dict) -> dict:
-        '''reoganizes address fields, or even shortens on demand'''
+        '''reoganizes address fields, returns original order dict, if reorganization still exceeds fields' limits'''
+        original_dict = order_dict
         addr1 = order_dict['ADDRESS_LINE_1']
         addr2 = order_dict['ADDRESS_LINE_2']
         addr3 = order_dict['ADDRESS_LINE_3']
+        logging.debug(f'Before reorg:\nf1: {addr1}\nf2: {addr2}\nf3:{addr3}')
         total_address_seq = addr1 + ' ' + addr2 + ' ' + addr3
-        address_items = total_address_seq.split()
-        
-        # DPOST_ADDRESS_CHARLIMIT
-        print('Magic')
-        # Do magic
+        address_seq = total_address_seq.split()
+        # Reset fields, declare availability flags
+        order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_3'] = ''
+        f1_not_filled = f2_not_filled = True
+        # Reorganizing fields
+        for addr_item in address_seq:
+            if len(order_dict['ADDRESS_LINE_1']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f1_not_filled:
+                order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_1'] + addr_item + ' '
+            elif len(order_dict['ADDRESS_LINE_2']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f2_not_filled:
+                order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_2'] + addr_item + ' '
+                f1_not_filled = False
+            elif len(order_dict['ADDRESS_LINE_3']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT:
+                order_dict['ADDRESS_LINE_3'] = order_dict['ADDRESS_LINE_3'] + addr_item + ' '
+                f2_not_filled = False
+            else:
+                logging.warning(f'Address reorganization failed. Total address char count: {len(addr1)+len(addr2)+len(addr3)} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
+                print(VBA_DPOST_CHARLIMIT_ALERT)
+                return original_dict
+        logging.debug(f'After reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
         return order_dict
 
     def sort_orders_by_shipment_company(self):
@@ -232,12 +249,12 @@ class ParseOrders():
         logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
     def export_orders(self, testing=False):
-        '''Summing up tasks inside ParseOrders class'''
+        '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         if testing:
             print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING DPOST CSV instead.')
-            logging.info(f'Suspended export of orders due to flag testing value: {testing}. Still adding orders to db though')
+            logging.info(f'Suspended export of orders due to flag testing value: {testing}')
             self.export_dpost()
             print('Closing db connection, The end.')
             self.db_client.close_connection()
