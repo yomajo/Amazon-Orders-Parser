@@ -71,7 +71,7 @@ End If
 
 'Check for DPost warning
 If InStr(1, sOutputStr, "DPOST_CHARLIMIT_WARNING") > 0 Then
-    MsgBox "One or more orders in Deutsche Post export CUST_REF column exceed 28 symbol limit.", vbInformation, "Deutsche Post CUST_REF column exceeded limit"
+    MsgBox "One or more orders in Deutsche Post exceed field limits. Rearrange name or address fields", vbInformation, "Deutsche Post field(s) exceeded limit"
 End If
 
 'Check for key(headers) error:
