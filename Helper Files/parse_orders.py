@@ -44,7 +44,7 @@ class ParseOrders():
                 for order in same_buyer_orders[recipient_name]:
                     f.write(f"\n\t\t{order['order-id']}\t\t{order['ship-address-1']} {order['ship-address-2']}")
         logging.info(f'Same Buyer Orders have been written to {self.same_buyers_filename} and being showed to client')
-        # os.startfile(self.same_buyers_filename)
+        os.startfile(self.same_buyers_filename)
 
     def get_same_buyer_orders(self):
         '''step1: collects {recipient-name: [{order1 details}, {order2 details}]} structure; step2: removes single orders'''
@@ -222,8 +222,7 @@ class ParseOrders():
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'Same Buyer Orders {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'Etonas-Amazon {date_stamp}.xlsx')
-        self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon-Export.csv')
-        # self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
+        self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
         self.ups_filename = os.path.join(output_dir, f'UPS-Amazon {date_stamp}.csv')
 
     def export_dpost(self):
