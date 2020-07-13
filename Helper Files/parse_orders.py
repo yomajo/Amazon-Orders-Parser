@@ -14,7 +14,7 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_NO_NEW_JOB = 'NO NEW JOB'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_DPOST_CHARLIMIT_ALERT = 'DPOST_CHARLIMIT_WARNING'
-DPOST_NAME_CHARLIMIT = 28
+DPOST_NAME_CHARLIMIT = 30
 DPOST_ADDRESS_CHARLIMIT = 40
 
 
@@ -108,6 +108,7 @@ class ParseOrders():
         order_dict['POSTAL_CODE'] = order_dict['POSTAL_CODE'].upper()
 
         if len(name) > DPOST_NAME_CHARLIMIT:
+            logging.debug('Order enters name shortening functions')
             order_dict['NAME'] = self.__shorten_word_sequence(name)
             order_dict['CUST_REF'] = order_dict['NAME']
 
@@ -135,7 +136,7 @@ class ParseOrders():
             assert len(short_seq) <= DPOST_NAME_CHARLIMIT, 'Shortened name did not pass charlimit validation'
             return short_seq        
         except Exception as e:
-            logging.warning(f'Could not shorten name: {long_seq}. Error: {e}. Alerting VBA')
+            logging.warning(f'Could not shorten name: {long_seq}. Error: {e}. Alerting VBA, returning unedited')
             print(VBA_DPOST_CHARLIMIT_ALERT)
             return long_seq
 
@@ -147,12 +148,9 @@ class ParseOrders():
     @staticmethod
     def __reorg_dpost_order_addr(order_dict : dict) -> dict:
         '''reoganizes address fields, returns original order dict, if reorganization still exceeds fields' limits'''
-        original_dict = order_dict
-        addr1 = order_dict['ADDRESS_LINE_1']
-        addr2 = order_dict['ADDRESS_LINE_2']
-        addr3 = order_dict['ADDRESS_LINE_3']
-        logging.debug(f'Before reorg:\nf1: {addr1}\nf2: {addr2}\nf3:{addr3}')
-        total_address_seq = addr1 + ' ' + addr2 + ' ' + addr3
+        original_order = order_dict.copy()
+        logging.debug(f'Before address reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
+        total_address_seq = order_dict['ADDRESS_LINE_1'] + ' ' + order_dict['ADDRESS_LINE_2'] + ' ' + order_dict['ADDRESS_LINE_3']
         address_seq = total_address_seq.split()
         # Reset fields, declare availability flags
         order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_3'] = ''
@@ -168,9 +166,10 @@ class ParseOrders():
                 order_dict['ADDRESS_LINE_3'] = order_dict['ADDRESS_LINE_3'] + addr_item + ' '
                 f2_not_filled = False
             else:
-                logging.warning(f'Address reorganization failed. Total address char count: {len(addr1)+len(addr2)+len(addr3)} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
+                logging.warning(f'Address reorganization failed. Total address char count: {len(order_dict["ADDRESS_LINE_1"])+len(order_dict["ADDRESS_LINE_2"])+len(order_dict["ADDRESS_LINE_3"])} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
+                logging.warning(f'Warning VBA, returning original order: {original_order}')
                 print(VBA_DPOST_CHARLIMIT_ALERT)
-                return original_dict
+                return original_order
         logging.debug(f'After reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
         return order_dict
 
@@ -186,6 +185,7 @@ class ParseOrders():
         self.exit_no_new_orders()
     
     def exit_no_new_orders(self):
+        '''terminates python program, closes db connection, warns VBA'''
         if not self.etonas_orders and not self.dpost_orders and not self.ups_orders:
             logging.info(f'No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.')
             self.db_client.close_connection()
