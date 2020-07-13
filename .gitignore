@@ -7,3 +7,4 @@ main_amazon.spec
 amzn_orders.db
 amzn_orders_b4lrun.db
 amzn_orders_lrun.db
+export.txt

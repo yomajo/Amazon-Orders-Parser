@@ -1,4 +1,5 @@
 from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
+import platform
 import logging
 import sys
 import os
@@ -66,6 +67,10 @@ def recreate_txt_file(abs_fpath:str, binary_data):
     except TypeError:
         print(f'Expected binary when writing contents to file {abs_fpath}')
 
+def is_windows_machine() -> bool:
+    '''returns True if machine executing the code is Windows based'''
+    machine_os = platform.system()
+    return True if machine_os == 'Windows' else False
 
 if __name__ == "__main__":
     pass

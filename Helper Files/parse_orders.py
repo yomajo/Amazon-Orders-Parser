@@ -1,6 +1,7 @@
 from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir
 from amzn_parser_constants import DPOST_HEADERS, DPOST_HEADERS_MAPPING, DPOST_FIXED_VALUES
 from etonas_xlsx_exporter import EtonasExporter
+from string import ascii_letters
 from datetime import datetime
 import logging
 import sys
@@ -12,8 +13,9 @@ import os
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_NO_NEW_JOB = 'NO NEW JOB'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
-VBA_DPOST_CHARTLIMIT_ALERT = 'DPOST_CHARLIMIT_WARNING'
-DPOST_REF_CHARLIMIT_PER_CELL = 28
+VBA_DPOST_CHARLIMIT_ALERT = 'DPOST_CHARLIMIT_WARNING'
+DPOST_NAME_CHARLIMIT = 30
+DPOST_ADDRESS_CHARLIMIT = 40
 
 
 class ParseOrders():
@@ -74,23 +76,21 @@ class ParseOrders():
             dpost_ready_data = []
             for order_dict in orders_data:
                 reduced_order_dict = self.prepare_dpost_order_contents(order_dict)
-                dpost_ready_data.append(reduced_order_dict)
+                validated_order_dict = self.__validate_dpost_order(reduced_order_dict)
+                dpost_ready_data.append(validated_order_dict)
             return dpost_ready_data
         except Exception as e:
             print(VBA_ERROR_ALERT)
             logging.critical(f'Error while iterating collected row dicts and trying to reduce. Error: {e}')
 
     def prepare_dpost_order_contents(self, order_dict : dict):
+        '''outputs a dir, those keys correspong to target csv headers'''        
         d_with_output_keys = {}
         for header in DPOST_HEADERS:
             if header in DPOST_FIXED_VALUES.keys():
                 d_with_output_keys[header] = DPOST_FIXED_VALUES[header]
             elif header in DPOST_HEADERS_MAPPING.keys():
                 d_with_output_keys[header] = order_dict[DPOST_HEADERS_MAPPING[header]]
-                # warn in VBA if char limit per cell is exceeded in DPost reference column
-                if 'cust_ref' in header.lower() and len(d_with_output_keys[header]) > DPOST_REF_CHARLIMIT_PER_CELL:
-                    logging.info(f'Order with key {header} and value {d_with_output_keys[header]} triggered VBA warning for charlimit in DPost')
-                    print(VBA_DPOST_CHARTLIMIT_ALERT)
             elif header == 'DETAILED_CONTENT_DESCRIPTIONS_1':
                 d_with_output_keys[header] = get_product_category(order_dict['product-name'])
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE']:
@@ -100,7 +100,79 @@ class ParseOrders():
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
+
+    def __validate_dpost_order(self, order_dict : dict) -> dict:
+        '''rearranges /shortens data fields on demand (charlimit for fields)
+        Takes care of: address1,2,3 , name, cust_ref, postcode fields'''
+        name = order_dict['NAME']
+        order_dict['POSTAL_CODE'] = order_dict['POSTAL_CODE'].upper()
+
+        if len(name) > DPOST_NAME_CHARLIMIT:
+            logging.debug('Order enters name shortening functions')
+            order_dict['NAME'] = self.__shorten_word_sequence(name)
+            order_dict['CUST_REF'] = order_dict['NAME']
+
+        if len(order_dict['ADDRESS_LINE_1']) > DPOST_ADDRESS_CHARLIMIT or \
+            len(order_dict['ADDRESS_LINE_2']) > DPOST_ADDRESS_CHARLIMIT or \
+            len(order_dict['ADDRESS_LINE_3']) > DPOST_ADDRESS_CHARLIMIT:
+            logging.debug('Order enters address reorganisation')
+            order_dict = self.__reorg_dpost_order_addr(order_dict)        
+        return order_dict
     
+    def __shorten_word_sequence(self, long_seq : str) -> str:
+        '''replaces middle names with abbreviations. Example input: Jose Inarritu Gonzallez Ima La Piena Hugo
+        Output: Jose I. G. I. L. P. Hugo'''
+        shortened_seq_lst = []
+        long_seq = long_seq.replace('-',' ')    # Treatment of dashes inside name string
+        try:
+            words_inside = long_seq.split()
+            for idx, word in enumerate(words_inside):
+                if idx == 0 or idx == len(words_inside) - 1:
+                    shortened_seq_lst.append(word)
+                else:
+                    abbr_word = self.__abbreviate_word(word)
+                    shortened_seq_lst.append(abbr_word)
+            short_seq = ' '.join(shortened_seq_lst)
+            assert len(short_seq) <= DPOST_NAME_CHARLIMIT, 'Shortened name did not pass charlimit validation'
+            return short_seq        
+        except Exception as e:
+            logging.warning(f'Could not shorten name: {long_seq}. Error: {e}. Alerting VBA, returning unedited')
+            print(VBA_DPOST_CHARLIMIT_ALERT)
+            return long_seq
+
+    @staticmethod
+    def __abbreviate_word(word : str) -> str:
+        '''returns capitalized first letter with dot of provided word if it stars with letter'''            
+        return word[0].upper() + '.' if word[0] in ascii_letters else word
+
+    @staticmethod
+    def __reorg_dpost_order_addr(order_dict : dict) -> dict:
+        '''reoganizes address fields, returns original order dict, if reorganization still exceeds fields' limits'''
+        original_order = order_dict.copy()
+        logging.debug(f'Before address reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
+        total_address_seq = order_dict['ADDRESS_LINE_1'] + ' ' + order_dict['ADDRESS_LINE_2'] + ' ' + order_dict['ADDRESS_LINE_3']
+        address_seq = total_address_seq.split()
+        # Reset fields, declare availability flags
+        order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_3'] = ''
+        f1_not_filled = f2_not_filled = True
+        # Reorganizing fields
+        for addr_item in address_seq:
+            if len(order_dict['ADDRESS_LINE_1']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f1_not_filled:
+                order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_1'] + addr_item + ' '
+            elif len(order_dict['ADDRESS_LINE_2']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f2_not_filled:
+                order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_2'] + addr_item + ' '
+                f1_not_filled = False
+            elif len(order_dict['ADDRESS_LINE_3']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT:
+                order_dict['ADDRESS_LINE_3'] = order_dict['ADDRESS_LINE_3'] + addr_item + ' '
+                f2_not_filled = False
+            else:
+                logging.warning(f'Address reorganization failed. Total address char count: {len(order_dict["ADDRESS_LINE_1"])+len(order_dict["ADDRESS_LINE_2"])+len(order_dict["ADDRESS_LINE_3"])} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
+                logging.warning(f'Warning VBA, returning original order: {original_order}')
+                print(VBA_DPOST_CHARLIMIT_ALERT)
+                return original_order
+        logging.debug(f'After reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
+        return order_dict
+
     def sort_orders_by_shipment_company(self):
         '''sorts orders by shipment company. Performs check in the end for empty lists'''    
         for order in self.all_orders:
@@ -113,6 +185,7 @@ class ParseOrders():
         self.exit_no_new_orders()
     
     def exit_no_new_orders(self):
+        '''terminates python program, closes db connection, warns VBA'''
         if not self.etonas_orders and not self.dpost_orders and not self.ups_orders:
             logging.info(f'No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.')
             self.db_client.close_connection()
@@ -175,13 +248,17 @@ class ParseOrders():
         logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
     def export_orders(self, testing=False):
-        '''Summing up tasks inside ParseOrders class'''
+        '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         if testing:
-            logging.info(f'Suspended export of orders due to flag testing value: {testing}. Still adding orders to db though')
-            self.push_orders_to_db()
-            print(f'Finished. File exports suspended, orders added to DB due to flag testing value: {testing}')
+            print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING DPOST CSV instead.')
+            logging.info(f'Suspended export of orders due to flag testing value: {testing}')
+            self.export_dpost()
+            print('Closing db connection, The end.')
+            self.db_client.close_connection()
+            # self.push_orders_to_db()
+            # print(f'Finished. File exports suspended, orders added to DB due to flag testing value: {testing}')
             return
         self.export_same_buyer_details()
         self.export_dpost()
