@@ -170,7 +170,6 @@ HEADERS_CONTAINING_DATA = [
 
 # Mapping: key corresponds to DPost CSV template (only the ones used for data entry), value - corresponding amazon header title
 DPOST_HEADERS_MAPPING = {
-    'CUST_REF' : 'recipient-name',
     'NAME' : 'recipient-name',
     'RECIPIENT_PHONE' : 'buyer-phone-number',
     'RECIPIENT_EMAIL' : 'buyer-email',
@@ -189,6 +188,7 @@ DPOST_FIXED_VALUES = {
     'PRODUCT' : 'GMP',
     'SERVICE_LEVEL' : 'PRIORITY',
     'CONTENT_TYPE' : 'SALE OF GOODS',
+    'CUST_REF' : '',
     'WEIGHT' : '100',
     'DECLARED_NETWEIGHT_1' : '100',
     'RETURN_LABEL' :'FALSE'
