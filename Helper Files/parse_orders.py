@@ -103,14 +103,13 @@ class ParseOrders():
 
     def __validate_dpost_order(self, order_dict : dict) -> dict:
         '''rearranges /shortens data fields on demand (charlimit for fields)
-        Takes care of: address1,2,3 , name, cust_ref, postcode fields'''
+        Takes care of: address1,2,3 , name, postcode fields'''
         name = order_dict['NAME']
         order_dict['POSTAL_CODE'] = order_dict['POSTAL_CODE'].upper()
 
         if len(name) > DPOST_NAME_CHARLIMIT:
             logging.debug('Order enters name shortening functions')
             order_dict['NAME'] = self.__shorten_word_sequence(name)
-            order_dict['CUST_REF'] = order_dict['NAME']
 
         if len(order_dict['ADDRESS_LINE_1']) > DPOST_ADDRESS_CHARLIMIT or \
             len(order_dict['ADDRESS_LINE_2']) > DPOST_ADDRESS_CHARLIMIT or \
