@@ -98,7 +98,7 @@ class ParseOrders():
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
                 d_with_output_keys[header] = get_origin_country(order_dict['product-name'])
             elif header == 'CUST_REF':
-                d_with_output_keys[header] = order_dict['recipient-name'][:35]
+                d_with_output_keys[header] = order_dict['recipient-name'][:20]
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
