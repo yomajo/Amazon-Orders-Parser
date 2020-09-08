@@ -67,6 +67,7 @@ CATEGORY_CRITERIAS = [
     ['injinji', '', 'INJINJI', 'OTHERS']
     ]
 
+# New Etonas Headers:
 ETONAS_HEADERS = [
     'Address_line_1',
     'Address_line_2',
@@ -77,16 +78,16 @@ ETONAS_HEADERS = [
     'Last_name',
     'Email',
     'Weight(Kg)',
-    'Compensation(£)',
+    'Compensation()',
     'Signature(y/n)',
     'Reference',
     'Contents',
-    'Parcel_value(£)',
     'Delivery_phone',
-    'Delivery_safe_place',
-    'Delivery_instructions',
-    '',
-    'COUNTRY'
+    'Buyer Country',
+    'Tracking (0 - neregistruota, 1 - registruota)',
+    'PackageType',
+    'Amount',
+    'Sum'
     ]
 
 DPOST_HEADERS = [
@@ -204,5 +205,6 @@ ETONAS_HEADERS_MAPPING = {
     'Address_line_4' : 'ship-state',
     'Postcode' : 'ship-postal-code',
     'Email' : 'buyer-email',
-    'COUNTRY': 'ship-country'
+    'Delivery_phone' : 'buyer-phone-number',
+    'Buyer Country': 'ship-country'
     }
