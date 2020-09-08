@@ -253,9 +253,9 @@ class ParseOrders():
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         if testing:
-            print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING DPOST CSV instead.')
+            print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING instead.')
             logging.info(f'Suspended export of orders due to flag testing value: {testing}')
-            self.export_dpost()
+            self.export_etonas()
             print('Closing db connection, The end.')
             self.db_client.close_connection()
             # self.push_orders_to_db()
