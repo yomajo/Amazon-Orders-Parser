@@ -31,6 +31,10 @@ class EtonasExporter():
     def prepare_etonas_order_contents(self, order_dict : dict):
         d_with_output_keys = {}
         first_name, last_name = self.get_fname_lname(order_dict)
+        # Change GB to UK for Etonas
+        if order_dict['ship-country'] == 'GB':
+            order_dict['ship-country'] = 'UK'
+        
         for header in ETONAS_HEADERS:
             if header in ETONAS_HEADERS_MAPPING.keys():
                 d_with_output_keys[header] = order_dict[ETONAS_HEADERS_MAPPING[header]]
