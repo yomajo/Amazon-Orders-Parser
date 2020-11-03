@@ -141,32 +141,9 @@ DPOST_HEADERS = [
     'DECLARED_HS_CODE_5', 
     'DECLARED_ORIGIN_COUNTRY_5', 
     'TOTAL_VALUE',
-    'RETURN_LABEL'
-    ]
-
-# Unused
-HEADERS_CONTAINING_DATA = [
-    'PRODUCT', 
-    'SERVICE_LEVEL', 
-    'CUST_REF', 
-    'NAME', 
-    'RECIPIENT_PHONE', 
-    'RECIPIENT_EMAIL', 
-    'ADDRESS_LINE_1', 
-    'ADDRESS_LINE_2', 
-    'ADDRESS_LINE_3', 
-    'CITY', 
-    'POSTAL_CODE', 
-    'DESTINATION_COUNTRY', 
-    'CURRENCY', 
-    'CONTENT_TYPE', 
-    'DECLARED_CONTENT_AMOUNT_1', 
-    'DETAILED_CONTENT_DESCRIPTIONS_1', 
-    'DECLARED_NETWEIGHT_1', 
-    'DECLARED_VALUE_1', 
-    'DECLARED_ORIGIN_COUNTRY_1', 
-    'TOTAL_VALUE', 
-    'RETURN_LABEL'
+    'RETURN_LABEL',
+    'SENDER_CUSTOMS_REFERENCE',
+    'IMPORTER_CUSTOMS_REFERENCE'
     ]
 
 # Mapping: key corresponds to DPost CSV template (only the ones used for data entry), value - corresponding amazon header title
@@ -194,9 +171,6 @@ DPOST_FIXED_VALUES = {
     'DECLARED_NETWEIGHT_1' : '100',
     'RETURN_LABEL' :'FALSE'
     }
-
-# Unused
-DPOST_DERIVE_VALUES = {'DETAILED_CONTENT_DESCRIPTIONS_1' : '', 'DECLARED_ORIGIN_COUNTRY_1' : ''}
 
 ETONAS_HEADERS_MAPPING = {
     'Address_line_1' : 'ship-address-1',
