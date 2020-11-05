@@ -15,10 +15,9 @@ EXPECTED_SYS_ARGS = 2
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
-TEST_AMZN_EXPORT_TXT = r'C:\Coding\Amazon Orders Parser\Amazon exports\sample_amzn_export.txt'
 
 if is_windows_machine():
-    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\amzn2.txt'
+    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\export 2020.11.05.txt'
 else:
     TEST_AMZN_EXPORT_TXT = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
