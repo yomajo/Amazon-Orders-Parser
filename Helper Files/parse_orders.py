@@ -1,5 +1,5 @@
-from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir
-from amzn_parser_constants import DPOST_HEADERS, DPOST_HEADERS_MAPPING, DPOST_FIXED_VALUES
+from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES
+from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir, order_contains_batteries
 from etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
 from datetime import datetime
@@ -28,6 +28,7 @@ class ParseOrders():
         self.all_orders = all_orders
         self.db_client = db_client
         self.dpost_orders = []
+        self.lp_orders = []
         self.etonas_orders = []
         self.ups_orders = []
     
@@ -62,46 +63,63 @@ class ParseOrders():
         return recipient_name_keys_orders
 
     def export_csv(self, csv_filename : str, headers : list, contents : list):
+        '''exports data to csv details provided as func. args, don't export empty files'''
+        if not contents:
+            logging.info(f'Skipping {os.path.basename(csv_filename)} export. No new orders.')
+            return
         try:
             with open(csv_filename, 'w', encoding='utf-8-sig', newline='') as csv_f:
                 writer = csv.DictWriter(csv_f, fieldnames=headers, delimiter=';')
                 writer.writeheader()
                 writer.writerows(contents)
+            logging.info(f'CSV {csv_filename} created. Orders inside: {len(contents)}')
         except Exception as e:
-            logging.error(f'Error occured while exporting data to csv. Error: {e}.Arguments:\nheaders: {headers}\ncontents: {contents}')
+            logging.error(f'Error occured while exporting data to csv. Error: {e}.Arguments:\nheaders: {headers}\ncontents: {contents[0].keys()}')
 
-    def reformat_data_to_dpost_output(self, orders_data : list):
-        '''reduces input data to that needed in output csv'''
+    def get_csv_export_ready_data(self, orders_data : list, headers_option : str) -> list:
+        '''reduces orders_data to that needed in output csv, based on passed option from EXPORT_CONSTANTS'''
+        assert headers_option in ['dp', 'lp'], 'Unexpected headers export option passed to get_csv_export_ready_data function. Expected dp or lp'
         try:
-            dpost_ready_data = []
+            export_ready_data = []
+            headers_settings = EXPORT_CONSTANTS[headers_option]
             for order_dict in orders_data:
-                reduced_order_dict = self.prepare_dpost_order_contents(order_dict)
-                validated_order_dict = self.__validate_dpost_order(reduced_order_dict)
-                dpost_ready_data.append(validated_order_dict)
-            return dpost_ready_data
+                reduced_order_dict = self.get_export_ready_order(order_dict, headers_settings)
+                # Most of LP valiation is made on VBA side, deleting some fields conditionally.
+                if headers_option == 'dp':
+                    validated_order_dict = self.__validate_dpost_order(reduced_order_dict)
+                    export_ready_data.append(validated_order_dict)
+                else:    
+                    validated_order_dict = self.__validate_lp_order(reduced_order_dict)
+                    export_ready_data.append(validated_order_dict)
+            return export_ready_data
         except Exception as e:
             print(VBA_ERROR_ALERT)
             logging.critical(f'Error while iterating collected row dicts and trying to reduce. Error: {e}')
+            logging.critical(f'Order causing trouble: {order_dict}')
 
-    def prepare_dpost_order_contents(self, order_dict : dict):
-        '''outputs a dir, those keys correspong to target csv headers'''        
+    def get_export_ready_order(self, order_dict : dict, headers_settings : dict) -> dict:
+        '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         d_with_output_keys = {}
-        for header in DPOST_HEADERS:
-            if header in DPOST_FIXED_VALUES.keys():
-                d_with_output_keys[header] = DPOST_FIXED_VALUES[header]
-            elif header in DPOST_HEADERS_MAPPING.keys():
-                d_with_output_keys[header] = order_dict[DPOST_HEADERS_MAPPING[header]]
-            elif header == 'DETAILED_CONTENT_DESCRIPTIONS_1':
-                d_with_output_keys[header] = get_product_category(order_dict['product-name'])
-            elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE']:
-                d_with_output_keys[header] = get_total_price(order_dict)
+        for header in headers_settings['headers']:
+            # Fixed values and header mapping: 
+            if header in headers_settings['fixed'].keys():
+                d_with_output_keys[header] = headers_settings['fixed'][header]
+            elif header in headers_settings['mapping'].keys():
+                d_with_output_keys[header] = order_dict[headers_settings['mapping'][header]]
+            # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
                 d_with_output_keys[header] = get_origin_country(order_dict['product-name'])
             elif header == 'CUST_REF':
                 d_with_output_keys[header] = order_dict['recipient-name'][:20]
+            # Common headers
+            elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
+                d_with_output_keys[header] = get_product_category(order_dict['product-name'])
+            elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
+                d_with_output_keys[header] = get_total_price(order_dict)
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
+
 
     def __validate_dpost_order(self, order_dict : dict) -> dict:
         '''rearranges /shortens data fields on demand (charlimit for fields)
@@ -174,10 +192,21 @@ class ParseOrders():
         logging.debug(f'After reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
         return order_dict
 
+    def __validate_lp_order(self, order_dict : dict) -> dict:
+        '''conditionally deletes some of the fields before export'''
+        if order_dict['Gavėjo šalies kodas'].upper() in EU_COUNTRY_CODES:
+            order_dict['Muitinės deklaracija turinys'] = ''
+            order_dict['Siunčiamų daiktų pavadinimas'] = ''
+            order_dict['Kiekis, vnt'] = ''
+            order_dict['Vertė, eur'] = ''
+        return order_dict
+
     def sort_orders_by_shipment_company(self):
         '''sorts orders by shipment company. Performs check in the end for empty lists'''    
         for order in self.all_orders:
-            if self._get_order_ship_country(order) in ['GB', 'UK']:
+            if order_contains_batteries(order):
+                self.lp_orders.append(order)
+            elif self._get_order_ship_country(order) in ['GB', 'UK']:
                 self.etonas_orders.append(order)
             elif self._get_order_ship_price(order) >= 10:
                 self.ups_orders.append(order)
@@ -187,8 +216,8 @@ class ParseOrders():
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''
-        if not self.etonas_orders and not self.dpost_orders and not self.ups_orders:
-            logging.info(f'No new orders for processing provided with filtering oder ID (see log above). Terminating, alerting VBA.')
+        if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders:
+            logging.info(f'No new orders for processing. Terminating, alerting VBA.')
             self.db_client.close_connection()
             print(VBA_NO_NEW_JOB)
             sys.exit()
@@ -220,23 +249,28 @@ class ParseOrders():
     def _prepare_filepaths(self):
         '''creates cls variables of files abs paths to be created one dir above this script dir'''
         output_dir = get_output_dir()
+        lp_output_dir = get_output_dir(client_file=False)
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'Same Buyer Orders {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'Etonas-Amazon {date_stamp}.xlsx')
         self.dpost_filename = os.path.join(output_dir, f'DPost-Amazon {date_stamp}.csv')
         self.ups_filename = os.path.join(output_dir, f'UPS-Amazon {date_stamp}.csv')
+        self.lp_filename = os.path.join(lp_output_dir, f'Amazon-LP.csv')
 
     def export_dpost(self):
         if self.dpost_orders:
-            dpost_content = self.reformat_data_to_dpost_output(self.dpost_orders)
-            self.export_csv(self.dpost_filename, DPOST_HEADERS, dpost_content)
-            logging.info(f'CSV {self.dpost_filename} created. Orders inside: {len(self.dpost_orders)}')
+            dpost_content = self.get_csv_export_ready_data(self.dpost_orders, 'dp')
+            self.export_csv(self.dpost_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
 
     def export_ups(self):
         if self.ups_orders:
-            ups_content = self.reformat_data_to_dpost_output(self.ups_orders)
-            self.export_csv(self.ups_filename, DPOST_HEADERS, ups_content)
-            logging.info(f'CSV {self.ups_filename} created. Orders inside: {len(self.ups_orders)}')
+            ups_content = self.get_csv_export_ready_data(self.ups_orders, 'dp')
+            self.export_csv(self.ups_filename, EXPORT_CONSTANTS['dp']['headers'], ups_content)
+
+    def export_lp(self):
+        if self.lp_orders:
+            lp_content = self.get_csv_export_ready_data(self.lp_orders, 'lp')
+            self.export_csv(self.lp_filename, EXPORT_CONSTANTS['lp']['headers'], lp_content)
 
     def export_etonas(self):
         if self.etonas_orders:
@@ -253,9 +287,10 @@ class ParseOrders():
         self._prepare_filepaths()
         self.sort_orders_by_shipment_company()
         if testing:
-            print(f'TESTING: SUSPENDED ADDING TO DB, EXPORTING instead.')
-            logging.info(f'Suspended export of orders due to flag testing value: {testing}')
-            self.export_etonas()
+            print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
+            logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
+            self.export_lp()
+            # self.export_dpost()
             print('Closing db connection, The end.')
             self.db_client.close_connection()
             # self.push_orders_to_db()
