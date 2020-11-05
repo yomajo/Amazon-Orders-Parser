@@ -1,3 +1,37 @@
+# Includes strange code for Greece (EL) and includes UK/GB
+EU_COUNTRY_CODES = [
+    'UK',
+    'GB',
+    'BE',
+    'BG',
+    'CZ',
+    'DK',
+    'DE',
+    'EE',
+    'IE',
+    'EL',
+    'GR',
+    'ES',
+    'FR',
+    'HR',
+    'IT',
+    'CY',
+    'LV',
+    'LT',
+    'LU',
+    'HU',
+    'MT',
+    'NL',
+    'AT',
+    'PL',
+    'PT',
+    'RO',
+    'SI',
+    'SK',
+    'FI',
+    'SE'
+]
+
 ORIGIN_COUNTRY_CRITERIAS = [
     ['copag', '', 'BR'],
     ['ellusionist', '', 'BE'],
@@ -182,3 +216,83 @@ ETONAS_HEADERS_MAPPING = {
     'Delivery_phone' : 'buyer-phone-number',
     'Buyer Country': 'ship-country'
     }
+
+LP_HEADERS = [
+    'Delivery Method',
+    'Terminalo ID',
+    'Siuntos rūšis',
+    'Gavėjo pavadinimas',
+    'Gavėjo gatvė',
+    'Gavėjo namas',
+    'Gavėjo butas',
+    'Gavėjo gyvenvietė',
+    'Gavėjo pašto kodas',
+    'Gavėjo šalies kodas',
+    'Gavėjo mob. tel. (370xxxxxxxx)',
+    'Gavėjo el. paštas',
+    'Svoris (g)',
+    'Dalių skaičius',
+    'Registruota',
+    'Pirmenybinė/nepirmenybinė',
+    'Įvertinimas (Eur)',
+    'Išperkamasis mokestis (Eur)'
+    'Įteikti asmeniškai',
+    'Su įteikimo pranešimu',
+    'Gavėjo p.d. numeris',
+    'Iki pareikalavimo',
+    'Moka gavėjas',
+    'Komentaras',
+    'Muitinės deklaracija turinys',
+    'Siunčiamų daiktų pavadinimas',
+    'Kiekis, vnt',
+    'Svoris, g',
+    'Vertė, eur',
+    'Nevykus pristatymui , grąžinti siuntą po ( nurodyti dienų skaičių)'
+    ]
+
+LP_HEADERS_MAPPING = {
+    'Delivery Method' : 'currency',
+    'Gavėjo pavadinimas' : 'recipient-name',
+    'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
+    'Gavėjo el. paštas' : 'buyer-email',
+    'Gavėjo gatvė' : 'ship-address-1',
+    'Gavėjo namas' : 'ship-address-2',
+    'Gavėjo butas' : 'ship-address-3',
+    'Gavėjo gyvenvietė' : 'ship-city',
+    'Gavėjo pašto kodas' : 'ship-postal-code',
+    'Gavėjo šalies kodas' : 'ship-country',
+    'Kiekis, vnt' : 'quantity-purchased',
+    'Vertė, eur' : 'item-price'
+    }
+
+LP_FIXED_VALUES = {
+    'Muitinės deklaracija turinys' : 'Dovana'
+    }
+
+BATTERY_BRANDS = [
+    'RENATA',
+    'VINNIC',
+    'EVERACTIVE',
+    'MAXELL',
+    'RAYOVAC',
+    'KODAK',
+    'XTAR',
+    'PANASONIC',
+    'SONY',
+    'VARTA',
+    'ENERGIZER',
+    'DURACELL',
+    'SIEMENS',
+    'SIGNIA',
+    'SAMSUNG',
+    'SANYO',
+    'LG',
+    'GP',
+    'TADIRAN',
+    'BATTERIES'
+    ]
+
+EXPORT_CONSTANTS = {
+                'dp' : {'headers' : DPOST_HEADERS, 'mapping' : DPOST_HEADERS_MAPPING, 'fixed' : DPOST_FIXED_VALUES},
+                'lp' : {'headers' : LP_HEADERS, 'mapping' : LP_HEADERS_MAPPING, 'fixed' : LP_FIXED_VALUES}
+                }
