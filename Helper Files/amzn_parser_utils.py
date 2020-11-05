@@ -1,4 +1,4 @@
-from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
+from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS
 import platform
 import logging
 import sys
@@ -71,6 +71,14 @@ def is_windows_machine() -> bool:
     '''returns True if machine executing the code is Windows based'''
     machine_os = platform.system()
     return True if machine_os == 'Windows' else False
+
+def order_contains_batteries(order:dict) ->bool:
+    '''returns True if order item is batteries (uses list of brand words)'''
+    for brand in BATTERY_BRANDS:
+        if brand in order['product-name'].upper():
+            return True
+    return False
+
 
 if __name__ == "__main__":
     pass
