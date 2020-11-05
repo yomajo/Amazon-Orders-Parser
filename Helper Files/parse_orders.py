@@ -299,6 +299,7 @@ class ParseOrders():
         self.export_same_buyer_details()
         self.export_dpost()
         self.export_ups()
+        self.export_lp()
         self.export_etonas()
         self.push_orders_to_db()
 
