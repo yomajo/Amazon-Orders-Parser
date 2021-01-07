@@ -201,13 +201,17 @@ class ParseOrders():
             order_dict['Vertė, eur'] = ''
         return order_dict
 
-    def sort_orders_by_shipment_company(self):
+    def sort_orders_by_shipment_company(self, skip_etonas):
         '''sorts orders by shipment company. Performs check in the end for empty lists'''    
         for order in self.all_orders:
             if order_contains_batteries(order):
                 self.lp_orders.append(order)
             elif self._get_order_ship_country(order) in ['GB', 'UK']:
-                self.etonas_orders.append(order)
+                # Route Etonas shipments with DPost if flag is on.
+                if skip_etonas:
+                    self.dpost_orders.append(order)
+                else:
+                    self.etonas_orders.append(order)
             elif self._get_order_ship_price(order) >= 10:
                 self.ups_orders.append(order)
             else:
@@ -282,10 +286,10 @@ class ParseOrders():
         count_added_to_db = self.db_client.add_orders_to_db()
         logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
-    def export_orders(self, testing=False):
+    def export_orders(self, testing=False, skip_etonas=False):
         '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
         self._prepare_filepaths()
-        self.sort_orders_by_shipment_company()
+        self.sort_orders_by_shipment_company(skip_etonas)
         if testing:
             print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
             logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
