@@ -1,7 +1,5 @@
-# Includes strange code for Greece (EL) and includes UK/GB
+# Includes strange code for Greece (EL)
 EU_COUNTRY_CODES = [
-    'UK',
-    'GB',
     'BE',
     'BG',
     'CZ',
