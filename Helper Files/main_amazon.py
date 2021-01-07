@@ -11,6 +11,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = False
+SKIP_ETONAS = True
 EXPECTED_SYS_ARGS = 2
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
@@ -54,7 +55,7 @@ def parse_export_orders(testing:bool, cleaned_source_orders:list, loaded_txt:str
     db_client = OrdersDB(cleaned_source_orders, loaded_txt)
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
-    ParseOrders(new_orders, db_client).export_orders(testing)
+    ParseOrders(new_orders, db_client).export_orders(testing=testing, skip_etonas=SKIP_ETONAS)
 
 def parse_args():
     if len(sys.argv) == EXPECTED_SYS_ARGS:
