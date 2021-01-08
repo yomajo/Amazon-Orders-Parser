@@ -201,7 +201,7 @@ class ParseOrders():
             order_dict['Vertė, eur'] = ''
         return order_dict
 
-    def sort_orders_by_shipment_company(self, skip_etonas):
+    def sort_orders_by_shipment_company(self, skip_etonas:bool):
         '''sorts orders by shipment company. Performs check in the end for empty lists'''    
         for order in self.all_orders:
             if order_contains_batteries(order):
