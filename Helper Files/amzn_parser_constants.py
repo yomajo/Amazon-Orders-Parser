@@ -233,7 +233,7 @@ LP_HEADERS = [
     'Registruota',
     'Pirmenybinė/nepirmenybinė',
     'Įvertinimas (Eur)',
-    'Išperkamasis mokestis (Eur)'
+    'Išperkamasis mokestis (Eur)',
     'Įteikti asmeniškai',
     'Su įteikimo pranešimu',
     'Gavėjo p.d. numeris',
