@@ -1,4 +1,4 @@
-from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES
+from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES
 from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_total_price, get_output_dir, order_contains_batteries
 from etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
@@ -204,7 +204,7 @@ class ParseOrders():
     def sort_orders_by_shipment_company(self, skip_etonas:bool):
         '''sorts orders by shipment company. Performs check in the end for empty lists'''    
         for order in self.all_orders:
-            if order_contains_batteries(order):
+            if order_contains_batteries(order) or self._get_order_ship_country(order) in LP_COUNTRIES:
                 self.lp_orders.append(order)
             elif self._get_order_ship_country(order) in ['GB', 'UK']:
                 # Route Etonas shipments with DPost if flag is on.
