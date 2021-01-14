@@ -280,6 +280,7 @@ BATTERY_BRANDS = [
     'VARTA',
     'ENERGIZER',
     'DURACELL',
+    'SAFT',
     'SIEMENS',
     'SIGNIA',
     'SAMSUNG',
@@ -294,3 +295,15 @@ EXPORT_CONSTANTS = {
                 'dp' : {'headers' : DPOST_HEADERS, 'mapping' : DPOST_HEADERS_MAPPING, 'fixed' : DPOST_FIXED_VALUES},
                 'lp' : {'headers' : LP_HEADERS, 'mapping' : LP_HEADERS_MAPPING, 'fixed' : LP_FIXED_VALUES}
                 }
+
+LP_COUNTRIES = [
+    'IE',
+    'SE',
+    'LT',
+    'FI',
+    'EE',
+    'LV',
+    'NO',
+    'CH',
+    'IS'
+]
