@@ -11,13 +11,14 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = False
+SKIP_ETONAS_FLAG = True
 EXPECTED_SYS_ARGS = 3
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
-    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\export 2020.11.05.txt'
+    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\export 2021.02.01.txt'
 else:
     TEST_AMZN_EXPORT_TXT = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
@@ -77,6 +78,7 @@ def main(testing, amazon_export_txt_path):
     else:
         print('RUNNING IN TESTING MODE')
         txt_path = amazon_export_txt_path
+        skip_etonas = SKIP_ETONAS_FLAG
     if os.path.exists(txt_path):
         logging.info('file exists, continuing to processing...')
         cleaned_source_orders = get_cleaned_orders(txt_path)
