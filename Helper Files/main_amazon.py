@@ -18,7 +18,7 @@ VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
-    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\export 2021.02.01.txt'
+    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.02.01.txt'
 else:
     TEST_AMZN_EXPORT_TXT = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
