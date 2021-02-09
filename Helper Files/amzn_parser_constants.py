@@ -288,6 +288,8 @@ BATTERY_BRANDS = [
     'LG',
     'GP',
     'TADIRAN',
+    'HELLE',
+    '5EEB459849DA77.22643238',
     'BATTERIES'
     ]
 
