@@ -294,7 +294,7 @@ class ParseOrders():
             print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
             logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
             self.export_lp()
-            # self.export_dpost()
+            self.export_dpost()
             print('Closing db connection, The end.')
             self.db_client.close_connection()
             # self.push_orders_to_db()
