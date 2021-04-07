@@ -287,11 +287,19 @@ BATTERY_BRANDS = [
     'SANYO',
     'LG',
     'GP',
+    'EVE',
     'TADIRAN',
     'HELLE',
+    'MURATA',
     '5EEB459849DA77.22643238',
     'BATTERIES'
     ]
+
+CARDS_KEYWORDS = [
+    'SATIN',
+    'MYSTIQUE',
+    'MINI MOTHERPEACE'
+]
 
 EXPORT_CONSTANTS = {
                 'dp' : {'headers' : DPOST_HEADERS, 'mapping' : DPOST_HEADERS_MAPPING, 'fixed' : DPOST_FIXED_VALUES},
@@ -307,5 +315,6 @@ LP_COUNTRIES = [
     'LV',
     'NO',
     'CH',
-    'IS'
+    'IS',
+    'PL'
 ]

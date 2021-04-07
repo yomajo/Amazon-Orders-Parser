@@ -1,4 +1,4 @@
-from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS
+from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
 import platform
 import logging
 import sys
@@ -79,6 +79,12 @@ def order_contains_batteries(order:dict) ->bool:
             return True
     return False
 
+def order_contains_cards_keywords(order:dict) ->bool:
+    '''returns True if order item is batteries (uses list of brand words)'''
+    for keyword in CARDS_KEYWORDS:
+        if keyword in order['product-name'].upper():
+            return True
+    return False
 
 if __name__ == "__main__":
     pass
