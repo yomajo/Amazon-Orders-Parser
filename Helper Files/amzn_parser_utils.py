@@ -1,4 +1,4 @@
-from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
+from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS, DP_KEYWORDS, DPOST_TRACKED_COUNTRIES
 import platform
 import logging
 import sys
@@ -72,19 +72,32 @@ def is_windows_machine() -> bool:
     machine_os = platform.system()
     return True if machine_os == 'Windows' else False
 
-def order_contains_batteries(order:dict) ->bool:
+def order_contains_batteries(order:dict) -> bool:
     '''returns True if order item is batteries (uses list of brand words)'''
     for brand in BATTERY_BRANDS:
         if brand in order['product-name'].upper():
             return True
     return False
 
-def order_contains_cards_keywords(order:dict) ->bool:
+def order_contains_cards_keywords(order:dict) -> bool:
     '''returns True if order item is batteries (uses list of brand words)'''
     for keyword in CARDS_KEYWORDS:
         if keyword in order['product-name'].upper():
             return True
     return False
+
+def uk_order_contains_dp_keywords(order:dict) -> bool:
+    '''returns True if order item contains country-specific keywords (uses list of brand words)'''
+    for keyword in DP_KEYWORDS:
+        if keyword in order['product-name'].upper():
+            return True
+    return False
+
+def get_order_service_lvl(ship_country:str) -> str:
+    '''returns SERVICE_LEVEL DPost csv header value based on order country (Tracked or Priority)'''
+    if ship_country in DPOST_TRACKED_COUNTRIES:
+        return 'TRACKED'
+    return 'PRIORITY'
 
 if __name__ == "__main__":
     pass
