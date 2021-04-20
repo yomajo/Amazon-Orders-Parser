@@ -1,4 +1,4 @@
-from amzn_parser_utils import get_output_dir, is_windows_machine
+from amzn_parser_utils import get_output_dir, is_windows_machine, clean_phone_number
 from amzn_parser_constants import EXPECTED_AMZN_CHANNELS
 from etonas_xlsx_exporter import EtonasExporter
 from parse_orders import ParseOrders
@@ -46,7 +46,7 @@ def clean_orders(orders:list) -> list:
     '''replaces plus sign in phone numbers with 00'''
     for order in orders:
         try:
-            order['buyer-phone-number'] = order['buyer-phone-number'].replace('+', '00')
+            order['buyer-phone-number'] = clean_phone_number(order['buyer-phone-number'])
         except KeyError as e:
             logging.warning(f'New header in source file. Alert VBA on new header. Error: {e}')
             print(VBA_KEYERROR_ALERT)
@@ -57,7 +57,7 @@ def parse_export_orders(testing:bool, amzn_channel:str, skip_etonas:bool, cleane
     db_client = OrdersDB(cleaned_source_orders, loaded_txt)
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
-    ParseOrders(new_orders, db_client).export_orders(amzn_channel=amzn_channel, testing=testing, skip_etonas=skip_etonas)
+    ParseOrders(new_orders, db_client, amzn_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
 
 def parse_args():
     '''returns arguments passed from VBA'''
