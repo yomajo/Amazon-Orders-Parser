@@ -1,6 +1,8 @@
-from amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords, uk_order_contains_dp_keywords
-from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath, get_order_service_lvl
-from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES
+from amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries
+from amzn_parser_utils import order_contains_cards_keywords, uk_order_contains_dp_keywords
+from amzn_parser_utils import get_origin_country, get_product_category, get_level_up_abspath
+from amzn_parser_utils import get_order_service_lvl, get_lp_registruota_value
+from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
 from datetime import datetime
@@ -21,13 +23,19 @@ DPOST_ADDRESS_CHARLIMIT = 40
 
 class ParseOrders():
     '''Input: orders as list of dicts, outputs csv, xlsx files based on shipment method
+
+    Args:
+    -orders - list of order dicts
+    -db_client - object
+    -amzn_channel - str ('EU'/'COM')
     
     export_orders(testing=False) : main method, sorts orders by shipment company, if testing flag is False,
     exports files with appropriate orders data and adds all passed orders when creating class to database'''
     
-    def __init__(self, all_orders : list, db_client : object):
+    def __init__(self, all_orders : list, db_client : object, amzn_channel:str):
         self.all_orders = all_orders
         self.db_client = db_client
+        self.amzn_channel = amzn_channel
         self.dpost_orders = []
         self.lp_orders = []
         self.etonas_orders = []
@@ -63,14 +71,14 @@ class ParseOrders():
                 recipient_name_keys_orders.pop(name_key, None)
         return recipient_name_keys_orders
 
-    def export_csv(self, csv_filename : str, headers : list, contents : list):
+    def export_csv(self, csv_filename : str, headers : list, contents : list, delimiter:str=';'):
         '''exports data to csv details provided as func. args, don't export empty files'''
         if not contents:
             logging.info(f'Skipping {os.path.basename(csv_filename)} export. No new orders.')
             return
         try:
             with open(csv_filename, 'w', encoding='utf-8-sig', newline='') as csv_f:
-                writer = csv.DictWriter(csv_f, fieldnames=headers, delimiter=';')
+                writer = csv.DictWriter(csv_f, fieldnames=headers, delimiter=delimiter)
                 writer.writeheader()
                 writer.writerows(contents)
             logging.info(f'CSV {csv_filename} created. Orders inside: {len(contents)}')
@@ -115,6 +123,9 @@ class ParseOrders():
                 d_with_output_keys[header] = get_order_service_lvl(order_country)
             elif header == 'CUST_REF':
                 d_with_output_keys[header] = order_dict['recipient-name'][:20]
+            # LP specific headers
+            elif header == 'Registruota':
+                d_with_output_keys[header] = get_lp_registruota_value(order_dict, self.amzn_channel)
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
                 d_with_output_keys[header] = get_product_category(order_dict['product-name'])
@@ -205,12 +216,12 @@ class ParseOrders():
             order_dict['Vertė, eur'] = ''
         return order_dict
 
-    def sort_orders_by_amzn_channel(self, amzn_channel:str, skip_etonas:bool):
+    def sort_orders_by_amzn_channel(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
-        logging.info(f'Sorting orders by shippment company specific to Amazon {amzn_channel} ruleset')
-        if amzn_channel == 'EU':
+        logging.info(f'Sorting orders by shippment company specific to Amazon {self.amzn_channel} ruleset')
+        if self.amzn_channel == 'EU':
             self.sort_EU_orders_by_shipment_company(skip_etonas)
-        elif amzn_channel == 'COM':
+        elif self.amzn_channel == 'COM':
             self.sort_COM_orders_by_shipment_company()
         self.exit_no_new_orders()
     
@@ -273,16 +284,16 @@ class ParseOrders():
             logging.warning(f'Error retrieving ship-country in order: {order}, returning empty string. Error: {e}')
             return ''
 
-    def _prepare_filepaths(self, amzn_channel:str):
+    def _prepare_filepaths(self):
         '''creates cls variables of files abs paths to be created one dir above this script dir'''
         output_dir = get_output_dir()
         lp_output_dir = get_output_dir(client_file=False)
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
-        self.same_buyers_filename = os.path.join(output_dir, f'Amzn{amzn_channel}-Same Buyer {date_stamp}.txt')
-        self.etonas_filename = os.path.join(output_dir, f'Amzn{amzn_channel}-Etonas {date_stamp}.xlsx')
-        self.dpost_filename = os.path.join(output_dir, f'Amzn{amzn_channel}-DPost {date_stamp}.csv')
-        self.ups_filename = os.path.join(output_dir, f'Amzn{amzn_channel}-UPS {date_stamp}.csv')
-        self.lp_filename = os.path.join(lp_output_dir, f'Amzn{amzn_channel}-LP.csv')
+        self.same_buyers_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-Same Buyer {date_stamp}.txt')
+        self.etonas_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-Etonas {date_stamp}.xlsx')
+        self.dpost_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-DPost {date_stamp}.csv')
+        self.ups_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-UPS {date_stamp}.csv')
+        self.lp_filename = os.path.join(lp_output_dir, f'Amzn{self.amzn_channel}-LP.csv')
 
     def export_dpost(self):
         '''export csv file for Deutsche Post shipping service'''
@@ -313,15 +324,14 @@ class ParseOrders():
         count_added_to_db = self.db_client.add_orders_to_db()
         logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
-    def export_orders(self, amzn_channel:str, testing=False, skip_etonas=False):
+    def export_orders(self, testing=False, skip_etonas=False):
         '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
-        self._prepare_filepaths(amzn_channel)
-        self.sort_orders_by_amzn_channel(amzn_channel, skip_etonas)
+        self._prepare_filepaths()
+        self.sort_orders_by_amzn_channel(skip_etonas)
         if testing:
             print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
             logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
-            self.export_lp()
-            self.export_ups()
+            # self.export_lp()
             self.export_dpost()
             # self.push_orders_to_db()
             self.db_client.close_connection()
