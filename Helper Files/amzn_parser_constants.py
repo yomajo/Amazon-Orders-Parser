@@ -89,6 +89,7 @@ CATEGORY_CRITERIAS = [
     ['us games', '', 'US GAMES', 'TAROT CARDS'],
     ['blue angel', '', 'BLUE ANGELS', 'TAROT CARDS'],
     ['schiffer', '', 'SCHIFFER', 'TAROT CARDS'],
+    ['tarot', '', 'OTHER CARDS BRAND', 'TAROT CARDS'], # Generic for Tarot cards
     ['FOOTBALL', '', 'FOOTBOOL', 'FOOTBALL'],
     ['fußball', '', 'FOOTBOOL', 'FOOTBALL'],
     ['nfl', '', 'FOOTBOOL', 'FOOTBALL'],
@@ -117,9 +118,13 @@ ETONAS_HEADERS = [
     'Delivery_phone',
     'Buyer Country',
     'Tracking (0 - neregistruota, 1 - registruota)',
-    'PackageType',
+    'PackageType (DP Jeigu maza pakuote)',
     'Amount',
-    'Sum'
+    'Price per quantity',
+    'GLS (0 - default (DP; 1- GLS)',
+    'HS',
+    'Origin',
+    'Currency'
     ]
 
 DPOST_HEADERS = [
@@ -195,7 +200,7 @@ DPOST_HEADERS_MAPPING = {
     }
 
 DPOST_FIXED_VALUES = {
-    'PRODUCT' : 'GMP',
+    'SERVICE_LEVEL' : 'PRIORITY',
     'CONTENT_TYPE' : 'SALE_GOODS',
     'WEIGHT' : '100',
     'DECLARED_NETWEIGHT_1' : '100',
@@ -210,7 +215,10 @@ ETONAS_HEADERS_MAPPING = {
     'Postcode' : 'ship-postal-code',
     'Email' : 'buyer-email',
     'Delivery_phone' : 'buyer-phone-number',
-    'Buyer Country': 'ship-country'
+    'Buyer Country': 'ship-country',
+    'Currency' : 'currency',
+    'Price per quantity' : 'item-price',
+    'Amount' : 'quantity-purchased'
     }
 
 LP_HEADERS = [

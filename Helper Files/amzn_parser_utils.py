@@ -8,12 +8,33 @@ import os
 # GLOBAL VARIABLES
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 
-def get_product_category(item_description : str):
-    '''returns item category based on products'''
+def get_product_category_or_brand(item_description:str, return_brand:bool=False) -> str:
+    '''returns item category or brand based on item title. Last item in CATEGORY_CRITERIAS. Item before that - brand.
+    Switch return index based on provided bool'''
+    return_index = -1
+    if return_brand:
+        return_index = -2
     for criteria_set in CATEGORY_CRITERIAS:
         if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
-            return criteria_set[-1]
+            return criteria_set[return_index]
     return 'OTHER'
+
+def get_hs_code(item_brand:str, item_category:str) -> str:
+    '''returns hs code for etonas export file based on item brand and category'''
+    # based on brand
+    if item_brand == 'BOMB COSM' or item_brand == 'GELLI BAFF':
+        return '3307'
+    elif item_brand == 'INJINJI':
+        return '6115'
+    # based on category
+    if item_category == 'BATTERIES':
+        return '8506'
+    elif item_category == 'PLAYING CARDS' or item_category == 'TAROT CARDS':
+        return '9504 40'
+    elif item_category == 'FOOTBALL':
+        return '95'
+    # unable to indentify
+    return ''
 
 def get_origin_country(item_description : str):
     '''returns item origin country based on products'''
@@ -22,9 +43,9 @@ def get_origin_country(item_description : str):
             return criteria_set[-1]
     return 'CN'
 
-def get_level_up_abspath(absdir_path):
-        from os import path
-        return path.dirname(absdir_path)
+def get_level_up_abspath(absdir_path:str) -> str:
+    '''returns abs directory path one level above provided dir as arg'''
+    return os.path.dirname(absdir_path)
 
 def get_total_price(order_dict : dict):
     '''returns a sum of 'item-price' and 'shipping-price' for given order'''
@@ -94,12 +115,11 @@ def uk_order_contains_dp_keywords(order:dict) -> bool:
             return True
     return False
 
-def get_order_service_lvl(ship_country:str) -> str:
-    '''returns SERVICE_LEVEL DPost csv header value based on order country (Tracked or Priority)'''
+def get_dpost_product_header_val(ship_country:str) -> str:
+    '''returns PRODUCT header value for Deutsche Post csv'''
     if ship_country in DPOST_TRACKED_COUNTRIES:
-        # Temporary switch back to PRIORITY out of PRIORITY / STANDARD / REGISTERED options, thats the only DP will accept
-        return 'PRIORITY'
-    return 'PRIORITY'
+        return 'GPT'    
+    return 'GMP'
 
 def clean_phone_number(phone_number:str) -> str:
     '''cleans phone numbers. Conditional reformatting for US based numbers

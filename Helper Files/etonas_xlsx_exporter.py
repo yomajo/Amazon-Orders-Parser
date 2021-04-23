@@ -1,5 +1,5 @@
 from amzn_parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
-from amzn_parser_utils import get_product_category
+from amzn_parser_utils import get_product_category_or_brand, get_hs_code, get_origin_country
 import logging
 import openpyxl
 import sys
@@ -47,7 +47,13 @@ class EtonasExporter():
             elif header == 'Last_name':
                 d_with_output_keys['Last_name'] = last_name
             elif header == 'Contents':
-                d_with_output_keys['Contents'] = get_product_category(order_dict['product-name'])
+                d_with_output_keys['Contents'] = get_product_category_or_brand(order_dict['product-name'])
+            elif header == 'HS':
+                item_brand = get_product_category_or_brand(order_dict['product-name'], return_brand=True)
+                item_category = get_product_category_or_brand(order_dict['product-name'])                
+                d_with_output_keys['HS'] = get_hs_code(item_brand, item_category)
+            elif header == 'Origin':
+                d_with_output_keys['Origin'] = get_origin_country(order_dict['product-name'])
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
