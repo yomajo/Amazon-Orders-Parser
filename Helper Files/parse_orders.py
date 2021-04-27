@@ -1,7 +1,7 @@
-from amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries
-from amzn_parser_utils import order_contains_cards_keywords, uk_order_contains_dp_keywords
-from amzn_parser_utils import get_origin_country, get_product_category_or_brand, get_level_up_abspath
-from amzn_parser_utils import get_dpost_product_header_val, get_lp_registruota_value
+from amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords
+from amzn_parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand, get_level_up_abspath
+from amzn_parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
+from amzn_parser_utils import delete_file
 from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
@@ -39,6 +39,7 @@ class ParseOrders():
         self.dpost_orders = []
         self.dpost_tracked_orders = []
         self.lp_orders = []
+        self.lp_tracked_orders = []
         self.etonas_orders = []
         self.ups_orders = []
     
@@ -125,8 +126,8 @@ class ParseOrders():
             elif header == 'CUST_REF':
                 d_with_output_keys[header] = order_dict['recipient-name'][:20]
             # LP specific headers
-            elif header == 'Registruota':
-                d_with_output_keys[header] = get_lp_registruota_value(order_dict, self.amzn_channel)
+            elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
+                d_with_output_keys[header] = get_lp_registered_priority_value(order_dict, self.amzn_channel)
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
                 d_with_output_keys[header] = get_product_category_or_brand(order_dict['product-name'])
@@ -220,40 +221,44 @@ class ParseOrders():
     def sort_orders_by_amzn_channel(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
         logging.info(f'Sorting orders by shippment company specific to Amazon {self.amzn_channel} ruleset')
-        if self.amzn_channel == 'EU':
-            self.sort_EU_orders_by_shipment_company(skip_etonas)
-        elif self.amzn_channel == 'COM':
-            self.sort_COM_orders_by_shipment_company()
+        for order in self.all_orders:
+            if self.amzn_channel == 'EU':
+                self.sort_EU_order_by_shipment_company(order, skip_etonas)
+            elif self.amzn_channel == 'COM':
+                self.sort_COM_order_by_shipment_company(order)
         self.exit_no_new_orders()
     
-    def sort_EU_orders_by_shipment_company(self, skip_etonas:bool):
-        '''sorts orders from AMAZON EU by shipment company'''    
-        for order in self.all_orders:
-            if self._get_order_ship_country(order) in DPOST_TRACKED_COUNTRIES:
+    def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
+        '''sorts individual order from AMAZON EU by shipment company'''    
+        if self._get_order_ship_country(order) in DPOST_TRACKED_COUNTRIES:
+            if order_contains_batteries(order):
+                self.lp_tracked_orders.append(order)
+            else:
                 self.dpost_tracked_orders.append(order)
-            elif order_contains_batteries(order) or order_contains_cards_keywords(order) or self._get_order_ship_country(order) in LP_COUNTRIES:
-                self.lp_orders.append(order)
-            elif self._get_order_ship_country(order) in ['GB', 'UK']:
-                # Route Etonas shipments with DPost if flag is on.
-                if skip_etonas:
-                    self.dpost_orders.append(order)
-                else:
-                    if uk_order_contains_dp_keywords(order):
-                        self.dpost_orders.append(order)
-                    else:
-                        self.etonas_orders.append(order)
-            elif self._get_order_ship_price(order) >= 10:
-                self.ups_orders.append(order)
-            else:
+        elif order_contains_batteries(order) or order_contains_cards_keywords(order) or self._get_order_ship_country(order) in LP_COUNTRIES:
+            self.lp_orders.append(order)
+        elif self._get_order_ship_country(order) in ['GB', 'UK']:
+            # Route Etonas shipments with DPost if flag is on.
+            if skip_etonas:
                 self.dpost_orders.append(order)
-
-    def sort_COM_orders_by_shipment_company(self):
-        '''sorts orders from AMAZON COM by shipment company'''
-        for order in self.all_orders:
-            if self._get_order_ship_price(order) >= 10:
-                self.ups_orders.append(order)
             else:
-                self.lp_orders.append(order)
+                if uk_order_contains_dp_keywords(order):
+                    self.dpost_orders.append(order)
+                elif uk_order_contains_lp_keywords(order):
+                    self.lp_orders.append(order)
+                else:
+                    self.etonas_orders.append(order)
+        elif self._get_order_ship_price(order) >= 10:
+            self.ups_orders.append(order)
+        else:
+            self.dpost_orders.append(order)
+
+    def sort_COM_order_by_shipment_company(self, order:dict):
+        '''sorts individual order from AMAZON COM by shipment company'''
+        if self._get_order_ship_price(order) >= 10:
+            self.ups_orders.append(order)
+        else:
+            self.lp_orders.append(order)
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''
@@ -263,7 +268,7 @@ class ParseOrders():
             print(VBA_NO_NEW_JOB)
             sys.exit()
 
-    def _get_order_ship_price(self, order):
+    def _get_order_ship_price(self, order:dict) -> float:
         try:
             return float(order['shipping-price'])
         except KeyError:
@@ -275,7 +280,7 @@ class ParseOrders():
             logging.warning(f'Error retrieving shipping-price in order: {order}, returning 0 (integer). Error: {e}')
             return 0
     
-    def _get_order_ship_country(self, order):
+    def _get_order_ship_country(self, order:dict) -> str:
         try:
             return order['ship-country'].upper()
         except KeyError:
@@ -298,7 +303,14 @@ class ParseOrders():
         self.dpost_tracked_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-DPost Tracked {date_stamp}.csv')
         self.ups_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-UPS {date_stamp}.csv')
         self.lp_filename = os.path.join(lp_output_dir, f'Amzn{self.amzn_channel}-LP.csv')
+        self.lp_tracked_filename = os.path.join(lp_output_dir, f'Amzn{self.amzn_channel}-LP-Tracked.csv')
 
+    def delete_old_files(self):
+        '''addresses potential double loading of same LP sheets to Excel problem,
+        deletes csv files from Helper Files dir before new run'''
+        delete_file(self.lp_filename)
+        delete_file(self.lp_tracked_filename)
+    
     def export_dpost(self):
         '''export csv file for Deutsche Post shipping service'''
         if self.dpost_orders:
@@ -327,6 +339,13 @@ class ParseOrders():
             self.export_csv(self.lp_filename, EXPORT_CONSTANTS['lp']['headers'], lp_content)
             logging.info(f'CSV {self.lp_filename} created. Orders inside: {len(self.lp_orders)}')
 
+    def export_lp_tracked(self):
+        '''export csv file for Lietuvos Pastas (TRACKED orders) shipping service'''
+        if self.lp_tracked_orders:
+            lp_content = self.get_csv_export_ready_data(self.lp_tracked_orders, 'lp')
+            self.export_csv(self.lp_tracked_filename, EXPORT_CONSTANTS['lp']['headers'], lp_content)
+            logging.info(f'CSV {self.lp_tracked_filename} created. Orders inside: {len(self.lp_tracked_orders)}')
+
     def export_etonas(self):
         '''export xlsx file for Etonas shipping service'''
         if self.etonas_orders:
@@ -341,14 +360,17 @@ class ParseOrders():
     def export_orders(self, testing=False, skip_etonas=False):
         '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
         self._prepare_filepaths()
+        self.delete_old_files()
         self.sort_orders_by_amzn_channel(skip_etonas)
         if testing:
             print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
             logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
-            # self.export_lp()
-            # self.export_dpost()
             # self.export_dpost_tracked()
-            self.export_etonas()
+            # self.export_dpost()
+            # self.export_ups()
+            self.export_lp()
+            self.export_lp_tracked()
+            # self.export_etonas()
             # self.push_orders_to_db()
             self.db_client.close_connection()
             print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
@@ -358,6 +380,7 @@ class ParseOrders():
         self.export_dpost()
         self.export_ups()
         self.export_lp()
+        self.export_lp_tracked()
         self.export_etonas()
         self.push_orders_to_db()
 

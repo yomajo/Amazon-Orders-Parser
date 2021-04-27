@@ -1,5 +1,5 @@
 from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
-from amzn_parser_constants import DP_KEYWORDS, DPOST_TRACKED_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES
+from amzn_parser_constants import DP_KEYWORDS, DPOST_TRACKED_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, LP_UK_BRANDS
 import platform
 import logging
 import sys
@@ -115,6 +115,13 @@ def uk_order_contains_dp_keywords(order:dict) -> bool:
             return True
     return False
 
+def uk_order_contains_lp_keywords(order:dict) -> bool:
+    '''returns True if order item contains country-specific keywords target for LP shippment service (uses list of brand words)'''
+    for keyword in LP_UK_BRANDS:
+        if keyword in order['product-name'].upper():
+            return True
+    return False
+
 def get_dpost_product_header_val(ship_country:str) -> str:
     '''returns PRODUCT header value for Deutsche Post csv'''
     if ship_country in DPOST_TRACKED_COUNTRIES:
@@ -141,9 +148,9 @@ def replace_phone_zero(phone_number:str) -> str:
     '''returns phone number with 00 insted of +. Example: +1-213-442 returns 001-213-442'''
     return phone_number.replace('+', '00')
 
-def get_lp_registruota_value(order:dict, amzn_channel:str) -> str:
+def get_lp_registered_priority_value(order:dict, amzn_channel:str) -> str:
     '''based on ship country and amazon sales channel returns 1 or 0 as string to fill in
-    Lietuvos Pastas 'Registruota' header value'''
+    Lietuvos Pastas 'Registruota' / 'Pirmenybinė/nepirmenybinė' header value'''
     if amzn_channel == 'COM':
         return '1'
     elif amzn_channel == 'EU':
@@ -154,6 +161,14 @@ def get_lp_registruota_value(order:dict, amzn_channel:str) -> str:
     else:
         logging.critical(f'Unexpected amzn_channel got up to get_lp_registruota_value func: {amzn_channel}. Retuning empty str')
         return ''
+
+def delete_file(target_file_abs_path:str):
+    '''deletes file located in target_file_abs_path'''
+    try:
+        os.remove(target_file_abs_path)
+    except FileNotFoundError:
+        logging.info(f'Could not find file to delete. Apparently {os.path.basename(target_file_abs_path)} was not created during last run. ')
+
 
 if __name__ == "__main__":
     pass
