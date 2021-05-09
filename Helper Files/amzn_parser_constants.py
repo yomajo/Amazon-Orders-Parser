@@ -121,7 +121,6 @@ ETONAS_HEADERS = [
     'PackageType (DP Jeigu maza pakuote)',
     'Amount',
     'Price per quantity',
-    'GLS (0 - default (DP; 1- GLS)',
     'HS',
     'Origin',
     'Currency'
@@ -293,14 +292,14 @@ BATTERY_BRANDS = [
     'SANYO',
     'LG',
     'GP',
-    'EVE',
     'TADIRAN',
     'HELLE',
     'MURATA',
     '5EEB459849DA77.22643238',
-    'BATTERIES',
     'MYSTIQUE',
     'MLLE'
+    'BATTERIES',
+    'LITHIUM',
     ]
 
 CARDS_KEYWORDS = [
@@ -327,10 +326,10 @@ LP_COUNTRIES = [
     'PL'
 ]
 
-DP_KEYWORDS = ['BICYCLE', 'THEORY11,', 'ELLUSIONIST', 'COPAG']
+DP_KEYWORDS = ['BICYCLE', 'THEORY11,', 'ELLUSIONIST']
 
 EXPECTED_AMZN_CHANNELS = ['COM', 'EU']
 
-LP_UK_BRANDS = ['MYSTICAL LENORMAND', 'MLLE']
+LP_UK_BRANDS = ['MYSTICAL LENORMAND', 'MLLE', 'KIPPER MYSTIQUE', 'MYSTICAL KIPPER']
 
 LP_AMAZON_EU_REGISTRUOTA_COUNTRIES = DPOST_TRACKED_COUNTRIES = ['ES', 'FR']

@@ -54,6 +54,8 @@ class EtonasExporter():
                 d_with_output_keys['HS'] = get_hs_code(item_brand, item_category)
             elif header == 'Origin':
                 d_with_output_keys['Origin'] = get_origin_country(order_dict['product-name'])
+            elif header == 'Currency':
+                d_with_output_keys['Currency'] = order_dict['currency'].lower()
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
