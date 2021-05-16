@@ -1,9 +1,9 @@
-from amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords
-from amzn_parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand, get_level_up_abspath
-from amzn_parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
-from amzn_parser_utils import delete_file
-from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
-from etonas_xlsx_exporter import EtonasExporter
+from .amzn_parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords
+from .amzn_parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand, get_level_up_abspath
+from .amzn_parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
+from .amzn_parser_utils import delete_file
+from .amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
+from .etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
 from datetime import datetime
 import logging
