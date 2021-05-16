@@ -121,6 +121,7 @@ ETONAS_HEADERS = [
     'PackageType (DP Jeigu maza pakuote)',
     'Amount',
     'Price per quantity',
+    'GLS',
     'HS',
     'Origin',
     'Currency'
