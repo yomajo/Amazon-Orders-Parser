@@ -1,5 +1,5 @@
-from .amzn_parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
-from .amzn_parser_utils import get_product_category_or_brand, get_hs_code, get_origin_country
+from amzn_parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
+from amzn_parser_utils import get_product_category_or_brand, get_hs_code, get_origin_country
 import logging
 import openpyxl
 import sys
