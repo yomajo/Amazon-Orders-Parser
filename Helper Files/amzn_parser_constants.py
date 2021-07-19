@@ -298,7 +298,9 @@ BATTERY_BRANDS = [
     'MURATA',
     '5EEB459849DA77.22643238',
     'MYSTIQUE',
-    'MLLE'
+    'MLLE',
+    'CAMELION',
+    'BATTERIJ',
     'BATTERIES',
     'LITHIUM',
     ]
