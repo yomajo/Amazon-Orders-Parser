@@ -316,35 +316,30 @@ class ParseOrders():
         if self.dpost_orders:
             dpost_content = self.get_csv_export_ready_data(self.dpost_orders, 'dp')
             self.export_csv(self.dpost_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
-            logging.info(f'CSV {self.dpost_filename} created. Orders inside: {len(self.dpost_orders)}')
 
     def export_dpost_tracked(self):
         '''export csv file for Deutsche Post (TRACKED orders) shipping service'''
         if self.dpost_tracked_orders:
             dpost_content = self.get_csv_export_ready_data(self.dpost_tracked_orders, 'dp')
             self.export_csv(self.dpost_tracked_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
-            logging.info(f'CSV {self.dpost_tracked_filename} created. Orders inside: {len(self.dpost_tracked_orders)}')
 
     def export_ups(self):
         '''export csv file for UPS shipping service'''
         if self.ups_orders:
             ups_content = self.get_csv_export_ready_data(self.ups_orders, 'dp')
             self.export_csv(self.ups_filename, EXPORT_CONSTANTS['dp']['headers'], ups_content)
-            logging.info(f'CSV {self.ups_filename} created. Orders inside: {len(self.ups_orders)}')
 
     def export_lp(self):
         '''export csv file for Lietuvos Pastas shipping service'''
         if self.lp_orders:
             lp_content = self.get_csv_export_ready_data(self.lp_orders, 'lp')
             self.export_csv(self.lp_filename, EXPORT_CONSTANTS['lp']['headers'], lp_content)
-            logging.info(f'CSV {self.lp_filename} created. Orders inside: {len(self.lp_orders)}')
 
     def export_lp_tracked(self):
         '''export csv file for Lietuvos Pastas (TRACKED orders) shipping service'''
         if self.lp_tracked_orders:
             lp_content = self.get_csv_export_ready_data(self.lp_tracked_orders, 'lp')
             self.export_csv(self.lp_tracked_filename, EXPORT_CONSTANTS['lp']['headers'], lp_content)
-            logging.info(f'CSV {self.lp_tracked_filename} created. Orders inside: {len(self.lp_tracked_orders)}')
 
     def export_etonas(self):
         '''export xlsx file for Etonas shipping service'''
