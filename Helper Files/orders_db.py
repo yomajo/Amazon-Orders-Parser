@@ -233,10 +233,12 @@ class OrdersDB:
         try:
             self._backup_db(self.db_backup_b4_path)
             logging.info(f'Created backup {os.path.basename(self.db_backup_b4_path)} before adding orders')
+            
             # Adding new orders:
             self._insert_new_run(self.get_today_weekday_int())
             new_run_id = self._get_current_run_id()
             self.insert_multiple_orders(self.new_orders, new_run_id)
+            
             # House keeping
             self._flush_old_orders(ORDERS_ARCHIVE_DAYS)
             self._backup_db(self.db_backup_after_path)

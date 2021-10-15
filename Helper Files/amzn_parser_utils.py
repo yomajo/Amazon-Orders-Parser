@@ -1,5 +1,7 @@
 from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
 from amzn_parser_constants import DP_KEYWORDS, DPOST_TRACKED_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, LP_UK_BRANDS
+import shutil
+from datetime import datetime
 import platform
 import logging
 import sys
@@ -167,8 +169,32 @@ def delete_file(target_file_abs_path:str):
     try:
         os.remove(target_file_abs_path)
     except FileNotFoundError:
-        logging.info(f'Could not find file to delete. Apparently {os.path.basename(target_file_abs_path)} was not created during last run. ')
+        logging.info(f'Could not find file to delete. Apparently {os.path.basename(target_file_abs_path)} was not created during last run.')
 
+
+def create_src_file_backup(target_file_abs_path:str, backup_fname_prefix:str) -> str:
+    '''returns abspath of created file backup'''
+    src_files_folder = get_src_files_folder()
+    _, backup_ext = os.path.splitext(target_file_abs_path)
+    backup_abspath = get_backup_f_abspath(src_files_folder, backup_fname_prefix, backup_ext)
+    shutil.copy(src=target_file_abs_path, dst=backup_abspath)
+    print(f'backup created at: {backup_abspath}')
+    # logging.debug(f'I would like to save a back up here:\n{src_files_folder}')
+    return backup_abspath
+
+def get_src_files_folder():
+    output_dir = get_output_dir(client_file=False)
+    target_dir = os.path.join(output_dir, 'src files')
+    if not os.path.exists(target_dir):
+        os.mkdir(target_dir)
+        logging.debug(f'src files directory inside Helper files has been recreated: {target_dir}')
+    return target_dir
+
+def get_backup_f_abspath(src_files_folder:str, backup_fname_prefix:str, ext:str) -> str:
+    '''returns abs path for backup file. fname format: backup_fname_prefix-YY-MM-DD-HH-MM.ext'''
+    timestamp = datetime.now().strftime('%y-%m-%d %H-%M')
+    backup_fname = f'{backup_fname_prefix} {timestamp}{ext}'
+    return os.path.join(src_files_folder, backup_fname)
 
 if __name__ == "__main__":
     pass

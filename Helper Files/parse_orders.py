@@ -42,6 +42,15 @@ class ParseOrders():
         self.lp_tracked_orders = []
         self.etonas_orders = []
         self.ups_orders = []
+
+        self.inspect_order()
+
+    def inspect_order(self):
+        for order in self.all_orders:
+            print(order)
+            break
+        print('here you go. Premature exit')
+        exit()
     
     def export_same_buyer_details(self):
         '''exports orders data made by same person'''

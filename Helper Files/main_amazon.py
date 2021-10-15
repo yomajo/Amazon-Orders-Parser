@@ -11,7 +11,7 @@ import os
 
 
 # GLOBAL VARIABLES
-TESTING = False
+TESTING = True
 AMAZON_CHANNEL = 'EU'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
@@ -26,7 +26,7 @@ else:
 
 # Logging config:
 log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
-logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.INFO)
+logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.DEBUG)
 
 
 def get_cleaned_orders(source_file:str) -> list:
