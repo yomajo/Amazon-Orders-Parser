@@ -1,9 +1,10 @@
 from amzn_parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
 from amzn_parser_constants import DP_KEYWORDS, DPOST_TRACKED_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, LP_UK_BRANDS
-import shutil
 from datetime import datetime
 import platform
 import logging
+import shutil
+import json
 import sys
 import os
 
@@ -164,22 +165,13 @@ def get_lp_registered_priority_value(order:dict, amzn_channel:str) -> str:
         logging.critical(f'Unexpected amzn_channel got up to get_lp_registruota_value func: {amzn_channel}. Retuning empty str')
         return ''
 
-def delete_file(target_file_abs_path:str):
-    '''deletes file located in target_file_abs_path'''
-    try:
-        os.remove(target_file_abs_path)
-    except FileNotFoundError:
-        logging.info(f'Could not find file to delete. Apparently {os.path.basename(target_file_abs_path)} was not created during last run.')
-
-
 def create_src_file_backup(target_file_abs_path:str, backup_fname_prefix:str) -> str:
     '''returns abspath of created file backup'''
     src_files_folder = get_src_files_folder()
     _, backup_ext = os.path.splitext(target_file_abs_path)
     backup_abspath = get_backup_f_abspath(src_files_folder, backup_fname_prefix, backup_ext)
     shutil.copy(src=target_file_abs_path, dst=backup_abspath)
-    print(f'backup created at: {backup_abspath}')
-    # logging.debug(f'I would like to save a back up here:\n{src_files_folder}')
+    logging.info(f'Backup created at: {backup_abspath}')
     return backup_abspath
 
 def get_src_files_folder():
@@ -195,6 +187,21 @@ def get_backup_f_abspath(src_files_folder:str, backup_fname_prefix:str, ext:str)
     timestamp = datetime.now().strftime('%y-%m-%d %H-%M')
     backup_fname = f'{backup_fname_prefix} {timestamp}{ext}'
     return os.path.join(src_files_folder, backup_fname)
+
+def read_json_to_obj(json_file_path):
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        orders = json.load(f)
+    return orders
+
+def delete_file(file_abspath:str):
+    '''deletes file located in file_abspath'''
+    try:
+        os.remove(file_abspath)
+    except FileNotFoundError:
+        logging.warning(f'Tried deleting file: {file_abspath}, but apparently human has taken care of it first. (File not found)')
+    except Exception as e:
+        logging.warning(f'Unexpected err: {e} while flushing db old records, deleting file: {file_abspath}')
+
 
 if __name__ == "__main__":
     pass
