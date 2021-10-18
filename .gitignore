@@ -13,3 +13,4 @@ src files
 testing_orders?.json
 sample*
 snippets.txt
+*.db
