@@ -1,8 +1,8 @@
 from amzn_parser_utils import get_output_dir, is_windows_machine, clean_phone_number
-from amzn_parser_constants import EXPECTED_AMZN_CHANNELS
-from etonas_xlsx_exporter import EtonasExporter
-from parse_orders import ParseOrders
+from amzn_parser_constants import EXPECTED_SALES_CHANNELS
+from sqlalchemy_db import SQLAlchemyOrdersDB
 from orders_db import OrdersDB
+from parse_orders import ParseOrders
 from datetime import datetime
 import logging
 import sys
@@ -12,7 +12,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = True
-AMAZON_CHANNEL = 'EU'
+SALES_CHANNEL = 'AmazonEU'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -52,42 +52,49 @@ def clean_orders(orders:list) -> list:
             print(VBA_KEYERROR_ALERT)
     return orders
 
-def parse_export_orders(testing:bool, amzn_channel:str, skip_etonas:bool, cleaned_source_orders:list, loaded_txt:str):
+def parse_export_orders(testing:bool, sales_channel:str, skip_etonas:bool, cleaned_source_orders:list, loaded_txt:str):
     '''interacts with classes (ParseOrders, OrdersDB) to filter new orders, export desired files and push new orders to db'''
     db_client = OrdersDB(cleaned_source_orders, loaded_txt)
-    new_orders = db_client.get_new_orders_only()
-    logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
-    ParseOrders(new_orders, db_client, amzn_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
 
-def parse_args():
-    '''returns arguments passed from VBA'''
+    db_sqlalchemy_client = SQLAlchemyOrdersDB(cleaned_source_orders, loaded_txt, sales_channel)
+    
+    new_orders = db_client.get_new_orders_only()
+
+    new_orders_sqlalchemy = db_sqlalchemy_client.get_new_orders_only()
+
+    logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders_sqlalchemy)} orders')
+    
+    ParseOrders(new_orders, db_client, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
+    logging.info(f'\n---- Parsing with sqlite + ParseOrders done. SQLAlchemy turn + ParseOrders')
+    ParseOrders(new_orders_sqlalchemy, db_sqlalchemy_client, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
+
+def parse_args(testing=False):
+    '''returns arguments passed from VBA or hardcoded test environment'''
+    if testing:
+        print('--- RUNNING IN TESTING MODE ---')        
+        return TEST_AMZN_EXPORT_TXT, SALES_CHANNEL, SKIP_ETONAS_FLAG
+
     try:
         assert len(sys.argv) == EXPECTED_SYS_ARGS, 'Unexpected number of sys.args passed'
         txt_path = sys.argv[1]
-        amzn_channel = sys.argv[2]
+        sales_channel = sys.argv[2]
         skip_etonas = True if sys.argv[3] == 'True' else False
-        logging.info(f'Accepted sys args on launch: txt_path: {txt_path}; amzn_channel: {amzn_channel}; skip_etonas: {skip_etonas}. Whole sys.argv: {list(sys.argv)}')
-        assert amzn_channel in EXPECTED_AMZN_CHANNELS, f'Unexpected amzn_channel value passed from VBA side: {amzn_channel}'
-        return txt_path, amzn_channel, skip_etonas
+        logging.info(f'Accepted sys args on launch: txt_path: {txt_path}; sales_channel: {sales_channel}; skip_etonas: {skip_etonas}. Whole sys.argv: {list(sys.argv)}')
+        assert sales_channel in EXPECTED_SALES_CHANNELS, f'Unexpected sales_channel value passed from VBA side: {sales_channel}'
+        return txt_path, sales_channel, skip_etonas
     except Exception as e:
         print(VBA_ERROR_ALERT)
         logging.critical(f'Error parsing arguments on script initialization in cmd. Arguments provided: {list(sys.argv)} Number Expected: {EXPECTED_SYS_ARGS}.')
         sys.exit()
 
-def main(testing, amazon_export_txt_path):
+def main():
     '''Main function executing parsing of provided txt file and outputing csv, xlsx files'''
     logging.info(f'\n NEW RUN STARTING: {datetime.today().strftime("%Y.%m.%d %H:%M")}')    
-    if testing:
-        print('RUNNING IN TESTING MODE')
-        txt_path = amazon_export_txt_path
-        amzn_channel = AMAZON_CHANNEL
-        skip_etonas = SKIP_ETONAS_FLAG    
-    else:
-        txt_path, amzn_channel, skip_etonas = parse_args()
+    txt_path, sales_channel, skip_etonas = parse_args(testing=TESTING)
 
     if os.path.exists(txt_path):
         cleaned_source_orders = get_cleaned_orders(txt_path)
-        parse_export_orders(testing, amzn_channel, skip_etonas, cleaned_source_orders, txt_path)
+        parse_export_orders(TESTING, sales_channel, skip_etonas, cleaned_source_orders, txt_path)
         print(VBA_OK)
     else:
         logging.critical(f'Provided file {txt_path} does not exist.')
@@ -97,4 +104,4 @@ def main(testing, amazon_export_txt_path):
 
 
 if __name__ == "__main__":
-    main(testing=TESTING, amazon_export_txt_path=TEST_AMZN_EXPORT_TXT)
+    main()
