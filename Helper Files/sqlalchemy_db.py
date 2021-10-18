@@ -1,4 +1,4 @@
-from amzn_parser_utils import get_output_dir, create_src_file_backup, read_json_to_obj, delete_file
+from parser_utils import get_output_dir, create_src_file_backup, read_json_to_obj, delete_file
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship

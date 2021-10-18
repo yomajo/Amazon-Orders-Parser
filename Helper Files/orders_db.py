@@ -1,4 +1,4 @@
-from amzn_parser_utils import get_output_dir, file_to_binary, recreate_txt_file
+from parser_utils import get_output_dir, file_to_binary, recreate_txt_file
 from datetime import datetime
 import sqlite3
 import logging
