@@ -1,5 +1,5 @@
 from amzn_parser_utils import get_output_dir, is_windows_machine, clean_phone_number
-from amzn_parser_constants import EXPECTED_SALES_CHANNELS
+from parser_constants import EXPECTED_SALES_CHANNELS
 from sqlalchemy_db import SQLAlchemyOrdersDB
 from orders_db import OrdersDB
 from parse_orders import ParseOrders
