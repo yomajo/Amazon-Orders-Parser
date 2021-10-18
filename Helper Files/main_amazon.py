@@ -1,7 +1,6 @@
 from parser_utils import get_output_dir, is_windows_machine, clean_phone_number
 from parser_constants import EXPECTED_SALES_CHANNELS
-from sqlalchemy_db import SQLAlchemyOrdersDB
-from orders_db import OrdersDB
+from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
 import logging
@@ -20,6 +19,8 @@ VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
+    # 334 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt
+    # 1879 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt
     TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt'
 else:
     TEST_AMZN_EXPORT_TXT = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
@@ -54,19 +55,11 @@ def clean_orders(orders:list) -> list:
 
 def parse_export_orders(testing:bool, sales_channel:str, skip_etonas:bool, cleaned_source_orders:list, loaded_txt:str):
     '''interacts with classes (ParseOrders, OrdersDB) to filter new orders, export desired files and push new orders to db'''
-    db_client = OrdersDB(cleaned_source_orders, loaded_txt)
-
-    db_sqlalchemy_client = SQLAlchemyOrdersDB(cleaned_source_orders, loaded_txt, sales_channel)
-    
+    db_client = SQLAlchemyOrdersDB(cleaned_source_orders, loaded_txt, sales_channel, testing=testing)
     new_orders = db_client.get_new_orders_only()
+    logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
 
-    new_orders_sqlalchemy = db_sqlalchemy_client.get_new_orders_only()
-
-    logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders_sqlalchemy)} orders')
-    
     ParseOrders(new_orders, db_client, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
-    logging.info(f'\n---- Parsing with sqlite + ParseOrders done. SQLAlchemy turn + ParseOrders')
-    ParseOrders(new_orders_sqlalchemy, db_sqlalchemy_client, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
 
 def parse_args(testing=False):
     '''returns arguments passed from VBA or hardcoded test environment'''

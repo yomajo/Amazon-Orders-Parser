@@ -4,9 +4,9 @@ from parser_utils import get_dpost_product_header_val, get_lp_registered_priorit
 from parser_utils import delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
-from string import ascii_letters
+from database import SQLAlchemyOrdersDB
 from datetime import datetime
-from sqlalchemy_db import SQLAlchemyOrdersDB
+from string import ascii_letters
 import logging
 import csv
 import sys
@@ -265,9 +265,7 @@ class ParseOrders():
         '''terminates python program, closes db connection, warns VBA'''
         if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders:
             logging.info(f'No new orders for processing. Terminating, alerting VBA.')
-            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
-                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
-                self.db_client.close_connection()
+            self.db_client.session.close()
             print(VBA_NO_NEW_JOB)
             sys.exit()
 
@@ -276,9 +274,7 @@ class ParseOrders():
             return float(order['shipping-price'])
         except KeyError:
             logging.critical(f'Could not find column: \'shipping-price\' in data source. Exiting on order: {order}')
-            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
-                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
-                self.db_client.close_connection()
+            self.db_client.session.close()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
@@ -290,9 +286,7 @@ class ParseOrders():
             return order['ship-country'].upper()
         except KeyError:
             logging.critical(f'Could not find column: \'ship-country\' in data source. Exiting on order: {order}')
-            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
-                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
-                self.db_client.close_connection()
+            self.db_client.session.close()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
@@ -363,7 +357,7 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        self.export_same_buyer_details()
+        # self.export_same_buyer_details()
         # self.export_dpost_tracked()
         # self.export_dpost()
         # self.export_ups()
@@ -373,7 +367,7 @@ class ParseOrders():
         print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
         logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
         self.push_orders_to_db()
-        # self.db_client.close_connection()
+        self.db_client.session.close()
         print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
     
     def export_orders(self, testing=False, skip_etonas=False):
@@ -393,6 +387,7 @@ class ParseOrders():
         self.export_lp_tracked()
         self.export_etonas()
         self.push_orders_to_db()
+        self.db_client.session.close()
 
 if __name__ == "__main__":
     pass
