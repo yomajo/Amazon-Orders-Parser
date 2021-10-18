@@ -2,13 +2,14 @@ from amzn_parser_utils import get_total_price, get_output_dir, order_contains_ba
 from amzn_parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand, get_level_up_abspath
 from amzn_parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
 from amzn_parser_utils import delete_file
-from amzn_parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
+from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
 from string import ascii_letters
 from datetime import datetime
+from sqlalchemy_db import SQLAlchemyOrdersDB
 import logging
-import sys
 import csv
+import sys
 import os
 
 
@@ -27,30 +28,21 @@ class ParseOrders():
     Args:
     -orders - list of order dicts
     -db_client - object
-    -amzn_channel - str ('EU'/'COM')
+    -sales_channel - str ('AmazonEU'/'AmazonCOM'/'Etsy')
     
     export_orders(testing=False) : main method, sorts orders by shipment company, if testing flag is False,
     exports files with appropriate orders data and adds all passed orders when creating class to database'''
     
-    def __init__(self, all_orders : list, db_client : object, amzn_channel:str):
+    def __init__(self, all_orders:list, db_client:object, sales_channel:str):
         self.all_orders = all_orders
         self.db_client = db_client
-        self.amzn_channel = amzn_channel
+        self.sales_channel = sales_channel
         self.dpost_orders = []
         self.dpost_tracked_orders = []
         self.lp_orders = []
         self.lp_tracked_orders = []
         self.etonas_orders = []
         self.ups_orders = []
-
-        self.inspect_order()
-
-    def inspect_order(self):
-        for order in self.all_orders:
-            print(order)
-            break
-        print('here you go. Premature exit')
-        exit()
     
     def export_same_buyer_details(self):
         '''exports orders data made by same person'''
@@ -136,7 +128,7 @@ class ParseOrders():
                 d_with_output_keys[header] = order_dict['recipient-name'][:20]
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                d_with_output_keys[header] = get_lp_registered_priority_value(order_dict, self.amzn_channel)
+                d_with_output_keys[header] = get_lp_registered_priority_value(order_dict, self.sales_channel)
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
                 d_with_output_keys[header] = get_product_category_or_brand(order_dict['product-name'])
@@ -227,13 +219,13 @@ class ParseOrders():
             order_dict['Vertė, eur'] = ''
         return order_dict
 
-    def sort_orders_by_amzn_channel(self, skip_etonas:bool):
+    def sort_orders_by_sales_channel(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
-        logging.info(f'Sorting orders by shippment company specific to Amazon {self.amzn_channel} ruleset')
+        logging.info(f'Sorting orders by shippment company specific to Amazon {self.sales_channel} ruleset')
         for order in self.all_orders:
-            if self.amzn_channel == 'EU':
+            if self.sales_channel == 'AmazonEU':
                 self.sort_EU_order_by_shipment_company(order, skip_etonas)
-            elif self.amzn_channel == 'COM':
+            elif self.sales_channel == 'AmazonCOM':
                 self.sort_COM_order_by_shipment_company(order)
         self.exit_no_new_orders()
     
@@ -273,7 +265,9 @@ class ParseOrders():
         '''terminates python program, closes db connection, warns VBA'''
         if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders:
             logging.info(f'No new orders for processing. Terminating, alerting VBA.')
-            self.db_client.close_connection()
+            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
+                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
+                self.db_client.close_connection()
             print(VBA_NO_NEW_JOB)
             sys.exit()
 
@@ -282,7 +276,9 @@ class ParseOrders():
             return float(order['shipping-price'])
         except KeyError:
             logging.critical(f'Could not find column: \'shipping-price\' in data source. Exiting on order: {order}')
-            self.db_client.close_connection()
+            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
+                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
+                self.db_client.close_connection()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
@@ -294,7 +290,9 @@ class ParseOrders():
             return order['ship-country'].upper()
         except KeyError:
             logging.critical(f'Could not find column: \'ship-country\' in data source. Exiting on order: {order}')
-            self.db_client.close_connection()
+            if not isinstance(self.db_client, SQLAlchemyOrdersDB):
+                logging.debug(f'db client is NOT SQLAlchemyOrdersDB instance')
+                self.db_client.close_connection()
             print(VBA_KEYERROR_ALERT)
             sys.exit()
         except Exception as e:
@@ -306,13 +304,13 @@ class ParseOrders():
         output_dir = get_output_dir()
         lp_output_dir = get_output_dir(client_file=False)
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
-        self.same_buyers_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-Same Buyer {date_stamp}.txt')
-        self.etonas_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-Etonas {date_stamp}.xlsx')
-        self.dpost_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-DPost {date_stamp}.csv')
-        self.dpost_tracked_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-DPost Tracked {date_stamp}.csv')
-        self.ups_filename = os.path.join(output_dir, f'Amzn{self.amzn_channel}-UPS {date_stamp}.csv')
-        self.lp_filename = os.path.join(lp_output_dir, f'Amzn{self.amzn_channel}-LP.csv')
-        self.lp_tracked_filename = os.path.join(lp_output_dir, f'Amzn{self.amzn_channel}-LP-Tracked.csv')
+        self.same_buyers_filename = os.path.join(output_dir, f'{self.sales_channel}-Same Buyer {date_stamp}.txt')
+        self.etonas_filename = os.path.join(output_dir, f'{self.sales_channel}-Etonas {date_stamp}.xlsx')
+        self.dpost_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost {date_stamp}.csv')
+        self.dpost_tracked_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost Tracked {date_stamp}.csv')
+        self.ups_filename = os.path.join(output_dir, f'{self.sales_channel}-UPS {date_stamp}.csv')
+        self.lp_filename = os.path.join(lp_output_dir, f'{self.sales_channel}-LP.csv')
+        self.lp_tracked_filename = os.path.join(lp_output_dir, f'{self.sales_channel}-LP-Tracked.csv')
 
     def delete_old_files(self):
         '''addresses potential double loading of same LP sheets to Excel problem,
@@ -361,23 +359,30 @@ class ParseOrders():
         count_added_to_db = self.db_client.add_orders_to_db()
         logging.info(f'Total of {count_added_to_db} new orders have been added to database, after exports were completed')
 
+    def test_exports(self, testing=False, skip_etonas=False):
+        '''customize what shall happen when testing=True'''
+        print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
+        logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
+        # self.export_dpost_tracked()
+        # self.export_dpost()
+        # self.export_ups()
+        # self.export_lp()
+        # self.export_lp_tracked()
+        # self.export_etonas()
+        print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
+        logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
+        self.push_orders_to_db()
+        # self.db_client.close_connection()
+        print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
+    
     def export_orders(self, testing=False, skip_etonas=False):
-        '''Summing up tasks inside ParseOrders class. Customizable under testing=True w/ commenting out'''
+        '''Summing up tasks inside ParseOrders class. When testing, behaviour customizable inside
+        test_exports method'''
         self._prepare_filepaths()
         self.delete_old_files()
-        self.sort_orders_by_amzn_channel(skip_etonas)
+        self.sort_orders_by_sales_channel(skip_etonas)
         if testing:
-            print(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
-            logging.info(f'TESTING FLAG IS: {testing}. Refer to export_orders in parse_orders.py')
-            # self.export_dpost_tracked()
-            # self.export_dpost()
-            # self.export_ups()
-            self.export_lp()
-            self.export_lp_tracked()
-            # self.export_etonas()
-            # self.push_orders_to_db()
-            self.db_client.close_connection()
-            print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
+            self.test_exports(testing, skip_etonas)
             return
         self.export_same_buyer_details()
         self.export_dpost_tracked()
