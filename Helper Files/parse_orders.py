@@ -43,7 +43,7 @@ class ParseOrders():
         self.lp_tracked_orders = []
         self.etonas_orders = []
         self.ups_orders = []
-    
+
     def export_same_buyer_details(self):
         '''exports orders data made by same person'''
         same_buyer_orders = self.get_same_buyer_orders()
@@ -363,6 +363,7 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
+        self.export_same_buyer_details()
         # self.export_dpost_tracked()
         # self.export_dpost()
         # self.export_ups()

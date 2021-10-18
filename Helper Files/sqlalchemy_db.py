@@ -1,9 +1,11 @@
+import sqlalchemy
 from parser_utils import get_output_dir, create_src_file_backup, read_json_to_obj, delete_file
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.exc import IntegrityError
 import datetime
 import logging
 import os
@@ -136,19 +138,24 @@ class SQLAlchemyOrdersDB:
         for order in new_orders:
             self._add_single_order(order)
             added_to_db_counter += 1
-        self.session.commit()
         print(f'Total {added_to_db_counter} new orders have been added to database')
 
     def _add_single_order(self, order_dict:dict):
         '''adds single order to database (via session.add(new_order)).
         
         !!! WARNING !!! : Different keys for etsy'''        
-        new_order = Order(order_id=order_dict['order-id'],
-                purchase_date=order_dict['purchase-date'],
-                buyer_name=order_dict['buyer-name'],
-                run=self.new_run_id,
-                sales_channel=self.sales_channel)
-        self.session.add(new_order)
+        try:
+            new_order = Order(order_id=order_dict['order-id'],
+                    purchase_date=order_dict['purchase-date'],
+                    buyer_name=order_dict['buyer-name'],
+                    run=self.new_run_id,
+                    sales_channel=self.sales_channel)
+            self.session.add(new_order)
+            self.session.commit()
+        except IntegrityError as e:
+            logging.warning(f'Order w/ order_id: {order_dict["order-id"]} already in database. \
+                Integrity error {e}. Skipping addition of said order, rolling back db session')
+            self.session.rollback()
 
     def _add_new_run(self) -> int:
         '''adds new row in program_run table, returns new run id,
