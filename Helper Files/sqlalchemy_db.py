@@ -12,7 +12,6 @@ import shutil
 
 # GLOBAL VARIABLES
 ORDERS_ARCHIVE_DAYS = 60
-# ORDERS_ARCHIVE_DAYS = 30
 DATABASE_NAME = 'orders.db'
 BACKUP_DB_BEFORE_NAME = 'orders_b4lrun.db'
 BACKUP_DB_AFTER_NAME = 'orders_lrun.db'
@@ -94,9 +93,7 @@ class SQLAlchemyOrdersDB:
         if not os.path.exists(self.db_path):
             self.__get_engine()
             Base.metadata.create_all(bind=self.engine)
-            print('------ database has been created (change to logging) ------')
-        else:
-            print('------ database already exists (change to logging) ------')
+            logging.info(f'Database has been created at {self.db_path}')
 
     def __get_db_paths(self):
         output_dir = get_output_dir(client_file=False)
@@ -115,13 +112,13 @@ class SQLAlchemyOrdersDB:
         session = Session()
         return session
 
-    def add_orders_to_db(self, test_timestamp):
+    def add_orders_to_db(self):
         '''filters passed orders to cls to only those, whose order_id
         (db table unique constraint) is not present in db yet adds them to db
         assumes get_new_orders_only was called outside of this cls before to get self.new_orders'''
         try:
             if self.new_orders:
-                self._add_new_orders_to_db(self.new_orders, test_timestamp)
+                self._add_new_orders_to_db(self.new_orders)
                 self.flush_old_records()
                 self._backup_db(self.db_backup_after_path)
             # create backup with new added orders 
@@ -132,9 +129,9 @@ class SQLAlchemyOrdersDB:
             print(VBA_ERROR_ALERT)
             exit()
 
-    def _add_new_orders_to_db(self, new_orders:list, test_timestamp):
+    def _add_new_orders_to_db(self, new_orders:list):
         '''create new entry in program_runs table, add new orders'''
-        self.new_run_id = self._add_new_run(test_timestamp)
+        self.new_run_id = self._add_new_run()
         added_to_db_counter = 0
         for order in new_orders:
             self._add_single_order(order)
@@ -143,7 +140,9 @@ class SQLAlchemyOrdersDB:
         print(f'Total {added_to_db_counter} new orders have been added to database')
 
     def _add_single_order(self, order_dict:dict):
-        '''CONTAINS HARDCODED VALUES WARNING SOLVE LATER. Different keys for etsy, WARNING'''        
+        '''adds single order to database (via session.add(new_order)).
+        
+        !!! WARNING !!! : Different keys for etsy'''        
         new_order = Order(order_id=order_dict['order-id'],
                 purchase_date=order_dict['purchase-date'],
                 buyer_name=order_dict['buyer-name'],
@@ -151,21 +150,23 @@ class SQLAlchemyOrdersDB:
                 sales_channel=self.sales_channel)
         self.session.add(new_order)
 
-    def _add_new_run(self, test_timestamp) -> int:
+    def _add_new_run(self) -> int:
         '''adds new row in program_run table, returns new run id,
         creates source file backup, saves its path. On testing - save original file path'''
         backup_path = self.source_file_path if self.testing else create_src_file_backup(self.source_file_path, self.sales_channel)
-        print(f'This is backup path being saved to program_run: {backup_path}')
-        new_run = ProgramRun(backup_path, test_timestamp)
+        logging.debug(f'This is backup path being saved to program_run fpath column: {backup_path}')
+        new_run = ProgramRun(backup_path)
         self.session.add(new_run)
         self.session.commit()
         logging.debug(f'Added new run: {new_run}, created backup')
         return new_run.id
 
     def get_new_orders_only(self) -> list:
-        '''From passed orders to cls, returns only orders NOT YET in database WARNING DIFFERENT KEYS FOR ETSY DICT
-        order-id vs Order ID SOLVE LATER
-        called from main.py'''
+        '''From passed orders to cls, returns only orders NOT YET in database
+        
+        called from main.py to filter old, parsed orders
+
+        !!! WARNING !!! DIFFERENT KEYS FOR ETSY DICT'''
         orders_in_db = self._get_order_ids_in_db()
         self.new_orders = [order_data for order_data in self.orders if order_data['order-id'] not in orders_in_db]
         logging.info(f'Returning {len(self.new_orders)}/{len(self.orders)} new/loaded orders for further processing')
@@ -207,56 +208,11 @@ class SQLAlchemyOrdersDB:
 
 def run():
     f1 = r'C:\Coding\Amazon Orders Parser\Helper Files\testing_orders1.json'
-    f2 = r'C:\Coding\Amazon Orders Parser\Helper Files\testing_orders2.json'
-    f3 = r'C:\Coding\Amazon Orders Parser\Helper Files\testing_orders3.json'
     orders_1 = read_json_to_obj(f1)
-    # orders_2 = read_json_to_obj(f2)
-    # orders_3 = read_json_to_obj(f3)
-
-    db = SQLAlchemyOrdersDB(orders_1, f1, 'AmazonEU', testing=True)
-    # hardcoded_timestamp1 = datetime.datetime(2021, 9, 15, 10, 58, 39)
-    # db.add_orders_to_db(hardcoded_timestamp1)
-
-    # db2 = SQLAlchemyOrdersDB(orders_2, f2, 'AmazonCOM', testing=False)
-    # hardcoded_timestamp2 = datetime.datetime(2021, 6, 10, 6, 00, 15)
-    # db2.add_orders_to_db(hardcoded_timestamp2)
-
-    # db3 = SQLAlchemyOrdersDB(orders_3, f3, 'Etsy', testing=False)
-    # hardcoded_timestamp3 = datetime.datetime(2021, 10, 4, 20, 5, 6)
-    # db3.add_orders_to_db(hardcoded_timestamp3)
-
-    
-    # session = db.get_session()
-
-    # rename 2 run id to -> 20
-    # run = session.query(ProgramRun).filter_by(id=2).first()
-    # run.id = 20
-    # print(f'Changed run 2 id to 20. Expecting orders to inherit new val')
-    # session.commit()
-
-    # # # view changes
-    # run_after_changes = session.query(ProgramRun).filter_by(id=20).first()
-    # print(run_after_changes)
-
-    # db_order_objs = session.query(Order).all()
-    # for order_obj in db_order_objs:
-    #     print(order_obj)
-
-    # print(f'Total orders in db: {len(db_order_objs)}') #21
-
-    # run1_db_orders = session.query(Order).filter(Order.run == 1).all()
-    # run2_db_orders = session.query(Order).filter(Order.run == 2).all()
-    # run3_db_orders = session.query(Order).filter(Order.run == 3).all()
-
-    # print(f'1 run contains {len(run1_db_orders)} orders')   #6
-    # print(f'2 run contains {len(run2_db_orders)} orders')   #10 - will be deleted
-    # print(f'3 run contains {len(run3_db_orders)} orders')   #5
-
-    db_order_objs = db.session.query(Order).all()
-    for order_obj in db_order_objs:
-        print(order_obj)
-    print(f'Total {len(db_order_objs)} orders left in db')
+    db = SQLAlchemyOrdersDB(orders_1, f1, 'AmazonEU', testing=True)    
+    session = db.get_session()
     
 
 if __name__ == '__main__':
-    run()
+    # run()
+    pass
