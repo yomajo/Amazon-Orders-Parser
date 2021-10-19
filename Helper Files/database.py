@@ -1,4 +1,4 @@
-from parser_utils import get_output_dir, create_src_file_backup, read_json_to_obj, delete_file
+from parser_utils import get_output_dir, create_src_file_backup, delete_file
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -129,7 +129,7 @@ class SQLAlchemyOrdersDB:
             logging.debug(f'New orders added, flushing old records complete, backup after created at: {self.db_backup_after_path}')
             return len(self.new_orders)
         except Exception as e:
-            logging.critical(f'Unexpected err {e} trying to add orders to db. Alerting VBA, terminating program immediately.')
+            logging.critical(f'Unexpected err {e} trying to add orders to db. Alerting VBA, terminating program immediately via exit().')
             print(VBA_ERROR_ALERT)
             exit()
 
