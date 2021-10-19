@@ -188,6 +188,14 @@ def get_backup_f_abspath(src_files_folder:str, backup_fname_prefix:str, ext:str)
     backup_fname = f'{backup_fname_prefix} {timestamp}{ext}'
     return os.path.join(src_files_folder, backup_fname)
 
+def dump_to_json(export_obj, json_fname:str) -> str:
+    '''exports export_obj to json file. Returns path to crated json'''
+    output_dir = get_output_dir(client_file=False)
+    json_path = os.path.join(output_dir, json_fname)
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(export_obj, f, indent=4)
+    return json_path
+
 def read_json_to_obj(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
         orders = json.load(f)
