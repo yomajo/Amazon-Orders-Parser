@@ -30,16 +30,19 @@ log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_order
 logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.DEBUG)
 
 
-def get_cleaned_orders(source_file:str) -> list:
+def get_cleaned_orders(source_file:str, sales_channel:str) -> list:
     '''returns cleaned orders (as cleaned in clean_orders func) from source_file arg path'''
-    raw_orders = get_raw_orders(source_file)
+    delimiter = ',' if sales_channel == 'Etsy' else '\t'
+    raw_orders = get_raw_orders(source_file, delimiter)
+    if sales_channel == 'Etsy':
+        return raw_orders
     cleaned_orders = clean_orders(raw_orders)
     return cleaned_orders
 
-def get_raw_orders(source_file:str) -> list:
+def get_raw_orders(source_file:str, delimiter:str) -> list:
     '''returns raw orders as list of dicts for each order in txt source_file'''
     with open(source_file, 'r', encoding='utf-8') as f:
-        source_contents = csv.DictReader(f, delimiter='\t')
+        source_contents = csv.DictReader(f, delimiter=delimiter)
         raw_orders = [{header : value for header, value in row.items()} for row in source_contents]
     return raw_orders
 
@@ -86,7 +89,7 @@ def main():
     txt_path, sales_channel, skip_etonas = parse_args(testing=TESTING)
 
     if os.path.exists(txt_path):
-        cleaned_source_orders = get_cleaned_orders(txt_path)
+        cleaned_source_orders = get_cleaned_orders(txt_path, sales_channel)
         parse_export_orders(TESTING, sales_channel, skip_etonas, cleaned_source_orders, txt_path)
         print(VBA_OK)
     else:
