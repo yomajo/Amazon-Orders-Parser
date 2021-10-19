@@ -4,7 +4,6 @@ from parser_utils import get_dpost_product_header_val, get_lp_registered_priorit
 from parser_utils import delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
-from database import SQLAlchemyOrdersDB
 from datetime import datetime
 from string import ascii_letters
 import logging
