@@ -25,7 +25,8 @@ class ProgramRun(Base):
     '''database table model representing unique program run'''
     __tablename__ = 'program_run'
 
-    def __init__(self, fpath:str, sales_channel, timestamp=datetime.datetime.now()):
+    def __init__(self, fpath:str, sales_channel, timestamp=datetime.datetime.now(), **kwargs):
+        super(ProgramRun, self).__init__(**kwargs)
         self.fpath = fpath
         self.sales_channel = sales_channel
         self.timestamp = timestamp
@@ -42,17 +43,21 @@ class ProgramRun(Base):
     
 
 class Order(Base):
-    '''database table model representing Order'''
+    '''database table model representing Order
+    
+    NOTE: unique primary key is: order['order-item-id'] for Amazon; order['Order ID'] for Etsy
+    order_id_secondary = order['order-id'] for Amazon; null for Etsy'''
     __tablename__ = 'order'
 
-    def __init__(self, order_id, purchase_date, buyer_name, run):
+    def __init__(self, order_id, purchase_date, buyer_name, run, **kwargs):
+        super(Order, self).__init__(**kwargs)
         self.order_id = order_id
         self.purchase_date = purchase_date
         self.buyer_name = buyer_name
         self.run = run
 
-    order_id = Column(String, primary_key=True, nullable=False)     # order['order-item-id'] for Amazon; order['Order ID'] for Etsy
-    order_id_secondary = Column(String)     #order['order-id'] for Amazon; null for Etsy
+    order_id = Column(String, primary_key=True, nullable=False)
+    order_id_secondary = Column(String)
     purchase_date = Column(String)
     buyer_name = Column(String)
     run = Column(Integer, ForeignKey('program_run.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
