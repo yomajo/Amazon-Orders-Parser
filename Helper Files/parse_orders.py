@@ -1,7 +1,7 @@
 from parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords
-from parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand, get_level_up_abspath
+from parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand
 from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
-from parser_utils import delete_file
+from parser_utils import delete_file, get_order_ship_price, get_order_country
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
 from datetime import datetime
@@ -56,24 +56,28 @@ class ParseOrders():
             for recipient_name in same_buyer_orders:
                 f.write(f'\n\n{recipient_name}')
                 for order in same_buyer_orders[recipient_name]:
-                    f.write(f"\n\t\t{order['order-id']}\t\t{order['ship-address-1']} {order['ship-address-2']}")
+                    f.write(f"\n\t\t{order[self.proxy_keys['same-buyer-order-id']]}\t\t{order[self.proxy_keys['ship-address-1']]} {order[self.proxy_keys['ship-address-2']]}")
         logging.info(f'Same Buyer Orders have been written to {self.same_buyers_filename} and being showed to client')
         os.startfile(self.same_buyers_filename)
 
     def get_same_buyer_orders(self):
-        '''step1: collects {recipient-name: [{order1 details}, {order2 details}]} structure; step2: removes single orders'''
+        '''step1: collects {recipient-name: [{order1}, {order2}]} structure; step2: removes single orders'''
         recipient_name_keys_orders = {}
-        for order_details in self.all_orders:
+        for order in self.all_orders:
             # If name is in same_buyers_orders keys, append order dict as list item, else, add order dict as list
-            if order_details['recipient-name'] in recipient_name_keys_orders:
-                recipient_name_keys_orders[order_details['recipient-name']].append(order_details)
+            if order[self.proxy_keys['recipient-name']] in recipient_name_keys_orders:
+                recipient_name_keys_orders[order[self.proxy_keys['recipient-name']]].append(order)
             else:
-                recipient_name_keys_orders[order_details['recipient-name']] = [order_details]
+                recipient_name_keys_orders[order[self.proxy_keys['recipient-name']]] = [order]
         # Filter for same person orders dict, where key is recipient name and value is a list of order dicts:
         for name_key in list(recipient_name_keys_orders):
             if len(recipient_name_keys_orders[name_key]) == 1:
                 recipient_name_keys_orders.pop(name_key, None)
         return recipient_name_keys_orders
+
+        # -----------------------------------------------------------------------------------------------------------------
+        # '---------------------------------------'etsy support added up to this line -------------------------------------
+        # -----------------------------------------------------------------------------------------------------------------
 
     def export_csv(self, csv_filename : str, headers : list, contents : list, delimiter:str=';'):
         '''exports data to csv details provided as func. args, don't export empty files'''
@@ -113,7 +117,7 @@ class ParseOrders():
     def get_export_ready_order(self, order_dict : dict, headers_settings : dict) -> dict:
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         d_with_output_keys = {}
-        order_country = self._get_order_ship_country(order_dict)
+        order_country = get_order_country(order_dict, self.proxy_keys)
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
             if header in headers_settings['fixed'].keys():
@@ -222,7 +226,7 @@ class ParseOrders():
 
     def sort_orders_by_sales_channel(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
-        logging.info(f'Sorting orders by shippment company specific to Amazon {self.sales_channel} ruleset')
+        logging.info(f'Sorting orders by shippment company specific to {self.sales_channel} ruleset')
         for order in self.all_orders:
             if self.sales_channel == 'AmazonEU':
                 self.sort_EU_order_by_shipment_company(order, skip_etonas)
@@ -234,14 +238,14 @@ class ParseOrders():
     
     def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
         '''sorts individual order from AMAZON EU by shipment company'''    
-        if self._get_order_ship_country(order) in DPOST_TRACKED_COUNTRIES:
+        if get_order_country(order, self.proxy_keys) in DPOST_TRACKED_COUNTRIES:
             if order_contains_batteries(order):
                 self.lp_tracked_orders.append(order)
             else:
                 self.dpost_tracked_orders.append(order)
-        elif order_contains_batteries(order) or order_contains_cards_keywords(order) or self._get_order_ship_country(order) in LP_COUNTRIES:
+        elif order_contains_batteries(order) or order_contains_cards_keywords(order) or get_order_country(order, self.proxy_keys) in LP_COUNTRIES:
             self.lp_orders.append(order)
-        elif self._get_order_ship_country(order) in ['GB', 'UK']:
+        elif get_order_country(order, self.proxy_keys) in ['GB', 'UK']:
             # Route Etonas shipments with DPost if flag is on.
             if skip_etonas:
                 self.dpost_orders.append(order)
@@ -252,54 +256,34 @@ class ParseOrders():
                     self.lp_orders.append(order)
                 else:
                     self.etonas_orders.append(order)
-        elif self._get_order_ship_price(order) >= 10:
+        elif get_order_ship_price(order, self.proxy_keys) >= 10:
             self.ups_orders.append(order)
         else:
             self.dpost_orders.append(order)
 
     def sort_COM_order_by_shipment_company(self, order:dict):
         '''sorts individual order from AMAZON COM by shipment company'''
-        if self._get_order_ship_price(order) >= 10:
+        if get_order_ship_price(order, self.proxy_keys) >= 10:
             self.ups_orders.append(order)
         else:
             self.lp_orders.append(order)
 
     def sort_etsy_order_by_shipment_company(self, order:dict):
         '''sorts individual order from Etsy by shipment company'''
-        self.ups_orders.append(order)
+        if get_order_ship_price(order, self.proxy_keys) >= 20:
+            self.ups_orders.append(order)
+        else:
+            self.lp_tracked_orders.append(order)
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''
-        if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders:
+        if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders \
+                and not self.dpost_tracked_orders and not self.lp_tracked_orders:
             logging.info(f'No new orders for processing. Terminating, alerting VBA.')
             self.db_client.session.close()
             print(VBA_NO_NEW_JOB)
             sys.exit()
-
-    def _get_order_ship_price(self, order:dict) -> float:
-        try:
-            return float(order['shipping-price'])
-        except KeyError:
-            logging.critical(f'Could not find column: \'shipping-price\' in data source. Exiting on order: {order}')
-            self.db_client.session.close()
-            print(VBA_KEYERROR_ALERT)
-            sys.exit()
-        except Exception as e:
-            logging.warning(f'Error retrieving shipping-price in order: {order}, returning 0 (integer). Error: {e}')
-            return 0
     
-    def _get_order_ship_country(self, order:dict) -> str:
-        try:
-            return order['ship-country'].upper()
-        except KeyError:
-            logging.critical(f'Could not find column: \'ship-country\' in data source. Exiting on order: {order}')
-            self.db_client.session.close()
-            print(VBA_KEYERROR_ALERT)
-            sys.exit()
-        except Exception as e:
-            logging.warning(f'Error retrieving ship-country in order: {order}, returning empty string. Error: {e}')
-            return ''
-
     def _prepare_filepaths(self):
         '''creates cls variables of files abs paths to be created one dir above this script dir'''
         output_dir = get_output_dir()
@@ -373,7 +357,7 @@ class ParseOrders():
         # self.export_etonas()
         print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
         logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
-        self.push_orders_to_db()
+        # self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
     
