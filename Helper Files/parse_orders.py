@@ -27,14 +27,16 @@ class ParseOrders():
     Args:
     -orders - list of order dicts
     -db_client - object
+    -proxy_keys = dict. Maps internal order keys (based on amazon) to external order headers(keys)
     -sales_channel - str ('AmazonEU'/'AmazonCOM'/'Etsy')
     
     export_orders(testing=False) : main method, sorts orders by shipment company, if testing flag is False,
     exports files with appropriate orders data and adds all passed orders when creating class to database'''
     
-    def __init__(self, all_orders:list, db_client:object, sales_channel:str):
+    def __init__(self, all_orders:list, db_client:object, proxy_keys:dict, sales_channel:str):
         self.all_orders = all_orders
         self.db_client = db_client
+        self.proxy_keys = proxy_keys
         self.sales_channel = sales_channel
         self.dpost_orders = []
         self.dpost_tracked_orders = []
@@ -226,6 +228,8 @@ class ParseOrders():
                 self.sort_EU_order_by_shipment_company(order, skip_etonas)
             elif self.sales_channel == 'AmazonCOM':
                 self.sort_COM_order_by_shipment_company(order)
+            elif self.sales_channel == 'Etsy':
+                self.sort_etsy_order_by_shipment_company(order)
         self.exit_no_new_orders()
     
     def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
@@ -259,6 +263,10 @@ class ParseOrders():
             self.ups_orders.append(order)
         else:
             self.lp_orders.append(order)
+
+    def sort_etsy_order_by_shipment_company(self, order:dict):
+        '''sorts individual order from Etsy by shipment company'''
+        self.ups_orders.append(order)
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''

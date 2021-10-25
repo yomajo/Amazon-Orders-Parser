@@ -3,27 +3,27 @@ import csv
 
 
 ETSY_FILE = 'sampleetsy.csv'
-
-
-# def get_raw_orders(source_file:str, delimiter:str) -> list:
-#     '''returns raw orders as list of dicts for each order in txt source_file'''
-#     with open(source_file, 'r', encoding='utf-8') as f:
-#         source_contents = csv.DictReader(f, delimiter=delimiter)
-#         raw_orders = [{header : value for header, value in row.items()} for row in source_contents]
-#     return raw_orders
+AMAZON_FILE = 'sampleCOM.txt'
 
 def run():
     sales_channel = 'Etsy'
+    read_file = ETSY_FILE
+
     delimiter = ',' if sales_channel == 'Etsy' else '\t'
     
-    print('trying to read')
-    orders = get_raw_orders(ETSY_FILE, delimiter)
+    orders = get_raw_orders(read_file, delimiter)
     for i, order in enumerate(orders):
-        number_items = order['Number of Items']
-        sku = order['SKU']
-                
-        if 0 < i < 10:
-            print(f'order {i} has # items: {number_items}; SKUs: {sku}')
-    
+        # for header, value in order.items():
+            # print(header, value)
+
+        target_header = 'Order Type'
+        val = order[target_header]
+        if 0 < i < 100:
+            print(f'order {i}: {target_header}: {val}')
+        
+        if i > 100:
+            break
+
+
 if __name__ == '__main__':
     run()

@@ -1,5 +1,5 @@
 from parser_utils import get_output_dir, is_windows_machine, clean_phone_number
-from parser_constants import EXPECTED_SALES_CHANNELS
+from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
@@ -11,7 +11,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = True
-SALES_CHANNEL = 'AmazonEU'
+SALES_CHANNEL = 'AmazonCOM'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -21,9 +21,11 @@ VBA_OK = 'EXPORTED_SUCCESSFULLY'
 if is_windows_machine():
     # 334 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt
     # 1879 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt
-    TEST_AMZN_EXPORT_TXT = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt'
+    # C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt
+    # C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt'
 else:
-    TEST_AMZN_EXPORT_TXT = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
+    ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
 # Logging config:
 log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
@@ -58,17 +60,20 @@ def clean_orders(orders:list) -> list:
 
 def parse_export_orders(testing:bool, sales_channel:str, skip_etonas:bool, cleaned_source_orders:list, loaded_txt:str):
     '''interacts with classes (ParseOrders, OrdersDB) to filter new orders, export desired files and push new orders to db'''
-    db_client = SQLAlchemyOrdersDB(cleaned_source_orders, loaded_txt, sales_channel, testing=testing)
+    # Define keys to use
+    proxy_keys = ETSY_KEYS if sales_channel == 'Etsy' else AMAZON_KEYS
+    
+    db_client = SQLAlchemyOrdersDB(cleaned_source_orders, loaded_txt, sales_channel, proxy_keys, testing=testing)
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded txt contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
 
-    ParseOrders(new_orders, db_client, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
+    ParseOrders(new_orders, db_client, proxy_keys, sales_channel).export_orders(testing=testing, skip_etonas=skip_etonas)
 
 def parse_args(testing=False):
     '''returns arguments passed from VBA or hardcoded test environment'''
     if testing:
         print('--- RUNNING IN TESTING MODE ---')        
-        return TEST_AMZN_EXPORT_TXT, SALES_CHANNEL, SKIP_ETONAS_FLAG
+        return ORDERS_SOURCE_FILE, SALES_CHANNEL, SKIP_ETONAS_FLAG
 
     try:
         assert len(sys.argv) == EXPECTED_SYS_ARGS, 'Unexpected number of sys.args passed'
@@ -84,7 +89,7 @@ def parse_args(testing=False):
         sys.exit()
 
 def main():
-    '''Main function executing parsing of provided txt file and outputing csv, xlsx files'''
+    '''Main function executing parsing of provided txt/csv file and outputing csv, xlsx files'''
     logging.info(f'\n NEW RUN STARTING: {datetime.today().strftime("%Y.%m.%d %H:%M")}')    
     txt_path, sales_channel, skip_etonas = parse_args(testing=TESTING)
 

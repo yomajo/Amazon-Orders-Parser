@@ -39,3 +39,90 @@ INFO:root:Total of 346 new orders have been added to database, after exports wer
 INFO:root:
 RUN ENDED: 2021.10.18 18:12
 
+INFO:root:
+ NEW RUN STARTING: 2021.10.21 11:34
+INFO:root:Database has been created at c:\Coding\Amazon Orders Parser\Helper Files\orders.db
+DEBUG:root:Backup for orders_b4lrun.db suspended due to testing: True
+DEBUG:root:Before inserting new orders, orders table contains 0 entries associated with AmazonEU channel
+INFO:root:Returning 346/346 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 346. Further processing: 346 orders
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Amazon AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+DEBUG:root:FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY
+DEBUG:root:This is backup path being saved to program_run fpath column: C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt
+DEBUG:root:Added new run: <ProgramRun id: 1, sales_channel: AmazonEU, timestamp: 2021-10-21 11:34:21.828969, fpath: C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt>, created backup
+DEBUG:root:Backup for orders_lrun.db suspended due to testing: True
+DEBUG:root:New orders added, flushing old records complete, backup after created at: c:\Coding\Amazon Orders Parser\Helper Files\orders_lrun.db
+INFO:root:Total of 346 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2021.10.21 11:34
+
+INFO:root:
+ NEW RUN STARTING: 2021.10.25 10:10
+DEBUG:root:Backup for orders_b4lrun.db suspended due to testing: True
+DEBUG:root:Before inserting new orders, orders table contains 0 entries associated with Etsy channel
+INFO:root:Returning 164/164 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 164. Further processing: 164 orders
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Amazon Etsy ruleset
+INFO:root:No new orders for processing. Terminating, alerting VBA.
+INFO:root:
+ NEW RUN STARTING: 2021.10.25 10:19
+DEBUG:root:Backup for orders_b4lrun.db suspended due to testing: True
+DEBUG:root:Before inserting new orders, orders table contains 0 entries associated with Etsy channel
+INFO:root:Returning 164/164 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 164. Further processing: 164 orders
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Amazon Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+DEBUG:root:FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY
+DEBUG:root:This is backup path being saved to program_run fpath column: C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv
+DEBUG:root:Added new run: <ProgramRun id: 2, sales_channel: Etsy, timestamp: 2021-10-25 10:19:39.574536, fpath: C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv>, created backup
+DEBUG:root:Backup for orders_lrun.db suspended due to testing: True
+DEBUG:root:New orders added, flushing old records complete, backup after created at: c:\Coding\Amazon Orders Parser\Helper Files\orders_lrun.db
+INFO:root:Total of 164 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2021.10.25 10:19
+
+INFO:root:
+ NEW RUN STARTING: 2021.10.25 10:33
+DEBUG:root:Backup for orders_b4lrun.db suspended due to testing: True
+DEBUG:root:Before inserting new orders, orders table contains 164 entries associated with Etsy channel
+INFO:root:Returning 169/169 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 169. Further processing: 169 orders
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Amazon Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+DEBUG:root:FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY
+DEBUG:root:This is backup path being saved to program_run fpath column: C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-9.csv
+DEBUG:root:Added new run: <ProgramRun id: 3, sales_channel: Etsy, timestamp: 2021-10-25 10:33:17.121691, fpath: C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-9.csv>, created backup
+DEBUG:root:Backup for orders_lrun.db suspended due to testing: True
+DEBUG:root:169 new orders added, flushing old records complete, backup after created at: c:\Coding\Amazon Orders Parser\Helper Files\orders_lrun.db
+INFO:root:Total of 169 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2021.10.25 10:33
+
+INFO:root:
+ NEW RUN STARTING: 2021.10.25 10:35
+DEBUG:root:Backup for orders_b4lrun.db suspended due to testing: True
+DEBUG:root:Before inserting new orders, orders table contains 0 entries associated with AmazonCOM channel
+INFO:root:Returning 81/81 new/loaded orders for further processing
+INFO:root:Loaded txt contains: 81. Further processing: 81 orders
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Amazon AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+DEBUG:root:FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY
+DEBUG:root:This is backup path being saved to program_run fpath column: C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt
+DEBUG:root:Added new run: <ProgramRun id: 4, sales_channel: AmazonCOM, timestamp: 2021-10-25 10:35:56.877823, fpath: C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt>, created backup
+DEBUG:root:Backup for orders_lrun.db suspended due to testing: True
+DEBUG:root:81 new orders added, flushing old records complete, backup after created at: c:\Coding\Amazon Orders Parser\Helper Files\orders_lrun.db
+INFO:root:Total of 81 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2021.10.25 10:35
+

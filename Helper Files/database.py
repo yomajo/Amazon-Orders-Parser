@@ -86,13 +86,16 @@ class SQLAlchemyOrdersDB:
 
     sales_channel - str identifier for db entry, backup file naming. Expected value: ['AmazonEU', 'AmazonCOM', Etsy]
 
+    proxy_keys - dict mapper of internal (based on amazon) order keys vs external sales_channel keys 
+
     testing - optional flag for testing (suspending backup, save add source_file_path to program_run table instead)
     '''
 
-    def __init__(self, orders:list, source_file_path:str, sales_channel:str, testing=False):
+    def __init__(self, orders:list, source_file_path:str, sales_channel:str, proxy_keys:dict, testing=False):
         self.orders = orders
         self.source_file_path = source_file_path
         self.sales_channel = sales_channel
+        self.proxy_keys = proxy_keys
         self.testing = testing
         self.__setup_db()
         self._backup_db(self.db_backup_b4_path)
@@ -131,7 +134,7 @@ class SQLAlchemyOrdersDB:
                 self._add_new_orders_to_db(self.new_orders)
                 self.flush_old_records()
                 self._backup_db(self.db_backup_after_path)
-            logging.debug(f'New orders added, flushing old records complete, backup after created at: {self.db_backup_after_path}')
+            logging.debug(f'{len(self.new_orders)} new orders added, flushing old records complete, backup after created at: {self.db_backup_after_path}')
             return len(self.new_orders)
         except Exception as e:
             logging.critical(f'Unexpected err {e} trying to add orders to db. Alerting VBA, terminating program immediately via exit().')
@@ -147,25 +150,21 @@ class SQLAlchemyOrdersDB:
             added_to_db_counter += 1
 
     def _add_single_order(self, order_dict:dict):
-        '''adds single order to database (via session.add(new_order)).
-        
-        !!! WARNING !!! : Different keys for etsy
-        
-        DIFFERENTIATE AMAZON/ ETSY adding'''        
+        '''adds single order to database (via session.add(new_order))'''
         try:
-            new_order = Order(order_id=order_dict['order-item-id'],
-                    purchase_date=order_dict['purchase-date'],
-                    buyer_name=order_dict['buyer-name'],
-                    run=self.new_run.id)
+            new_order = Order(order_id = order_dict[self.proxy_keys['order-id']],
+                    purchase_date = order_dict[self.proxy_keys['purchase-date']],
+                    buyer_name = order_dict[self.proxy_keys['buyer-name']],
+                    run = self.new_run.id)
             if self.new_run.sales_channel != 'Etsy':
-                # Additionally add to database original order-id (may have duplicates) for AmazonCOM, AmazonEU
+                # Additionally add original order-id (may have duplicates for multiple items in shopping cart) for AmazonCOM, AmazonEU
                 new_order.order_id_secondary = order_dict['order-id']
             
             self.session.add(new_order)
             self.session.commit()
         except IntegrityError as e:
-            logging.warning(f'Order w/ order-item-id: {order_dict["order-item-id"]} already in database. \
-                Integrity error {e}. Skipping addition of said order, rolling back db session')
+            logging.warning(f'Order from channel: {self.sales_channel} w/ proxy order-id: {order_dict[self.proxy_keys["order-id"]]} \
+                already in database. Integrity error {e}. Skipping addition of said order, rolling back db session')
             self.session.rollback()
 
     def _add_new_run(self) -> object:
@@ -180,15 +179,10 @@ class SQLAlchemyOrdersDB:
         return new_run
 
     def get_new_orders_only(self) -> list:
-        '''From passed orders to cls, returns only orders NOT YET in database
-        
-        called from main.py to filter old, parsed orders
-
-        !!! WARNING !!! DIFFERENT KEYS FOR ETSY DICT
-        
-        ALSO DIFFERENTIATE WHEN RETURNING ETSY NEW ORDERS'''
+        '''From passed orders to cls, returns only orders NOT YET in database.
+        Called from main.py to filter old, parsed orders'''
         orders_in_db = self._get_channel_order_ids_in_db()
-        self.new_orders = [order_data for order_data in self.orders if order_data['order-item-id'] not in orders_in_db]
+        self.new_orders = [order_data for order_data in self.orders if order_data[self.proxy_keys['order-id']] not in orders_in_db]
         logging.info(f'Returning {len(self.new_orders)}/{len(self.orders)} new/loaded orders for further processing')
         return self.new_orders
 
@@ -220,7 +214,7 @@ class SQLAlchemyOrdersDB:
         return runs
 
     def _backup_db(self, backup_db_path):
-        '''creates database backup file at backup_db_path'''
+        '''creates database backup file at backup_db_path in production (testing = False)'''
         if self.testing:
             logging.debug(f'Backup for {os.path.basename(backup_db_path)} suspended due to testing: {self.testing}')
             return
