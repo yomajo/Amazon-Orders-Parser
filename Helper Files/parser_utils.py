@@ -1,5 +1,6 @@
 from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
 from parser_constants import DP_KEYWORDS, DPOST_TRACKED_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, LP_UK_BRANDS
+from countries import COUNTRY_CODES
 from datetime import datetime
 import platform
 import logging
@@ -10,6 +11,7 @@ import os
 
 # GLOBAL VARIABLES
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
+VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 
 def get_product_category_or_brand(item_description:str, return_brand:bool=False) -> str:
     '''returns item category or brand based on item title. Last item in CATEGORY_CRITERIAS. Item before that - brand.
@@ -164,6 +166,47 @@ def get_lp_registered_priority_value(order:dict, amzn_channel:str) -> str:
     else:
         logging.critical(f'Unexpected amzn_channel got up to get_lp_registruota_value func: {amzn_channel}. Retuning empty str')
         return ''
+
+def get_order_ship_price(order:dict, proxy_keys:dict) -> float:
+    '''returns order shipping price as float'''
+    try:
+        target_key = proxy_keys['shipping-price']
+        return float(order[target_key])
+    except KeyError:
+        logging.critical(f'Key error: Could not find column: \'{target_key}\' in data source. Exiting on order: {order}')
+        print(VBA_KEYERROR_ALERT)
+        sys.exit()
+    except Exception as e:
+        logging.warning(f'Error retrieving \'{target_key}\' in order: {order}, returning 0 (integer). Error: {e}')
+        return 0
+
+def get_order_country(order:dict, proxy_keys) -> str:
+    '''returns order destination country code. Called from ParseOrders'''
+    try:
+        target_key = proxy_keys['ship-country']
+        return order[target_key]
+    except KeyError:
+        logging.critical(f'Could not find column: \'shipping-country\' in data source. Exiting on order: {order}. Terminating immediately')
+        print(VBA_KEYERROR_ALERT)
+        sys.exit()
+    except Exception as e:
+        logging.critical(f'Error retrieving ship-country in order: {order}, returning empty string. Error: {e}')
+        print(VBA_KEYERROR_ALERT)
+        sys.exit()
+
+def get_country_code(country:str) -> str:
+    '''using COUNTRY_CODES dict, returns 2 letter str for country if len(country) > 2. Called from main'''
+    try:
+        if len(country) > 2:
+            country_code = COUNTRY_CODES[country.upper()]
+            return country_code
+        else:
+            return country
+    except KeyError as e:
+        logging.critical(f'Failed to get country code for: {country}. Err:{e}. Alerting VBA, terminating immediately')
+        print(VBA_ERROR_ALERT)
+        sys.exit()
+
 
 def create_src_file_backup(target_file_abs_path:str, backup_fname_prefix:str) -> str:
     '''returns abspath of created file backup'''
