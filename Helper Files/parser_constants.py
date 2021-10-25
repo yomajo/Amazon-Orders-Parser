@@ -342,6 +342,7 @@ LP_AMAZON_EU_REGISTRUOTA_COUNTRIES = DPOST_TRACKED_COUNTRIES = ['ES', 'FR', 'IT'
 AMAZON_KEYS = {
     'order-id' : 'order-item-id',
     'secondary-order-id' : 'order-id',
+    'same-buyer-order-id' : 'order-id',
     'purchase-date' : 'purchase-date',
     'payments-date' : 'payments-date',
     'buyer-email' : 'buyer-email',
@@ -374,6 +375,7 @@ AMAZON_KEYS = {
 
 ETSY_KEYS = {
     'order-id' : 'Order ID',
+    'same-buyer-order-id' : 'Order ID',
     'purchase-date' : 'Sale Date',
     'recipient-name' : 'Full Name',
     'buyer-name' : 'Full Name',
