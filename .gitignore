@@ -15,3 +15,5 @@ snippets.txt
 *.db
 launch.json
 *.json
+*.csv
+*.xlsx
