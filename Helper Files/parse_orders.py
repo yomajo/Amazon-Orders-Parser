@@ -93,73 +93,74 @@ class ParseOrders():
         except Exception as e:
             logging.error(f'Error occured while exporting data to csv. Error: {e}.Arguments:\nheaders: {headers}\ncontents: {contents[0].keys()}')
 
-    def get_csv_export_ready_data(self, orders_data : list, headers_option : str) -> list:
-        '''reduces orders_data to that needed in output csv, based on passed option from EXPORT_CONSTANTS'''
+    def get_csv_export_ready_data(self, orders : list, headers_option : str) -> list:
+        '''reduces orders to that needed in output csv, based on passed option from EXPORT_CONSTANTS'''
         assert headers_option in ['dp', 'lp'], 'Unexpected headers export option passed to get_csv_export_ready_data function. Expected dp or lp'
         try:
             export_ready_data = []
             headers_settings = EXPORT_CONSTANTS[headers_option]
-            for order_dict in orders_data:
-                reduced_order_dict = self.get_export_ready_order(order_dict, headers_settings)
+            for order in orders:
+                reduced_order = self.get_export_ready_order(order, headers_settings)
                 # Most of LP valiation is made on VBA side, deleting some fields conditionally.
                 if headers_option == 'dp':
-                    validated_order_dict = self.__validate_dpost_order(reduced_order_dict)
-                    export_ready_data.append(validated_order_dict)
+                    validated_order = self.__validate_dpost_order(reduced_order)
+                    export_ready_data.append(validated_order)
                 else:    
-                    validated_order_dict = self.__validate_lp_order(reduced_order_dict)
-                    export_ready_data.append(validated_order_dict)
+                    validated_order = self.__validate_lp_order(reduced_order)
+                    export_ready_data.append(validated_order)
             return export_ready_data
         except Exception as e:
             print(VBA_ERROR_ALERT)
             logging.critical(f'Error while iterating collected row dicts and trying to reduce. Error: {e}')
-            logging.critical(f'Order causing trouble: {order_dict}')
+            logging.critical(f'Order causing trouble: {order}')
+            sys.exit()
 
-    def get_export_ready_order(self, order_dict : dict, headers_settings : dict) -> dict:
+    def get_export_ready_order(self, order : dict, headers_settings : dict) -> dict:
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         d_with_output_keys = {}
-        order_country = get_order_country(order_dict, self.proxy_keys)
+        order_country = get_order_country(order, self.proxy_keys)
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
             if header in headers_settings['fixed'].keys():
                 d_with_output_keys[header] = headers_settings['fixed'][header]
             elif header in headers_settings['mapping'].keys():
-                d_with_output_keys[header] = order_dict[headers_settings['mapping'][header]]
+                d_with_output_keys[header] = order[headers_settings['mapping'][header]]
             # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
-                d_with_output_keys[header] = get_origin_country(order_dict['product-name'])
+                d_with_output_keys[header] = get_origin_country(order['product-name'])
             elif header == 'PRODUCT':
                 d_with_output_keys[header] = get_dpost_product_header_val(order_country)
             elif header == 'CUST_REF':
-                d_with_output_keys[header] = order_dict['recipient-name'][:20]
+                d_with_output_keys[header] = order['recipient-name'][:20]
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                d_with_output_keys[header] = get_lp_registered_priority_value(order_dict, self.sales_channel)
+                d_with_output_keys[header] = get_lp_registered_priority_value(order, self.sales_channel)
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                d_with_output_keys[header] = get_product_category_or_brand(order_dict['product-name'])
+                d_with_output_keys[header] = get_product_category_or_brand(order['product-name'])
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
-                d_with_output_keys[header] = get_total_price(order_dict)
+                d_with_output_keys[header] = get_total_price(order)
             else:
                 d_with_output_keys[header] = ''
         return d_with_output_keys
 
 
-    def __validate_dpost_order(self, order_dict : dict) -> dict:
+    def __validate_dpost_order(self, order : dict) -> dict:
         '''rearranges /shortens data fields on demand (charlimit for fields)
         Takes care of: address1,2,3 , name, postcode fields'''
-        name = order_dict['NAME']
-        order_dict['POSTAL_CODE'] = order_dict['POSTAL_CODE'].upper()
+        name = order['NAME']
+        order['POSTAL_CODE'] = order['POSTAL_CODE'].upper()
 
         if len(name) > DPOST_NAME_CHARLIMIT:
             logging.debug('Order enters name shortening functions')
-            order_dict['NAME'] = self.__shorten_word_sequence(name)
+            order['NAME'] = self.__shorten_word_sequence(name)
 
-        if len(order_dict['ADDRESS_LINE_1']) > DPOST_ADDRESS_CHARLIMIT or \
-            len(order_dict['ADDRESS_LINE_2']) > DPOST_ADDRESS_CHARLIMIT or \
-            len(order_dict['ADDRESS_LINE_3']) > DPOST_ADDRESS_CHARLIMIT:
+        if len(order['ADDRESS_LINE_1']) > DPOST_ADDRESS_CHARLIMIT or \
+            len(order['ADDRESS_LINE_2']) > DPOST_ADDRESS_CHARLIMIT or \
+            len(order['ADDRESS_LINE_3']) > DPOST_ADDRESS_CHARLIMIT:
             logging.debug('Order enters address reorganisation')
-            order_dict = self.__reorg_dpost_order_addr(order_dict)        
-        return order_dict
+            order = self.__reorg_dpost_order_addr(order)        
+        return order
     
     def __shorten_word_sequence(self, long_seq : str) -> str:
         '''replaces middle names with abbreviations. Example input: Jose Inarritu Gonzallez Ima La Piena Hugo
@@ -188,41 +189,41 @@ class ParseOrders():
         return word[0].upper() + '.' if word[0] in ascii_letters else word
 
     @staticmethod
-    def __reorg_dpost_order_addr(order_dict : dict) -> dict:
+    def __reorg_dpost_order_addr(order : dict) -> dict:
         '''reoganizes address fields, returns original order dict, if reorganization still exceeds fields' limits'''
-        original_order = order_dict.copy()
-        logging.debug(f'Before address reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
-        total_address_seq = order_dict['ADDRESS_LINE_1'] + ' ' + order_dict['ADDRESS_LINE_2'] + ' ' + order_dict['ADDRESS_LINE_3']
+        original_order = order.copy()
+        logging.debug(f'Before address reorg:\nf1: {order["ADDRESS_LINE_1"]}\nf2: {order["ADDRESS_LINE_2"]}\nf3:{order["ADDRESS_LINE_3"]}')
+        total_address_seq = order['ADDRESS_LINE_1'] + ' ' + order['ADDRESS_LINE_2'] + ' ' + order['ADDRESS_LINE_3']
         address_seq = total_address_seq.split()
         # Reset fields, declare availability flags
-        order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_3'] = ''
+        order['ADDRESS_LINE_1'] = order['ADDRESS_LINE_2'] = order['ADDRESS_LINE_3'] = ''
         f1_not_filled = f2_not_filled = True
         # Reorganizing fields
         for addr_item in address_seq:
-            if len(order_dict['ADDRESS_LINE_1']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f1_not_filled:
-                order_dict['ADDRESS_LINE_1'] = order_dict['ADDRESS_LINE_1'] + addr_item + ' '
-            elif len(order_dict['ADDRESS_LINE_2']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f2_not_filled:
-                order_dict['ADDRESS_LINE_2'] = order_dict['ADDRESS_LINE_2'] + addr_item + ' '
+            if len(order['ADDRESS_LINE_1']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f1_not_filled:
+                order['ADDRESS_LINE_1'] = order['ADDRESS_LINE_1'] + addr_item + ' '
+            elif len(order['ADDRESS_LINE_2']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT and f2_not_filled:
+                order['ADDRESS_LINE_2'] = order['ADDRESS_LINE_2'] + addr_item + ' '
                 f1_not_filled = False
-            elif len(order_dict['ADDRESS_LINE_3']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT:
-                order_dict['ADDRESS_LINE_3'] = order_dict['ADDRESS_LINE_3'] + addr_item + ' '
+            elif len(order['ADDRESS_LINE_3']) + len(addr_item) < DPOST_ADDRESS_CHARLIMIT:
+                order['ADDRESS_LINE_3'] = order['ADDRESS_LINE_3'] + addr_item + ' '
                 f2_not_filled = False
             else:
-                logging.warning(f'Address reorganization failed. Total address char count: {len(order_dict["ADDRESS_LINE_1"])+len(order_dict["ADDRESS_LINE_2"])+len(order_dict["ADDRESS_LINE_3"])} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
+                logging.warning(f'Address reorganization failed. Total address char count: {len(order["ADDRESS_LINE_1"])+len(order["ADDRESS_LINE_2"])+len(order["ADDRESS_LINE_3"])} could not fit into 3x{DPOST_ADDRESS_CHARLIMIT}')
                 logging.warning(f'Warning VBA, returning original order: {original_order}')
                 print(VBA_DPOST_CHARLIMIT_ALERT)
                 return original_order
-        logging.debug(f'After reorg:\nf1: {order_dict["ADDRESS_LINE_1"]}\nf2: {order_dict["ADDRESS_LINE_2"]}\nf3:{order_dict["ADDRESS_LINE_3"]}')
-        return order_dict
+        logging.debug(f'After reorg:\nf1: {order["ADDRESS_LINE_1"]}\nf2: {order["ADDRESS_LINE_2"]}\nf3:{order["ADDRESS_LINE_3"]}')
+        return order
 
-    def __validate_lp_order(self, order_dict : dict) -> dict:
+    def __validate_lp_order(self, order : dict) -> dict:
         '''conditionally deletes some of the fields before export'''
-        if order_dict['Gavėjo šalies kodas'].upper() in EU_COUNTRY_CODES:
-            order_dict['Muitinės deklaracija turinys'] = ''
-            order_dict['Siunčiamų daiktų pavadinimas'] = ''
-            order_dict['Kiekis, vnt'] = ''
-            order_dict['Vertė, eur'] = ''
-        return order_dict
+        if order['Gavėjo šalies kodas'].upper() in EU_COUNTRY_CODES:
+            order['Muitinės deklaracija turinys'] = ''
+            order['Siunčiamų daiktų pavadinimas'] = ''
+            order['Kiekis, vnt'] = ''
+            order['Vertė, eur'] = ''
+        return order
 
     def sort_orders_by_sales_channel(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
@@ -349,12 +350,12 @@ class ParseOrders():
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         # self.export_same_buyer_details()
-        # self.export_dpost_tracked()
-        # self.export_dpost()
+        self.export_dpost_tracked()
+        self.export_dpost()
         # self.export_ups()
-        # self.export_lp()
-        # self.export_lp_tracked()
-        # self.export_etonas()
+        self.export_lp()
+        self.export_lp_tracked()
+        self.export_etonas()
         print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
         logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
         # self.push_orders_to_db()
