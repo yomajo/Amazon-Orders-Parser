@@ -93,6 +93,8 @@ class ParseOrders():
         except Exception as e:
             logging.error(f'Error occured while exporting data to csv. Error: {e}.Arguments:\nheaders: {headers}\ncontents: {contents[0].keys()}')
 
+# HERE
+
     def get_csv_export_ready_data(self, orders : list, headers_option : str) -> list:
         '''reduces orders to that needed in output csv, based on passed option from EXPORT_CONSTANTS'''
         assert headers_option in ['dp', 'lp'], 'Unexpected headers export option passed to get_csv_export_ready_data function. Expected dp or lp'
@@ -117,32 +119,32 @@ class ParseOrders():
 
     def get_export_ready_order(self, order : dict, headers_settings : dict) -> dict:
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
-        d_with_output_keys = {}
+        export = {}
         order_country = get_order_country(order, self.proxy_keys)
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
             if header in headers_settings['fixed'].keys():
-                d_with_output_keys[header] = headers_settings['fixed'][header]
+                export[header] = headers_settings['fixed'][header]
             elif header in headers_settings['mapping'].keys():
-                d_with_output_keys[header] = order[headers_settings['mapping'][header]]
+                export[header] = order[headers_settings['mapping'][header]]
             # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
-                d_with_output_keys[header] = get_origin_country(order['product-name'])
+                export[header] = get_origin_country(order['product-name'])
             elif header == 'PRODUCT':
-                d_with_output_keys[header] = get_dpost_product_header_val(order_country)
+                export[header] = get_dpost_product_header_val(order_country)
             elif header == 'CUST_REF':
-                d_with_output_keys[header] = order['recipient-name'][:20]
+                export[header] = order['recipient-name'][:20]
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                d_with_output_keys[header] = get_lp_registered_priority_value(order, self.sales_channel)
+                export[header] = get_lp_registered_priority_value(order, self.sales_channel)
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                d_with_output_keys[header] = get_product_category_or_brand(order['product-name'])
+                export[header] = get_product_category_or_brand(order['product-name'])
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
-                d_with_output_keys[header] = get_total_price(order)
+                export[header] = get_total_price(order)
             else:
-                d_with_output_keys[header] = ''
-        return d_with_output_keys
+                export[header] = ''
+        return export
 
 
     def __validate_dpost_order(self, order : dict) -> dict:
