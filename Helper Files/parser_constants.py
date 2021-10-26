@@ -337,7 +337,7 @@ EXPECTED_SALES_CHANNELS = ['AmazonCOM', 'AmazonEU', 'Etsy']
 
 LP_UK_BRANDS = ['MYSTICAL LENORMAND', 'MLLE', 'KIPPER MYSTIQUE', 'MYSTICAL KIPPER']
 
-LP_AMAZON_EU_REGISTRUOTA_COUNTRIES = DPOST_TRACKED_COUNTRIES = ['ES', 'FR', 'IT']
+TRACKED_COUNTRIES = ['ES', 'FR', 'IT']
 
 AMAZON_KEYS = {
     'order-id' : 'order-item-id',
@@ -389,7 +389,7 @@ ETSY_KEYS = {
     'ship-postal-code' : 'Ship Zipcode',
     'ship-country' : 'Ship Country',
     'currency' : 'Currency',
-    'items-number' : 'Number of Items',
+    'quantity-purchased' : 'Number of Items',
     'sku' : 'SKU',
     'item-price' : 'Order Value',
     'discount' : 'Discount Amount',
@@ -403,6 +403,3 @@ ETSY_KEYS = {
     'adjusted-card-processing-fees' : 'Adjusted Card Processing Fees',
     'adjusted-net-order-amount' : 'Adjusted Net Order Amount',
 }
-
-
-

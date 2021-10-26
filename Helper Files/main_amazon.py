@@ -1,5 +1,6 @@
-from parser_utils import get_output_dir, is_windows_machine, clean_phone_number, get_country_code
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
+from parser_utils import clean_phone_number, get_country_code
+from file_utils import get_output_dir, is_windows_machine
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
@@ -11,7 +12,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = True
-SALES_CHANNEL = 'Etsy'
+SALES_CHANNEL = 'AmazonEU'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -23,7 +24,7 @@ if is_windows_machine():
     # 1879 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt
     # C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt
     # C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-10later.csv'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 

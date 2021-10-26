@@ -1,4 +1,4 @@
-from parser_utils import get_output_dir, create_src_file_backup, delete_file
+from file_utils import get_output_dir, create_src_file_backup, delete_file
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
