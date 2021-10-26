@@ -1,11 +1,11 @@
-from parser_utils import get_total_price, get_output_dir, order_contains_batteries, order_contains_cards_keywords
-from parser_utils import uk_order_contains_dp_keywords, get_origin_country, get_product_category_or_brand
+from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords
+from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
 from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
-from parser_utils import delete_file, get_order_ship_price, get_order_country
-from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, LP_AMAZON_EU_REGISTRUOTA_COUNTRIES, DPOST_TRACKED_COUNTRIES
+from parser_utils import get_order_ship_price, get_order_country
+from file_utils import get_output_dir, delete_file
+from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
 from etonas_xlsx_exporter import EtonasExporter
 from datetime import datetime
-from string import ascii_letters
 import logging
 import csv
 import sys
@@ -93,7 +93,6 @@ class ParseOrders():
         except Exception as e:
             logging.error(f'Error occured while exporting data to csv. Error: {e}.Arguments:\nheaders: {headers}\ncontents: {contents[0].keys()}')
 
-# HERE
 
     def get_csv_export_ready_data(self, orders : list, headers_option : str) -> list:
         '''reduces orders to that needed in output csv, based on passed option from EXPORT_CONSTANTS'''
@@ -108,6 +107,9 @@ class ParseOrders():
                     validated_order = self.__validate_dpost_order(reduced_order)
                     export_ready_data.append(validated_order)
                 else:    
+                
+                    #  ------------------ HERE ------------------  REVIEWED ABOVE
+
                     validated_order = self.__validate_lp_order(reduced_order)
                     export_ready_data.append(validated_order)
             return export_ready_data
@@ -121,27 +123,44 @@ class ParseOrders():
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         export = {}
         order_country = get_order_country(order, self.proxy_keys)
+        product_name_proxy_key = self.proxy_keys.get('product-name', '')
+
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
             if header in headers_settings['fixed'].keys():
                 export[header] = headers_settings['fixed'][header]
+
             elif header in headers_settings['mapping'].keys():
-                export[header] = order[headers_settings['mapping'][header]]
+                # etsy data has no phone / email / ship-address-3. Preventing key error via dict.get()
+                target_key = self.proxy_keys.get(headers_settings['mapping'][header], '')
+                if target_key == '':
+                    logging.debug(f'Mapping failure. Sales ch: {self.sales_channel}, header {target_key} not in data.')
+                export[header] = order.get(target_key, '')
+
             # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
-                export[header] = get_origin_country(order['product-name'])
+                # etsy - no item title, hardcoding for etsy until weight mapping
+                if product_name_proxy_key == '':
+                    export[header] = 'CN'
+                else:
+                    export[header] = get_origin_country(order['product-name'])
             elif header == 'PRODUCT':
                 export[header] = get_dpost_product_header_val(order_country)
             elif header == 'CUST_REF':
-                export[header] = order['recipient-name'][:20]
+                export[header] = order[self.proxy_keys['recipient-name']][:20]
+
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
                 export[header] = get_lp_registered_priority_value(order, self.sales_channel)
+
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                export[header] = get_product_category_or_brand(order['product-name'])
+                if product_name_proxy_key == '':
+                    export[header] = 'PLAYING CARDS'
+                else:
+                    export[header] = get_origin_country(order[product_name_proxy_key])
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
-                export[header] = get_total_price(order)
+                export[header] = get_total_price(order, self.sales_channel)
             else:
                 export[header] = ''
         return export
@@ -155,7 +174,7 @@ class ParseOrders():
 
         if len(name) > DPOST_NAME_CHARLIMIT:
             logging.debug('Order enters name shortening functions')
-            order['NAME'] = self.__shorten_word_sequence(name)
+            order['NAME'] = shorten_word_sequence(name)
 
         if len(order['ADDRESS_LINE_1']) > DPOST_ADDRESS_CHARLIMIT or \
             len(order['ADDRESS_LINE_2']) > DPOST_ADDRESS_CHARLIMIT or \
@@ -163,32 +182,6 @@ class ParseOrders():
             logging.debug('Order enters address reorganisation')
             order = self.__reorg_dpost_order_addr(order)        
         return order
-    
-    def __shorten_word_sequence(self, long_seq : str) -> str:
-        '''replaces middle names with abbreviations. Example input: Jose Inarritu Gonzallez Ima La Piena Hugo
-        Output: Jose I. G. I. L. P. Hugo'''
-        shortened_seq_lst = []
-        long_seq = long_seq.replace('-',' ')    # Treatment of dashes inside name string
-        try:
-            words_inside = long_seq.split()
-            for idx, word in enumerate(words_inside):
-                if idx == 0 or idx == len(words_inside) - 1:
-                    shortened_seq_lst.append(word)
-                else:
-                    abbr_word = self.__abbreviate_word(word)
-                    shortened_seq_lst.append(abbr_word)
-            short_seq = ' '.join(shortened_seq_lst)
-            assert len(short_seq) <= DPOST_NAME_CHARLIMIT, 'Shortened name did not pass charlimit validation'
-            return short_seq        
-        except Exception as e:
-            logging.warning(f'Could not shorten name: {long_seq}. Error: {e}. Alerting VBA, returning unedited')
-            print(VBA_DPOST_CHARLIMIT_ALERT)
-            return long_seq
-
-    @staticmethod
-    def __abbreviate_word(word : str) -> str:
-        '''returns capitalized first letter with dot of provided word if it stars with letter'''            
-        return word[0].upper() + '.' if word[0] in ascii_letters else word
 
     @staticmethod
     def __reorg_dpost_order_addr(order : dict) -> dict:
@@ -241,7 +234,7 @@ class ParseOrders():
     
     def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
         '''sorts individual order from AMAZON EU by shipment company'''    
-        if get_order_country(order, self.proxy_keys) in DPOST_TRACKED_COUNTRIES:
+        if get_order_country(order, self.proxy_keys) in TRACKED_COUNTRIES:
             if order_contains_batteries(order):
                 self.lp_tracked_orders.append(order)
             else:
@@ -273,10 +266,13 @@ class ParseOrders():
 
     def sort_etsy_order_by_shipment_company(self, order:dict):
         '''sorts individual order from Etsy by shipment company'''
-        if get_order_ship_price(order, self.proxy_keys) >= 20:
+        shipping_price = get_order_ship_price(order, self.proxy_keys)
+        if shipping_price >= 21:
             self.ups_orders.append(order)
-        else:
+        elif shipping_price > 0:
             self.lp_tracked_orders.append(order)
+        else:
+            self.lp_orders.append(order)
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''
