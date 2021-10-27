@@ -217,7 +217,6 @@ ETONAS_HEADERS_MAPPING = {
     'Delivery_phone' : 'buyer-phone-number',
     'Buyer Country': 'ship-country',
     'Currency' : 'currency',
-    'Price per quantity' : 'item-price',
     'Amount' : 'quantity-purchased'
     }
 
