@@ -12,7 +12,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = True
-SALES_CHANNEL = 'AmazonEU'
+SALES_CHANNEL = 'Etsy'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -23,8 +23,9 @@ if is_windows_machine():
     # 334 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt
     # 1879 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt
     # C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt
-    # C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
+    
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
