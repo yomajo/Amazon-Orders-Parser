@@ -1,5 +1,5 @@
-from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords
-from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
+from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords, get_product_category_or_brand
+from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence, get_sales_channel_category_brand
 from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
 from parser_utils import get_order_ship_price, get_order_country
 from file_utils import get_output_dir, delete_file
@@ -75,10 +75,6 @@ class ParseOrders():
                 recipient_name_keys_orders.pop(name_key, None)
         return recipient_name_keys_orders
 
-        # -----------------------------------------------------------------------------------------------------------------
-        # '---------------------------------------'etsy support added up to this line -------------------------------------
-        # -----------------------------------------------------------------------------------------------------------------
-
     def export_csv(self, csv_filename : str, headers : list, contents : list, delimiter:str=';'):
         '''exports data to csv details provided as func. args, don't export empty files'''
         if not contents:
@@ -102,14 +98,11 @@ class ParseOrders():
             headers_settings = EXPORT_CONSTANTS[headers_option]
             for order in orders:
                 reduced_order = self.get_export_ready_order(order, headers_settings)
-                # Most of LP valiation is made on VBA side, deleting some fields conditionally.
                 if headers_option == 'dp':
                     validated_order = self.__validate_dpost_order(reduced_order)
                     export_ready_data.append(validated_order)
                 else:    
-                
-                    #  ------------------ HERE ------------------  REVIEWED ABOVE
-
+                    # Most of LP valiation is made on VBA side, deleting some fields conditionally.
                     validated_order = self.__validate_lp_order(reduced_order)
                     export_ready_data.append(validated_order)
             return export_ready_data
@@ -133,8 +126,6 @@ class ParseOrders():
             elif header in headers_settings['mapping'].keys():
                 # etsy data has no phone / email / ship-address-3. Preventing key error via dict.get()
                 target_key = self.proxy_keys.get(headers_settings['mapping'][header], '')
-                if target_key == '':
-                    logging.debug(f'Mapping failure. Sales ch: {self.sales_channel}, header {target_key} not in data.')
                 export[header] = order.get(target_key, '')
 
             # DP specific headers
@@ -155,10 +146,7 @@ class ParseOrders():
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                if product_name_proxy_key == '':
-                    export[header] = 'PLAYING CARDS'
-                else:
-                    export[header] = get_origin_country(order[product_name_proxy_key])
+                export[header] = get_sales_channel_category_brand(order, product_name_proxy_key)
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
                 export[header] = get_total_price(order, self.sales_channel)
             else:
@@ -335,7 +323,7 @@ class ParseOrders():
     def export_etonas(self):
         '''export xlsx file for Etonas shipping service'''
         if self.etonas_orders:
-            EtonasExporter(self.etonas_orders, self.etonas_filename).export()
+            EtonasExporter(self.etonas_orders, self.etonas_filename, self.sales_channel, self.proxy_keys).export()
             logging.info(f'XLSX {self.etonas_filename} created. Orders inside: {len(self.etonas_orders)}')
     
     def push_orders_to_db(self):
@@ -347,16 +335,16 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        # self.export_same_buyer_details()
+        self.export_same_buyer_details()
         self.export_dpost_tracked()
         self.export_dpost()
-        # self.export_ups()
+        self.export_ups()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
         print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
         logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
-        # self.push_orders_to_db()
+        self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
     
