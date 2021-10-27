@@ -13,16 +13,30 @@ VBA_DPOST_CHARLIMIT_ALERT = 'DPOST_CHARLIMIT_WARNING'
 DPOST_NAME_CHARLIMIT = 30
 
 
+def get_sales_channel_category_brand(order:dict, product_name_proxy_key:str, return_brand:bool=False):
+    '''returns hardcoded PLAYING CARDS for etsy orders and category/brand for Amazon order'''
+    if product_name_proxy_key == '':
+        return 'PLAYING CARDS'
+    else:
+        return get_product_category_or_brand(order[product_name_proxy_key], return_brand)
+
 def get_product_category_or_brand(item_description:str, return_brand:bool=False) -> str:
     '''returns item category or brand based on item title. Last item in CATEGORY_CRITERIAS. Item before that - brand.
     Switch return index based on provided bool'''
-    return_index = -1
-    if return_brand:
-        return_index = -2
+    return_index = -2 if return_brand else -1
     for criteria_set in CATEGORY_CRITERIAS:
         if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
             return criteria_set[return_index]
     return 'OTHER'
+
+def get_sales_channel_hs_code(order:dict, product_name_proxy_key:str):
+    '''returns HS code based on sales channel. Hardcoded for Etsy'''
+    if product_name_proxy_key == '':
+        return '9504 40'
+    else:
+        item_brand = get_product_category_or_brand(order[product_name_proxy_key], return_brand=True)
+        item_category = get_product_category_or_brand(order[product_name_proxy_key])
+        return get_hs_code(item_brand, item_category)
 
 def get_hs_code(item_brand:str, item_category:str) -> str:
     '''returns hs code for etonas export file based on item brand and category'''
@@ -57,12 +71,14 @@ def get_total_price(order : dict, sales_channel : str) -> str:
             order_value = float(order['Order Value'])
             discount = float(order['Discount Amount'])
             shipping = float(order['Shipping'])
-            return str(order_value - discount + shipping)
+            total = round(order_value - discount + shipping, 2)
+            return str(total)
         else:
             # For amazon orders, total = item-price + shipping-price
-            item_price = order['item-price']
-            shipping_price = order['shipping-price']
-            return str(float(item_price) + float(shipping_price))
+            item_price = float(order['item-price'])
+            shipping_price = float(order['shipping-price'])
+            total = round(item_price + shipping_price, 2)
+            return str(total)
     except KeyError as e:
         logging.critical(f'Failed in get_total_price. Sales ch: {sales_channel}; order: {order} Key err: {e}')
         print(VBA_KEYERROR_ALERT)
