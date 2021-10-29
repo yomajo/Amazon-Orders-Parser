@@ -1,5 +1,5 @@
-from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords, get_product_category_or_brand
-from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence, get_sales_channel_category_brand
+from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords, get_sales_channel_category_brand
+from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
 from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
 from parser_utils import get_order_ship_price, get_order_country
 from file_utils import get_output_dir, delete_file
