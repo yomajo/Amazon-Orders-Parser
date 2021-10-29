@@ -142,7 +142,7 @@ class ParseOrders():
 
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                export[header] = get_lp_registered_priority_value(order, self.sales_channel)
+                export[header] = get_lp_registered_priority_value(order, self.sales_channel, self.proxy_keys)
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:

@@ -142,10 +142,16 @@ def replace_phone_zero(phone_number:str) -> str:
     '''returns phone number with 00 insted of +. Example: +1-213-442 returns 001-213-442'''
     return phone_number.replace('+', '00')
 
-def get_lp_registered_priority_value(order:dict, sales_channel:str) -> str:
+def get_lp_registered_priority_value(order:dict, sales_channel:str, proxy_keys:dict) -> str:
     '''based on ship country and sales channel returns 1 or 0 as string to fill in
     Lietuvos Pastas 'Registruota' / 'Pirmenybinė/nepirmenybinė' header values'''
-    if sales_channel == 'AmazonCOM' or sales_channel == 'Etsy':
+    shipping_price = get_order_ship_price(order, proxy_keys)
+    if sales_channel == 'Etsy':
+        if shipping_price > 0:
+            return '1'
+        else:
+            return ''
+    elif sales_channel == 'AmazonCOM':
         return '1'
     elif sales_channel == 'AmazonEU':
         if order['ship-country'] in TRACKED_COUNTRIES:
