@@ -1,3 +1,4 @@
+import sqlalchemy.sql.default_comparator    #neccessary for executable packing
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
 from parser_utils import clean_phone_number, get_country_code
 from file_utils import get_output_dir, is_windows_machine
@@ -9,7 +10,6 @@ import sys
 import csv
 import os
 
-
 # GLOBAL VARIABLES
 TESTING = False
 SALES_CHANNEL = 'Etsy'
@@ -19,11 +19,7 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
-if is_windows_machine():
-    # 334 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export 2021.04.29 EU.txt
-    # 1879 C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt
-    # C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\export COM 2021.06.28 - MXN new curency.txt
-    
+if is_windows_machine():    
     ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
