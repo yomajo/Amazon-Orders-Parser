@@ -1,5 +1,13 @@
 # Amazon Orders Parser
 
+### Documentation out of date
+
+Below documentation gives a basic understanding of program's purpose, but it does not reflect current code functionality. Added sales channel etsy, looking onwards: calculate order package weight, select *cheapest* shipping company, etc.
+
+Note added: **2021.11**
+
+Below documentation last updated: **2020.06**
+
 ## Description
 
 Amazon seller oriented project. Client uses 3 different shipment companies, that require different formats to be uploaded into their systems. 
