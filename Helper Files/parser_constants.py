@@ -402,3 +402,9 @@ ETSY_KEYS = {
     'adjusted-card-processing-fees' : 'Adjusted Card Processing Fees',
     'adjusted-net-order-amount' : 'Adjusted Net Order Amount',
 }
+
+QUANTITY_PATTERN = {
+    'AmazonCOM' : r'^\(\d+\svnt.\)\s',
+    'AmazonEU' : r'^\(\d+\svnt.\)\s',
+    'Etsy' : r'^\d+\svnt.\s',
+    }

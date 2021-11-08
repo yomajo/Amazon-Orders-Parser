@@ -1,7 +1,8 @@
 import sqlalchemy.sql.default_comparator    #neccessary for executable packing
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
-from parser_utils import clean_phone_number, get_country_code
-from file_utils import get_output_dir, is_windows_machine
+from parser_utils import clean_phone_number, get_country_code, split_sku
+from file_utils import get_output_dir, is_windows_machine, dump_to_json
+from weights import Weights
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
@@ -11,23 +12,23 @@ import csv
 import os
 
 # GLOBAL VARIABLES
-TESTING = False
-SALES_CHANNEL = 'Etsy'
+TESTING = True
+SALES_CHANNEL = 'AmazonEU'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
-if is_windows_machine():    
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
+if is_windows_machine():
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
 # Logging config:
 log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
-logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.INFO)
+logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.DEBUG)
 
 
 def get_cleaned_orders(source_file:str, sales_channel:str, proxy_keys:dict) -> list:
@@ -48,6 +49,8 @@ def clean_orders(orders:list, sales_channel:str, proxy_keys:dict) -> list:
     '''performs universal data cleaning for amazon and etsy raw orders data'''
     for order in orders:
         try:
+            # split sku for each order without replacing original keys. sku str value replaced by list of skus
+            order[proxy_keys['sku']] = split_sku(order[proxy_keys['sku']], sales_channel)
             if sales_channel == 'Etsy':
                 # transform etsy country (Lithuania) to country code (LT)
                 country = order[proxy_keys['ship-country']]
@@ -95,6 +98,14 @@ def main():
     db_client = SQLAlchemyOrdersDB(cleaned_source_orders, source_fpath, sales_channel, proxy_keys, testing=TESTING)
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded file contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
+
+    # Add weights to orders
+    weights = Weights(new_orders, sales_channel, proxy_keys)
+    orders_with_weights = weights.add_weights()
+    weights.export_target_data('amazoneu_orders_with_weights.json')
+
+    logging.debug(f'Finished running testing mode, before orders have entered parsing')
+    sys.exit()
 
     # Parse orders, export target files
     ParseOrders(new_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
