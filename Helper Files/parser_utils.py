@@ -21,12 +21,12 @@ def get_sales_channel_category_brand(order:dict, product_name_proxy_key:str, ret
     else:
         return get_product_category_or_brand(order[product_name_proxy_key], return_brand)
 
-def get_product_category_or_brand(item_description:str, return_brand:bool=False) -> str:
+def get_product_category_or_brand(title:str, return_brand:bool=False) -> str:
     '''returns item category or brand based on item title. Last item in CATEGORY_CRITERIAS. Item before that - brand.
     Switch return index based on provided bool'''
     return_index = -2 if return_brand else -1
     for criteria_set in CATEGORY_CRITERIAS:
-        if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
+        if criteria_set[0] in title.lower() and criteria_set[1] in title.lower():
             return criteria_set[return_index]
     return 'OTHER'
 
@@ -245,7 +245,7 @@ def split_sku(split_sku:str, sales_channel:str) -> list:
     example input: '1 vnt. 1040830 + 1 vnt. 1034630,1 vnt. T1147'
     return value: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
     
-    for Amazon, simply puts SKU to list'''
+    for Amazon, only splits multilistings on plus ' + ' string'''
     if sales_channel == 'Etsy':
         plus_comma_split = [sku_sublist.split(',') for sku_sublist in split_sku.split(' + ')]
         return [sku for sku_sublist in plus_comma_split for sku in sku_sublist]
