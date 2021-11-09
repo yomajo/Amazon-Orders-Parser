@@ -179,35 +179,20 @@ class OrderData():
     def _add_invalid_weight_data(self, order:dict) -> dict:
         '''adds invalid weight data to order dict'''
         self.invalid_orders += 1
-        logging.debug(f'order: {order[self.proxy_keys["order-id"]]} cant calc weights. skus: {order[self.proxy_keys["sku"]]}')
-
         self.no_matching_skus.append(order[self.proxy_keys['sku']])
-
+        logging.warning(f'order: {order[self.proxy_keys["order-id"]]} cant calc weights. skus: {order[self.proxy_keys["sku"]]}')
         order['weight'] = ''
         order['mksdksoption'] = ''
         return order
     
     def export_target_data(self, json_filename:str):
-        '''exports target data to json file'''
+        '''exports unmatched skus list and parsed orders passed to class'''
         target_data = {
+            'no_matching_skus': self.no_matching_skus,
             'orders': self.orders,
-            'no_matching_skus': self.no_matching_skus
         }
         dump_to_json(target_data, json_filename)
 
 
-def run():
-    sales_channel = 'Etsy'
-    proxy_keys = ETSY_KEYS if sales_channel == 'Etsy' else AMAZON_KEYS
-    TEST_ORDERS_JSON = 'Etsy_orders.json' if sales_channel == 'Etsy' else 'AmazonEU_orders.json'
-    orders = read_json_to_obj(TEST_ORDERS_JSON)
-    # inspect_sku(orders)
-    order_metadata = OrderData(orders, sales_channel, proxy_keys)
-    orders_with_weights = order_metadata.add_orders_data()
-    order_metadata.export_target_data('Etsy_orders_with_weights.json')
-
-
-
 if __name__ == '__main__':
-    # run()
     pass
