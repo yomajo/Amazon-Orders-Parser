@@ -1,8 +1,8 @@
 import sqlalchemy.sql.default_comparator    #neccessary for executable packing
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
 from parser_utils import clean_phone_number, get_country_code, split_sku
-from file_utils import get_output_dir, is_windows_machine, dump_to_json
-from weights import Weights
+from file_utils import get_output_dir, is_windows_machine
+from weights import OrderData
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
@@ -99,10 +99,10 @@ def main():
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded file contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
 
-    # Add weights to orders
-    weights = Weights(new_orders, sales_channel, proxy_keys)
-    orders_with_weights = weights.add_weights()
-    weights.export_target_data('amazoneu_orders_with_weights.json')
+    # Add additional data to orders
+    orders_client = OrderData(new_orders, sales_channel, proxy_keys)
+    weighted_orders = orders_client.add_orders_data()
+    # orders_client.export_target_data('amazoneu_orders_with_weights.json')
 
     logging.debug(f'Finished running testing mode, before orders have entered parsing')
     sys.exit()
