@@ -116,7 +116,7 @@ class ParseOrders():
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         export = {}
         order_country = get_order_country(order, self.proxy_keys)
-        product_name_proxy_key = self.proxy_keys.get('product-name', '')
+        title_proxy_key = self.proxy_keys.get('title', '')
 
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
@@ -131,7 +131,7 @@ class ParseOrders():
             # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
                 # etsy - no item title, hardcoding for etsy until weight mapping
-                if product_name_proxy_key == '':
+                if title_proxy_key == '':
                     export[header] = 'CN'
                 else:
                     export[header] = get_origin_country(order['product-name'])
@@ -146,7 +146,7 @@ class ParseOrders():
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                export[header] = get_sales_channel_category_brand(order, product_name_proxy_key)
+                export[header] = get_sales_channel_category_brand(order, title_proxy_key)
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
                 export[header] = get_total_price(order, self.sales_channel)
             else:

@@ -90,6 +90,7 @@ CATEGORY_CRITERIAS = [
     ['blue angel', '', 'BLUE ANGELS', 'TAROT CARDS'],
     ['schiffer', '', 'SCHIFFER', 'TAROT CARDS'],
     ['tarot', '', 'OTHER CARDS BRAND', 'TAROT CARDS'], # Generic for Tarot cards
+    ['cards', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # another generic for playing cards
     ['FOOTBALL', '', 'FOOTBOOL', 'FOOTBALL'],
     ['fußball', '', 'FOOTBOOL', 'FOOTBALL'],
     ['nfl', '', 'FOOTBOOL', 'FOOTBALL'],
@@ -348,7 +349,7 @@ AMAZON_KEYS = {
     'buyer-name' : 'buyer-name',
     'buyer-phone-number' : 'buyer-phone-number',
     'sku' : 'sku',
-    'product-name' : 'product-name',
+    'title' : 'product-name',
     'quantity-purchased' : 'quantity-purchased',
     'currency' : 'currency',
     'item-price' : 'item-price',
@@ -401,6 +402,7 @@ ETSY_KEYS = {
     'adjusted-order-total' : 'Adjusted Order Total',
     'adjusted-card-processing-fees' : 'Adjusted Card Processing Fees',
     'adjusted-net-order-amount' : 'Adjusted Net Order Amount',
+    'title' : 'title',  # added during processing
 }
 
 QUANTITY_PATTERN = {
