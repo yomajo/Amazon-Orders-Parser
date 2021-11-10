@@ -116,7 +116,7 @@ class ParseOrders():
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         export = {}
         order_country = get_order_country(order, self.proxy_keys)
-        product_name_proxy_key = self.proxy_keys.get('product-name', '')
+        title_proxy_key = self.proxy_keys.get('title', '')
 
         for header in headers_settings['headers']:
             # Fixed values and header mapping: 
@@ -131,10 +131,10 @@ class ParseOrders():
             # DP specific headers
             elif header == 'DECLARED_ORIGIN_COUNTRY_1':
                 # etsy - no item title, hardcoding for etsy until weight mapping
-                if product_name_proxy_key == '':
+                if title_proxy_key == '':
                     export[header] = 'CN'
                 else:
-                    export[header] = get_origin_country(order['product-name'])
+                    export[header] = get_origin_country(order[self.proxy_keys['title']])
             elif header == 'PRODUCT':
                 export[header] = get_dpost_product_header_val(order_country)
             elif header == 'CUST_REF':
@@ -146,7 +146,7 @@ class ParseOrders():
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
-                export[header] = get_sales_channel_category_brand(order, product_name_proxy_key)
+                export[header] = order['category']
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
                 export[header] = get_total_price(order, self.sales_channel)
             else:
@@ -250,7 +250,7 @@ class ParseOrders():
         if get_order_ship_price(order, self.proxy_keys) >= 10:
             self.ups_orders.append(order)
         else:
-            self.lp_orders.append(order)
+            self.lp_tracked_orders.append(order)
 
     def sort_etsy_order_by_shipment_company(self, order:dict):
         '''sorts individual order from Etsy by shipment company'''
@@ -342,11 +342,9 @@ class ParseOrders():
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
-        print('EXPORTS SUSPENDED. TESTING ADDING TO DATABASE ONLY')
-        logging.debug(f'FILE EXPORTS SUSPENDED. TESTING ADDING TO DATABSE ONLY')
         self.push_orders_to_db()
         self.db_client.session.close()
-        print(f'Finished. Selected exports made, orders were NOT added to DB due to flag testing value: {testing}')
+        print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')
     
     def export_orders(self, testing=False, skip_etonas=False):
         '''Summing up tasks inside ParseOrders class. When testing, behaviour customizable inside

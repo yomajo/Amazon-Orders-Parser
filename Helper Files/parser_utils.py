@@ -4,6 +4,7 @@ from countries import COUNTRY_CODES
 from string import ascii_letters
 import logging
 import sys
+import re
 
 
 # GLOBAL VARIABLES
@@ -20,12 +21,12 @@ def get_sales_channel_category_brand(order:dict, product_name_proxy_key:str, ret
     else:
         return get_product_category_or_brand(order[product_name_proxy_key], return_brand)
 
-def get_product_category_or_brand(item_description:str, return_brand:bool=False) -> str:
+def get_product_category_or_brand(title:str, return_brand:bool=False) -> str:
     '''returns item category or brand based on item title. Last item in CATEGORY_CRITERIAS. Item before that - brand.
     Switch return index based on provided bool'''
     return_index = -2 if return_brand else -1
     for criteria_set in CATEGORY_CRITERIAS:
-        if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
+        if criteria_set[0] in title.lower() and criteria_set[1] in title.lower():
             return criteria_set[return_index]
     return 'OTHER'
 
@@ -55,10 +56,10 @@ def get_hs_code(item_brand:str, item_category:str) -> str:
     # unable to indentify
     return ''
 
-def get_origin_country(item_description : str):
-    '''returns item origin country based on products'''
+def get_origin_country(title : str):
+    '''returns item origin country based on product title'''
     for criteria_set in ORIGIN_COUNTRY_CRITERIAS:
-        if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
+        if criteria_set[0] in title.lower() and criteria_set[1] in title.lower():
             return criteria_set[-1]
     return 'CN'
 
@@ -202,6 +203,18 @@ def get_country_code(country:str) -> str:
         print(VBA_ERROR_ALERT)
         sys.exit()
 
+def get_inner_qty_sku(original_code:str, quantity_pattern:str):
+    '''returns recognized internal quantity from passed regex pattern: quantity_pattern inside original_code arg and simplified code
+    two examples: from codes: '(3 vnt.) CR2016 5BL 3V VINNIC LITHIUM' / '1 vnt. 1034630' ->
+    return values are: 3, 'CR2016 5BL 3V VINNIC LITHIUM' / 1, '1034630' '''
+    try:
+        quantity_str = re.findall(quantity_pattern, original_code)[0]
+        inner_quantity = int(re.findall(r'\d+', quantity_str)[0])
+        inner_code = original_code.replace(quantity_str, '')
+        return inner_quantity, inner_code
+    except:
+        return 1, original_code
+
 def shorten_word_sequence(long_seq : str) -> str:
     '''replaces middle names with abbreviations. Example input: Jose Inarritu Gonzallez Ima La Piena Hugo
     Output: Jose I. G. I. L. P. Hugo'''
@@ -226,6 +239,23 @@ def shorten_word_sequence(long_seq : str) -> str:
 def abbreviate_word(word : str) -> str:
     '''returns capitalized first letter with dot of provided word if it stars with letter'''            
     return word[0].upper() + '.' if word[0] in ascii_letters else word
+
+def split_sku(split_sku:str, sales_channel:str) -> list:
+    '''splits sku string on ',' and ' + ' into list of skus for Etsy.
+    example input: '1 vnt. 1040830 + 1 vnt. 1034630,1 vnt. T1147'
+    return value: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+    
+    for Amazon, only splits multilistings on plus ' + ' string'''
+    if sales_channel == 'Etsy':
+        plus_comma_split = [sku_sublist.split(',') for sku_sublist in split_sku.split(' + ')]
+        return [sku for sku_sublist in plus_comma_split for sku in sku_sublist]
+    else:
+        return split_sku.split(' + ')
+
+def alert_VBA_duplicate_mapping_sku(sku_code:str):
+    '''duplicate SKU code found when reading mapping xlsx, alerts VBA, logs sku_code with warning level'''
+    logging.warning(f'Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: {sku_code}')
+    print(f'DUPLICATE SKU IN MAPPING: {sku_code}')
 
 
 if __name__ == "__main__":

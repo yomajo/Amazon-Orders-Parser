@@ -1,7 +1,8 @@
 import sqlalchemy.sql.default_comparator    #neccessary for executable packing
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
-from parser_utils import clean_phone_number, get_country_code
+from parser_utils import clean_phone_number, get_country_code, split_sku
 from file_utils import get_output_dir, is_windows_machine
+from weights import OrderData
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
@@ -19,14 +20,15 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
-if is_windows_machine():    
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
+if is_windows_machine():
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-10later.csv'
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
 # Logging config:
-log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
+log_path = os.path.join(get_output_dir(client_file=False), 'loading_orders.log')
 logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.INFO)
 
 
@@ -48,6 +50,8 @@ def clean_orders(orders:list, sales_channel:str, proxy_keys:dict) -> list:
     '''performs universal data cleaning for amazon and etsy raw orders data'''
     for order in orders:
         try:
+            # split sku for each order without replacing original keys. sku str value replaced by list of skus
+            order[proxy_keys['sku']] = split_sku(order[proxy_keys['sku']], sales_channel)
             if sales_channel == 'Etsy':
                 # transform etsy country (Lithuania) to country code (LT)
                 country = order[proxy_keys['ship-country']]
@@ -96,8 +100,14 @@ def main():
     new_orders = db_client.get_new_orders_only()
     logging.info(f'Loaded file contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
 
+    # Add additional data to orders
+    logging.info(f'Passing new orders to add category, brand, (/mapped) weight data')
+    orders_data_client = OrderData(new_orders, sales_channel, proxy_keys)
+    weighted_orders = orders_data_client.add_orders_data()
+    orders_data_client.export_unmapped_skus()
+
     # Parse orders, export target files
-    ParseOrders(new_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
+    ParseOrders(weighted_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
     print(VBA_OK)
     logging.info(f'\nRUN ENDED: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
 

@@ -1,5 +1,4 @@
-from parser_utils import get_origin_country, get_total_price
-from parser_utils import get_sales_channel_category_brand, get_sales_channel_hs_code
+from parser_utils import get_origin_country, get_total_price, get_sales_channel_hs_code
 from parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
 import logging
 import openpyxl
@@ -26,7 +25,7 @@ class EtonasExporter():
         self.sales_channel = sales_channel
         self.proxy_keys = proxy_keys
     
-    def reformat_data_to_etonas_output(self, orders_data : list):
+    def reformat_data_to_etonas_output(self):
         '''reduces input data to that needed in output csv'''
         try:
             etonas_ready_data = []
@@ -62,8 +61,6 @@ class EtonasExporter():
                 export[header] = first_name
             elif header == 'Last_name':
                 export[header] = last_name
-            elif header == 'Contents':
-                export[header] = get_sales_channel_category_brand(order, product_name_proxy_key)
             elif header == 'HS':
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
             elif header == 'Origin':
@@ -77,6 +74,8 @@ class EtonasExporter():
                 export[header] = order[target_key].lower()
             elif header == 'Price per quantity':
                 export[header] = get_total_price(order, self.sales_channel)
+            elif header == 'Weight(Kg)':
+                export[header] = self.__get_weight_for_etonas(order)
             else:
                 export[header] = ''
         return export
@@ -96,8 +95,15 @@ class EtonasExporter():
             print(VBA_ERROR_ALERT)
             sys.exit()
         except ValueError as e:
-            logging.info(f'Failed to unpack f_name, l_name for sales ch: {self.sales_channel} etonas xlsx. Err: {e}. Returning proxy recipient-name order val: {order[self.proxy_keys["recipient-name"]]} and empty l_name')
+            logging.debug(f'Failed to unpack f_name, l_name for sales ch: {self.sales_channel} etonas xlsx. Err: {e}. Returning proxy recipient-name order val: {order[self.proxy_keys["recipient-name"]]} and empty l_name')
             return order[self.proxy_keys['recipient-name']], ''
+
+    def __get_weight_for_etonas(self, order:dict):
+        '''returns order weight in kg if possible, empty str if not'''
+        try:
+            return round(order['weight'] / 1000, 2)
+        except :
+            return ''
 
     @staticmethod
     def _write_headers(worksheet, headers):
@@ -131,7 +137,7 @@ class EtonasExporter():
             worksheet.column_dimensions[col_letter].width = adjusted_width
 
     def export(self):
-        reheaded_etonas_orders = self.reformat_data_to_etonas_output(self.etonas_orders)
+        reheaded_etonas_orders = self.reformat_data_to_etonas_output()
         wb = openpyxl.Workbook()
         ws = wb.active
         self._write_headers(ws, ETONAS_HEADERS)
