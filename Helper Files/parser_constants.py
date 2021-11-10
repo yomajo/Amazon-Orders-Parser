@@ -184,7 +184,8 @@ DPOST_HEADERS = [
     'IMPORTER_CUSTOMS_REFERENCE'
     ]
 
-# Mapping: key corresponds to DPost CSV template (only the ones used for data entry), value - corresponding amazon header title
+# Mapping: key corresponds to DPost CSV template (only the ones used for data entry)
+# value - corresponding proxy_keys header title for amazon/etsy
 DPOST_HEADERS_MAPPING = {
     'NAME' : 'recipient-name',
     'RECIPIENT_PHONE' : 'buyer-phone-number',
@@ -197,14 +198,15 @@ DPOST_HEADERS_MAPPING = {
     'POSTAL_CODE' : 'ship-postal-code',
     'DESTINATION_COUNTRY' : 'ship-country',
     'DECLARED_CONTENT_AMOUNT_1' : 'quantity-purchased',
-    'CURRENCY' : 'currency'
+    'CURRENCY' : 'currency',
+    'WEIGHT' : 'weight',
+    'DECLARED_NETWEIGHT_1' : 'weight',
+    'DETAILED_CONTENT_DESCRIPTIONS_1' : 'category',
     }
 
 DPOST_FIXED_VALUES = {
     'SERVICE_LEVEL' : 'PRIORITY',
     'CONTENT_TYPE' : 'SALE_GOODS',
-    'WEIGHT' : '100',
-    'DECLARED_NETWEIGHT_1' : '100',
     'RETURN_LABEL' :'FALSE'
     }
 
@@ -218,7 +220,8 @@ ETONAS_HEADERS_MAPPING = {
     'Delivery_phone' : 'buyer-phone-number',
     'Buyer Country': 'ship-country',
     'Currency' : 'currency',
-    'Amount' : 'quantity-purchased'
+    'Amount' : 'quantity-purchased',
+    'Contents' : 'category',
     }
 
 LP_HEADERS = [
@@ -249,12 +252,13 @@ LP_HEADERS = [
     'Muitinės deklaracija turinys',
     'Siunčiamų daiktų pavadinimas',
     'Kiekis, vnt',
-    'Svoris, g',
+    'Svoris (g)',
     'Vertė, eur',
     'Nevykus pristatymui , grąžinti siuntą po ( nurodyti dienų skaičių)'
     ]
 
 LP_HEADERS_MAPPING = {
+    'Siuntos rūšis' : 'mksdksoption',
     'Delivery Method' : 'currency',
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
@@ -266,7 +270,8 @@ LP_HEADERS_MAPPING = {
     'Gavėjo pašto kodas' : 'ship-postal-code',
     'Gavėjo šalies kodas' : 'ship-country',
     'Kiekis, vnt' : 'quantity-purchased',
-    'Vertė, eur' : 'item-price'
+    'Vertė, eur' : 'item-price',
+    'Svoris (g)' : 'weight',
     }
 
 LP_FIXED_VALUES = {
@@ -371,6 +376,11 @@ AMAZON_KEYS = {
     'delivery-time-zone' : 'delivery-time-zone',
     'delivery-Instructions' : 'delivery-Instructions',
     'sales-channel' : 'sales-channel',
+    # added during processing
+    'weight' : 'weight',
+    'category' : 'category',
+    'brand' : 'brand',
+    'mksdksoption' : 'mksdksoption',
 }
 
 ETSY_KEYS = {
@@ -402,7 +412,12 @@ ETSY_KEYS = {
     'adjusted-order-total' : 'Adjusted Order Total',
     'adjusted-card-processing-fees' : 'Adjusted Card Processing Fees',
     'adjusted-net-order-amount' : 'Adjusted Net Order Amount',
-    'title' : 'title',  # added during processing
+    # added during processing
+    'title' : 'title',
+    'weight' : 'weight',
+    'category' : 'category',
+    'brand' : 'brand',
+    'mksdksoption' : 'mksdksoption',
 }
 
 QUANTITY_PATTERN = {
