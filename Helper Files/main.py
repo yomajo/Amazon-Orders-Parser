@@ -12,8 +12,8 @@ import csv
 import os
 
 # GLOBAL VARIABLES
-TESTING = True
-SALES_CHANNEL = 'AmazonEU'
+TESTING = False
+SALES_CHANNEL = 'Etsy'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -22,13 +22,14 @@ VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-10later.csv'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\Amazon EU 2021-08-19.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
 # Logging config:
-log_path = os.path.join(get_output_dir(client_file=False), 'loading_amazon_orders.log')
-logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.DEBUG)
+log_path = os.path.join(get_output_dir(client_file=False), 'loading_orders.log')
+logging.basicConfig(handlers=[logging.FileHandler(log_path, 'a', 'utf-8')], level=logging.INFO)
 
 
 def get_cleaned_orders(source_file:str, sales_channel:str, proxy_keys:dict) -> list:
@@ -100,15 +101,13 @@ def main():
     logging.info(f'Loaded file contains: {len(cleaned_source_orders)}. Further processing: {len(new_orders)} orders')
 
     # Add additional data to orders
-    orders_client = OrderData(new_orders, sales_channel, proxy_keys)
-    weighted_orders = orders_client.add_orders_data()
-    # orders_client.export_target_data('amazoneu_orders_with_weights.json')
-
-    logging.debug(f'Finished running testing mode, before orders have entered parsing')
-    sys.exit()
+    logging.info(f'Passing new orders to add category, brand, (/mapped) weight data')
+    orders_data_client = OrderData(new_orders, sales_channel, proxy_keys)
+    weighted_orders = orders_data_client.add_orders_data()
+    orders_data_client.export_unmapped_skus()
 
     # Parse orders, export target files
-    ParseOrders(new_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
+    ParseOrders(weighted_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
     print(VBA_OK)
     logging.info(f'\nRUN ENDED: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
 
