@@ -1,0 +1,26 @@
+INFO:root:
+
+ NEW RUN STARTING: 2021.11.10 16:45
+INFO:root:Returning 281/281 new/loaded orders for further processing
+INFO:root:Loaded file contains: 281. Further processing: 281 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:order: 2217863837 cant calc weights. skus: ['1 vnt. 1044656']
+WARNING:root:order: 2215218464 cant calc weights. skus: ['1 vnt. PC38', '1 vnt. 1023554', '1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2212652155 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2210616665 cant calc weights. skus: ['1 vnt. trackeddelivery']
+WARNING:root:order: 2206094455 cant calc weights. skus: ['1 vnt. 1044656']
+WARNING:root:order: 2200316579 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+INFO:root:2.14% orders contain SKU's that are invalid for weight calculation
+INFO:root:6 skus without complete weight data or amazon mapping were written to txt file: c:\Coding\Amazon Orders Parser\Not matching SKUs 2021.11.10 16.45.txt
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:Same Buyer Orders have been written to c:\Coding\Amazon Orders Parser\Etsy-Same Buyer 2021.11.10 16.45.txt and being showed to client
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Etsy-UPS 2021.11.10 16.45.csv created. Orders inside: 4
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv created. Orders inside: 264
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv created. Orders inside: 13
+INFO:root:Total of 281 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED: 2021.11.10 16:45
+
