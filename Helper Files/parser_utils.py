@@ -56,10 +56,10 @@ def get_hs_code(item_brand:str, item_category:str) -> str:
     # unable to indentify
     return ''
 
-def get_origin_country(item_description : str):
-    '''returns item origin country based on products'''
+def get_origin_country(title : str):
+    '''returns item origin country based on product title'''
     for criteria_set in ORIGIN_COUNTRY_CRITERIAS:
-        if criteria_set[0] in item_description.lower() and criteria_set[1] in item_description.lower():
+        if criteria_set[0] in title.lower() and criteria_set[1] in title.lower():
             return criteria_set[-1]
     return 'CN'
 
@@ -251,6 +251,11 @@ def split_sku(split_sku:str, sales_channel:str) -> list:
         return [sku for sku_sublist in plus_comma_split for sku in sku_sublist]
     else:
         return split_sku.split(' + ')
+
+def alert_VBA_duplicate_mapping_sku(sku_code:str):
+    '''duplicate SKU code found when reading mapping xlsx, alerts VBA, logs sku_code with warning level'''
+    logging.warning(f'Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: {sku_code}')
+    print(f'DUPLICATE SKU IN MAPPING: {sku_code}')
 
 
 if __name__ == "__main__":
