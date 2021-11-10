@@ -1,7 +1,9 @@
 from parser_constants import AMAZON_KEYS, ETSY_KEYS, QUANTITY_PATTERN
 from excel_utils import get_last_used_row_col, cell_to_float
-from file_utils import get_output_dir, read_json_to_obj, dump_to_json
+from file_utils import get_output_dir
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand
+from sku_mapping import SKUMapping
+from datetime import datetime
 import openpyxl
 import logging
 import os
@@ -9,14 +11,18 @@ import os
 # GLOBAL VARIABLES
 WB_NAME = 'WEIGHTS.xlsx'
 WEIGHT_WB_PATH = os.path.join(get_output_dir(client_file=False), WB_NAME)
+SKU_MAPPING_WB_NAME = 'Amazon SKU Mapping.xlsx'
+SKU_MAPPING_WB_PATH = os.path.join(get_output_dir(client_file=False), SKU_MAPPING_WB_NAME)
 
 
 class OrderData():
-    '''adds data to each order in passed orders list. Class assumes workbook WEIGHTS.xlsx is in Helper Files folder
-    and its data integrity, fixed headers are in place. Main method:
-
-    add_orders_data() - adds category, brand, mksdksoption, weight to order dict keys
+    '''adds data to each order in passed orders list. Class assumes workbooks WEIGHTS.xlsx and
+    'Amazon SKU Mapping.xlsx' are in Helper Files folder and its data integrity, fixed headers are in place.
     
+    Main methods:
+    add_orders_data() - adds category, brand, mksdksoption, weight to order dict keys
+    export_unmapped_skus() - writes unmatched/unmapped skus to txt file    
+
     Arguments:
     orders: list of order dicts
     sales_channel: str
@@ -26,12 +32,15 @@ class OrderData():
         self.orders = orders
         self.sales_channel = sales_channel
         self.proxy_keys = proxy_keys
+        self.pattern = QUANTITY_PATTERN[sales_channel]
         
         self.weight_data = self._parse_weights_wb()
-        self.pattern = QUANTITY_PATTERN[sales_channel]
+        if self.sales_channel != 'Etsy':    
+            self.sku_mapping = SKUMapping(SKU_MAPPING_WB_PATH).read_sku_mapping_to_dict()
 
         self.no_matching_skus = []
-        self.invalid_orders = 0    
+        self.invalid_orders = 0
+
 
     def _parse_weights_wb(self) -> dict:
         '''returns weights data as dict from reading excel workbook'''
@@ -102,12 +111,15 @@ class OrderData():
         '''adds Etsy order title to order dict'''
         for sku in skus:
             _, inner_sku = get_inner_qty_sku(sku, self.pattern)
-            sku_weight_data = self.weight_data[inner_sku]
-            title = sku_weight_data['Title']
-            if title:
-                order['title'] = title
-                logging.debug(f'Adding title to etsy order: {title} based on inner sku: {inner_sku}')
-                return order
+            try:
+                sku_weight_data = self.weight_data[inner_sku]
+                title = sku_weight_data['Title']
+                if title:
+                    order['title'] = title
+                    logging.debug(f'Adding title to etsy order: {title} based on inner sku: {inner_sku}')
+                    return order
+            except:
+                continue
         # no valid title found
         order['title'] = 'Title not available'
         return order
@@ -129,7 +141,14 @@ class OrderData():
             for sku in skus:
                 inner_qty, inner_sku = get_inner_qty_sku(sku, self.pattern)
 
+                if self.sales_channel != 'Etsy' and inner_sku not in self.weight_data:
+                    # try to find sku in mapping
+                    mapped_sku = self.sku_mapping[inner_sku]
+                    logging.debug(f'Found mapping match for {inner_sku}. Trying to use new (unparsed for inner) sku: {mapped_sku}')
+                    inner_qty, inner_sku = get_inner_qty_sku(mapped_sku, self.pattern)
+                    
                 sku_weight_data = self.weight_data[inner_sku]
+
                 sku_weight = float(sku_weight_data['Weight'])
                 order_sku_weight = sku_weight * inner_qty
                 
@@ -147,7 +166,7 @@ class OrderData():
                 self._update_mksdksoption(sku_weight_data)
 
             order_weight += package_weight
-            order['weight'] = order_weight
+            order['weight'] = int(round(order_weight, 2))
             order['mksdksoption'] = self.mksdksoption
             return order
         except:
@@ -185,13 +204,18 @@ class OrderData():
         order['mksdksoption'] = ''
         return order
     
-    def export_target_data(self, json_filename:str):
-        '''exports unmatched skus list and parsed orders passed to class'''
-        target_data = {
-            'no_matching_skus': self.no_matching_skus,
-            'orders': self.orders,
-        }
-        dump_to_json(target_data, json_filename)
+    def export_unmapped_skus(self):
+        '''exports unmatched (weight or mapping) skus list to txt file'''
+        date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
+        txt_path = os.path.join(get_output_dir(), f'Not matching SKUs {date_stamp}.txt')
+        if self.no_matching_skus:
+            with open(txt_path, 'w') as f:
+                for i, sku_sublist in enumerate(self.no_matching_skus, start=1):
+                    text_line = ' ,'.join(sku_sublist)
+                    f.write(f'{i}. {text_line}\n')
+            logging.info(f'{len(self.no_matching_skus)} skus without complete weight data or amazon mapping were written to txt file: {txt_path}')
+        else:
+            logging.info('All skus were matched, skipping export of self.no_matching_skus')
 
 
 if __name__ == '__main__':
