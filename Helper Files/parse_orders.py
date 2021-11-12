@@ -143,6 +143,9 @@ class ParseOrders():
             # LP specific headers
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
                 export[header] = get_lp_registered_priority_value(order, self.sales_channel, self.proxy_keys)
+            elif header == 'Delivery Method':
+                optional_str = ' EXPEDITED' if order[self.proxy_keys['ship-service-level']] == 'Expedited' else ''
+                export[header] = order[self.proxy_keys['currency']] + optional_str
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
@@ -221,8 +224,10 @@ class ParseOrders():
         self.exit_no_new_orders()
     
     def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
-        '''sorts individual order from AMAZON EU by shipment company'''    
-        if get_order_country(order, self.proxy_keys) in TRACKED_COUNTRIES:
+        '''sorts individual order from AMAZON EU by shipment company'''
+        if order[self.proxy_keys['ship-service-level']] == 'Expedited':
+            self.lp_tracked_orders.append(order)
+        elif get_order_country(order, self.proxy_keys) in TRACKED_COUNTRIES:
             if order_contains_batteries(order):
                 self.lp_tracked_orders.append(order)
             else:
@@ -247,7 +252,9 @@ class ParseOrders():
 
     def sort_COM_order_by_shipment_company(self, order:dict):
         '''sorts individual order from AMAZON COM by shipment company'''
-        if get_order_ship_price(order, self.proxy_keys) >= 10:
+        if order[self.proxy_keys['ship-service-level']] == 'Expedited':
+            self.lp_tracked_orders.append(order)
+        elif get_order_ship_price(order, self.proxy_keys) >= 10:
             self.ups_orders.append(order)
         else:
             self.lp_tracked_orders.append(order)
@@ -335,14 +342,14 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        self.export_same_buyer_details()
+        # self.export_same_buyer_details()
         self.export_dpost_tracked()
         self.export_dpost()
         self.export_ups()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
-        self.push_orders_to_db()
+        # self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')
     

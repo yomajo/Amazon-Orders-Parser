@@ -259,7 +259,6 @@ LP_HEADERS = [
 
 LP_HEADERS_MAPPING = {
     'Siuntos rūšis' : 'mksdksoption',
-    'Delivery Method' : 'currency',
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
     'Gavėjo el. paštas' : 'buyer-email',
