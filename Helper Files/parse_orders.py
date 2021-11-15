@@ -144,7 +144,8 @@ class ParseOrders():
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
                 export[header] = get_lp_registered_priority_value(order, self.sales_channel, self.proxy_keys)
             elif header == 'Delivery Method':
-                optional_str = ' EXPEDITED' if order[self.proxy_keys['ship-service-level']] == 'Expedited' else ''
+                service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
+                optional_str = ' EXPEDITED' if order.get(service_level_proxy_key, '') == 'Expedited' else ''
                 export[header] = order[self.proxy_keys['currency']] + optional_str
 
             # Common headers
@@ -342,14 +343,14 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        # self.export_same_buyer_details()
+        self.export_same_buyer_details()
         self.export_dpost_tracked()
         self.export_dpost()
         self.export_ups()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
-        # self.push_orders_to_db()
+        self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')
     
