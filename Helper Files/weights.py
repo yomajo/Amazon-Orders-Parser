@@ -143,7 +143,7 @@ class OrderData():
 
                 if self.sales_channel != 'Etsy' and inner_sku not in self.weight_data:
                     # try to find sku in mapping
-                    mapped_sku = self.sku_mapping[inner_sku]
+                    mapped_sku = self.sku_mapping[sku]
                     logging.debug(f'Found mapping match for {inner_sku}. Trying to use new (unparsed for inner) sku: {mapped_sku}')
                     inner_qty, inner_sku = get_inner_qty_sku(mapped_sku, self.pattern)
                     
