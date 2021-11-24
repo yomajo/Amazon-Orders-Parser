@@ -29,7 +29,6 @@ COUNTRY_CODES = {
     'AZERBAIJAN':'AZ',
     'AZERBAIJAN REPUBLIC':'AZ',
     'BAHAMAS':'BS',
-    'BAHAMAS':'BS',
     'BAHRAIN':'BH',
     'BANGLADESCH':'BD',
     'BANGLADESH':'BD',
