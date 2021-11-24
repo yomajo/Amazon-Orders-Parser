@@ -4,7 +4,7 @@ from parser_utils import get_dpost_product_header_val, get_lp_registered_priorit
 from parser_utils import get_order_ship_price, get_order_country
 from file_utils import get_output_dir, delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
-from etonas_xlsx_exporter import EtonasExporter
+from xlsx_exporter import EtonasExporter
 from datetime import datetime
 import logging
 import csv
@@ -286,6 +286,7 @@ class ParseOrders():
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'{self.sales_channel}-Same Buyer {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'{self.sales_channel}-Etonas {date_stamp}.xlsx')
+        self.nlpost_filename = os.path.join(output_dir, f'{self.sales_channel}-NLPost {date_stamp}.xlsx')
         self.dpost_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost {date_stamp}.csv')
         self.dpost_tracked_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost Tracked {date_stamp}.csv')
         self.ups_filename = os.path.join(output_dir, f'{self.sales_channel}-UPS {date_stamp}.csv')
