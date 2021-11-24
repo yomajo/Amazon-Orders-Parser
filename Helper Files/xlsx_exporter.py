@@ -186,7 +186,6 @@ class EtonasExporter(XlsxExporter):
         export = {}
         first_name, last_name = self._get_fname_lname(order)
         product_name_proxy_key = self.proxy_keys.get('title', '')
-        print(f'product_name_proxy_key: {product_name_proxy_key}')
 
         # Change GB to UK for Etonas
         if order[self.proxy_keys['ship-country']] == 'GB':
