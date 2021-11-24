@@ -75,7 +75,7 @@ class EtonasExporter():
             elif header == 'Price per quantity':
                 export[header] = get_total_price(order, self.sales_channel)
             elif header == 'Weight(Kg)':
-                export[header] = self.__get_weight_for_etonas(order)
+                export[header] = self.__get_weight_in_kg(order)
             else:
                 export[header] = ''
         return export
@@ -98,11 +98,11 @@ class EtonasExporter():
             logging.debug(f'Failed to unpack f_name, l_name for sales ch: {self.sales_channel} etonas xlsx. Err: {e}. Returning proxy recipient-name order val: {order[self.proxy_keys["recipient-name"]]} and empty l_name')
             return order[self.proxy_keys['recipient-name']], ''
 
-    def __get_weight_for_etonas(self, order:dict):
+    def __get_weight_in_kg(self, order:dict):
         '''returns order weight in kg if possible, empty str if not'''
         try:
             return round(order['weight'] / 1000, 2)
-        except :
+        except:
             return ''
 
     @staticmethod
