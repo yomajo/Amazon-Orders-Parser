@@ -11,13 +11,12 @@ import sys
 # 2. functions to add certain data column values
 # 3. rewrite category from batteries to alkaline batteries
 # unmapped nl headers:
-'''
-    'Receiver phone' : '',
-    'Receiver email' : '',
-    'Receiver street' : '',
-    'Service name' : '',
-    'HS code' : '',
-''' 
+    # 'Receiver phone' : '',
+    # 'Receiver email' : '',
+    # 'Receiver street' : '',
+    # 'Service name' : '',
+    # 'HS code' : '',
+
 
 
 # GLOBAL VARIABLES
@@ -38,7 +37,7 @@ class XlsxExporter():
     -sales_channel: str option AmazonEU / AmazonCOM / Etsy
     -proxy_keys: dict to handle both Amazon and Etsy sales channels'''
 
-    def __init__(self, input_orders : list, export_path : str, sales_channel : str, proxy_keys : dict):
+    def __init__(self, input_orders:list, export_path:str, sales_channel:str, proxy_keys:dict):
         self.input_orders = input_orders
         self.export_path = export_path
         self.sales_channel = sales_channel
@@ -50,7 +49,7 @@ class XlsxExporter():
     def __get_mode(self):
         '''sets self.mode variable to differentiate Etonas / NLPost workbook generation'''
         self.mode = 'etonas' if self.__class__.__name__.startswith('Etonas') else 'nlpost'
-        logging.debug(f'{self.mode}')
+        logging.debug(f'Using XlsxExporter in {self.mode} mode. Parsing {len(self.input_orders)} orders, exporting to path: {self.export_path}')
 
 
     def refactor_data_for_export(self):
@@ -101,7 +100,7 @@ class XlsxExporter():
             logging.debug(f'Failed to unpack f_name, l_name for sales ch: {self.sales_channel} etonas xlsx. Err: {e}. Returning proxy recipient-name order val: {order[self.proxy_keys["recipient-name"]]} and empty l_name')
             return order[self.proxy_keys['recipient-name']], ''
 
-    def __get_weight_in_kg(self, order:dict):
+    def _get_weight_in_kg(self, order:dict):
         '''returns order weight in kg if possible, empty str if not'''
         try:
             return round(order['weight'] / 1000, 2)
@@ -186,11 +185,8 @@ class EtonasExporter(XlsxExporter):
         '''returns ready-to-write order data dict based on Etonas file headers'''
         export = {}
         first_name, last_name = self._get_fname_lname(order)
-        
-        # #####################################################################
-        # change here to proxy key: title
-        product_name_proxy_key = self.proxy_keys.get('product-name', '')
-        # #####################################################################
+        product_name_proxy_key = self.proxy_keys.get('title', '')
+        print(f'product_name_proxy_key: {product_name_proxy_key}')
 
         # Change GB to UK for Etonas
         if order[self.proxy_keys['ship-country']] == 'GB':
@@ -214,7 +210,6 @@ class EtonasExporter(XlsxExporter):
             elif header == 'HS':
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
             elif header == 'Origin':
-                # etsy - no item title, hardcoding for etsy until weight mapping
                 if product_name_proxy_key == '':
                     export[header] = 'CN'
                 else:
@@ -225,12 +220,11 @@ class EtonasExporter(XlsxExporter):
             elif header == 'Price per quantity':
                 export[header] = get_total_price(order, self.sales_channel)
             elif header == 'Weight(Kg)':
-                export[header] = self.__get_weight_in_kg(order)
+                export[header] = self._get_weight_in_kg(order)
             else:
                 export[header] = ''
         return export
 
 
 if __name__ == "__main__":
-    # etonas = NLPostExporter([], '', '', {})
     pass
