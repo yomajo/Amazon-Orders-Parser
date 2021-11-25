@@ -5,26 +5,17 @@ import logging
 import openpyxl
 import sys
 
-
-# to do:
-# 1. add validation to mirror vba side
-# 2. functions to add certain data column values
-# 3. rewrite category from batteries to alkaline batteries
-# unmapped nl headers:
-    # 'Receiver phone' : '',
-    # 'Receiver email' : '',
-    # 'Receiver street' : '',
-    # 'Service name' : '',
-    # 'HS code' : '',
-
-
-
 # GLOBAL VARIABLES
 ETONAS_CHARLIMIT_PER_CELL = 32
+NLPOST_CHARLIMIT_PER_CELL = 90
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_ETONAS_CHARTLIMIT_ALERT = 'ETONAS_CHARLIMIT_WARNING'
+VBA_NLPOST_CHARTLIMIT_ALERT = 'NLPOST_CHARLIMIT_WARNING'
+VBA_MISSING_WEIGHT_DATA_ALERT = 'ETONAS/NLPOST MISSING_WEIGHT_WARNING'
 HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEADERS_MAPPING}, 
                 'nlpost': {'headers' : NLPOST_HEADERS, 'mapping': NLPOST_HEADERS_MAPPING, 'fixed': NLPOST_FIXED_VALUES}}
+PACKAGE_DIMENSIONS = {'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
+                    'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
 
 
 class XlsxExporter():
@@ -105,6 +96,7 @@ class XlsxExporter():
         try:
             return round(order['weight'] / 1000, 2)
         except:
+            print(VBA_MISSING_WEIGHT_DATA_ALERT)
             return ''
 
     def _write_headers(self, ws:object, headers:list):
@@ -150,6 +142,7 @@ class XlsxExporter():
         wb.close()
 
 
+
 class NLPostExporter(XlsxExporter):
     '''Creates Excel orders workbook based on NLPost xlsx requirements. Uses generic parent XlsxExporter class. 
     class name must include word 'NLPost' (not actually, but kepping it clean).
@@ -162,10 +155,84 @@ class NLPostExporter(XlsxExporter):
     -sales_channel: str option AmazonEU / AmazonCOM / Etsy
     -proxy_keys: dict to handle both Amazon and Etsy sales channels'''
 
+
     def prepare_nlpost_order_contents(self, order:dict) -> dict:
         '''returns ready-to-write order data dict based on NLPost file headers'''
         export = {}
-        return order
+        for header in NLPOST_HEADERS:
+            if header in NLPOST_FIXED_VALUES.keys():
+                export[header] = NLPOST_FIXED_VALUES[header]
+            elif header in NLPOST_HEADERS_MAPPING.keys():
+                # Etsy has no phone, email, returning empty string, to prevent KeyError
+                target_key = self.proxy_keys.get(NLPOST_HEADERS_MAPPING[header], '')
+                raw_target_value = order.get(target_key, '')
+
+                if header == 'Receiver postal code' or header == 'Receiver phone':
+                    # strip special chars from postal code and phone number
+                    export[header] = self.__strip_special_nlpost_chars(raw_target_value)
+                elif header == 'Description':
+                    export[header] = self.__make_batteries_alkaline(raw_target_value)
+                else:
+                    export[header] = raw_target_value
+
+            elif header == 'Receiver street':
+                # combine two (three for amazon) address fields
+                address1 = order[self.proxy_keys['ship-address-1']]
+                address2 = order[self.proxy_keys['ship-address-2']]
+                address = f'{address1} {address2} {order[self.proxy_keys["ship-address-3"]]}' if self.sales_channel != 'Etsy' else f'{address1} {address2}'
+                export[header] = address
+
+                if len(address) > NLPOST_CHARLIMIT_PER_CELL:
+                    logging.warning(f'Order with key {header} and value {address} triggered VBA warning for charlimit set by NLPost')
+                    print(VBA_NLPOST_CHARTLIMIT_ALERT)
+            elif header in ['X', 'Y', 'Z']:
+                parcel_dimension = self.__get_package_dimension(order['vmdoption'], header)
+                export[header] = parcel_dimension
+            elif header == 'Service name':
+                export[header] = self.__get_nlpost_service_name(order)
+            elif header == 'Weight':
+                export[header] = self._get_weight_in_kg(order)    
+            elif header == 'HS code':
+                product_name_proxy_key = self.proxy_keys.get('title', '')
+                raw_hs_code = get_sales_channel_hs_code(order, product_name_proxy_key)
+                export[header] = self.__space_pad(raw_hs_code)
+                logging.debug(f'Zero padded HS code pushed to workbook: {export[header]} (contains characters: {len(export[header])}')
+            else:
+                export[header] = ''
+        return export
+
+    def __get_package_dimension(self, vmdoption:str, header:str) -> str:
+        '''returns package dimension in cm, formatted for NLPost'''
+        if vmdoption not in ['VKS', 'MKS', 'DKS']:
+            print(VBA_MISSING_WEIGHT_DATA_ALERT)
+            return ''
+        package_category = 'DKS' if vmdoption == 'DKS' else 'MKS'
+        return PACKAGE_DIMENSIONS[package_category][header]
+
+    def __space_pad(self, hs_code:str) -> str:
+        '''returns HS code padded with spaces if it has < 6 chars'''
+        return f'    ' + hs_code if len(hs_code) < 6 else hs_code
+
+    def __strip_special_nlpost_chars(self, text:str) -> str:
+        '''removes characters from 'text' arg not allowed in nlpost system'''
+        return text.replace('(', '').replace(')', '').replace('+', '').replace(';', '').replace(':', '').replace(' ', '').replace('-', '')
+
+    def __get_nlpost_service_name(self, order:dict) -> str:
+        '''returns value for NLPost column 'Service name' based on order details'''
+        if order['tracked']:
+            if order['vmdoption'] == 'DKS':
+                return 'PS4'
+            else:
+                logging.warning(f'Order with key "vmdoption" and value {order["vmdoption"]} triggered VBA warning for NLPost service name')
+                return 'No data'
+        else:
+            # PEC0 for all Untracked orders
+            return 'PEC0'
+
+    def __make_batteries_alkaline(self, contents:str) -> str:
+        '''replaces batteries with alkaline batteries string if applicable'''
+        return contents.replace('BATTERIES', 'ALKALINE BATTERIES')
+
 
 
 class EtonasExporter(XlsxExporter):
@@ -199,7 +266,7 @@ class EtonasExporter(XlsxExporter):
 
                 # warn in VBA if char limit per cell is exceeded in Etonas address lines 1/2/3/4
                 if 'address' in header.lower() and len(export[header]) > ETONAS_CHARLIMIT_PER_CELL:
-                    logging.info(f'Order with key {header} and value {export[header]} triggered VBA warning for charlimit set by Etonas')
+                    logging.warning(f'Order with key {header} and value {export[header]} triggered VBA warning for charlimit set by Etonas')
                     print(VBA_ETONAS_CHARTLIMIT_ALERT)
             
             elif header == 'First_name':
