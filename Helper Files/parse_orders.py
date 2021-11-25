@@ -4,7 +4,7 @@ from parser_utils import get_dpost_product_header_val, get_lp_registered_priorit
 from parser_utils import get_order_ship_price, get_order_country
 from file_utils import get_output_dir, delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
-from xlsx_exporter import EtonasExporter
+from xlsx_exporter import EtonasExporter, NLPostExporter
 from datetime import datetime
 import logging
 import csv
@@ -43,6 +43,7 @@ class ParseOrders():
         self.lp_orders = []
         self.lp_tracked_orders = []
         self.etonas_orders = []
+        self.nlpost_orders = []
         self.ups_orders = []
 
     def export_same_buyer_details(self):
@@ -245,7 +246,11 @@ class ParseOrders():
                 elif uk_order_contains_lp_keywords(order):
                     self.lp_orders.append(order)
                 else:
-                    self.etonas_orders.append(order)
+                    
+                    self.nlpost_orders.append(order)
+                    
+                    # self.etonas_orders.append(order)
+        
         elif get_order_ship_price(order, self.proxy_keys) >= 10:
             self.ups_orders.append(order)
         else:
@@ -335,6 +340,12 @@ class ParseOrders():
             EtonasExporter(self.etonas_orders, self.etonas_filename, self.sales_channel, self.proxy_keys).export()
             logging.info(f'XLSX {self.etonas_filename} created. Orders inside: {len(self.etonas_orders)}')
     
+    def export_nlpost(self):
+        '''export xlsx file for NLPost shipping service'''
+        if self.nlpost_orders:
+            NLPostExporter(self.nlpost_orders, self.nlpost_filename, self.sales_channel, self.proxy_keys).export()
+            logging.info(f'XLSX {self.nlpost_filename} created. Orders inside: {len(self.nlpost_orders)}')
+
     def push_orders_to_db(self):
         '''adds all orders in this class to orders table in db'''
         count_added_to_db = self.db_client.add_orders_to_db()
@@ -351,6 +362,7 @@ class ParseOrders():
         # self.export_lp()
         # self.export_lp_tracked()
         self.export_etonas()
+        self.export_nlpost()
         # self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')
