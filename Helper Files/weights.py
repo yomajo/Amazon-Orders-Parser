@@ -1,7 +1,7 @@
-from parser_constants import AMAZON_KEYS, ETSY_KEYS, QUANTITY_PATTERN
+from parser_constants import QUANTITY_PATTERN
 from excel_utils import get_last_used_row_col, cell_to_float
 from file_utils import get_output_dir
-from parser_utils import get_inner_qty_sku, get_product_category_or_brand
+from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
 from sku_mapping import SKUMapping
 from datetime import datetime
 import openpyxl
@@ -20,7 +20,7 @@ class OrderData():
     'Amazon SKU Mapping.xlsx' are in Helper Files folder and its data integrity, fixed headers are in place.
     
     Main methods:
-    add_orders_data() - adds category, brand, mksdksoption, weight to order dict keys
+    add_orders_data() - adds category, brand, vmdoption, weight to order dict keys
     export_unmapped_skus() - writes unmatched/unmapped skus to txt file    
 
     Arguments:
@@ -29,7 +29,7 @@ class OrderData():
     proxy_keys: dict'''
 
     def __init__(self, orders:list, sales_channel:str, proxy_keys:dict):
-        self.orders = orders
+        self.orders = self.__init_default(orders)
         self.sales_channel = sales_channel
         self.proxy_keys = proxy_keys
         self.pattern = QUANTITY_PATTERN[sales_channel]
@@ -41,6 +41,12 @@ class OrderData():
         self.no_matching_skus = []
         self.invalid_orders = 0
 
+    def __init_default(self, orders:list) -> list:
+        '''adds some default keys to each order'''
+        for order in orders:
+            order['tracked'], order['skip_service_selection'] = False, False
+            order['shipping_service'] = ''
+        return orders
 
     def _parse_weights_wb(self) -> dict:
         '''returns weights data as dict from reading excel workbook'''
@@ -78,9 +84,14 @@ class OrderData():
     def add_orders_data(self) -> list:
         '''adds properties to each order (keys):
         -weight (order weight as float)
-        -mksdksoption (string)
+        -vmdoption (string)
         -brand (string)
-        -category (string)'''
+        -category (string)
+        
+        new keys w/ shipping pricing update 2021.11
+        -tracked (bool)
+        -shipping_service
+        -skip_service_selection'''
         
         for order in self.orders:
             qty_purchased = self.__get_order_quantity(order)
@@ -88,6 +99,8 @@ class OrderData():
 
             # Add brand / category data to order, using first item in sku list
             order = self._add_order_brand_category_data(order, skus)
+
+            order = self._check_tracked_status(order)
 
             if self._validate_calculation(qty_purchased, skus):
                 order = self._calc_weight_add_data(order, qty_purchased, skus)
@@ -98,6 +111,49 @@ class OrderData():
         logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
         return self.orders
     
+    def _check_tracked_status(self, order:dict) -> dict:
+        '''adds key 'tracked' to order dict based on country, price, shipping, items purchased'''        
+        if self.sales_channel == 'Etsy':
+            return self.__is_etsy_tracked(order)
+        else:
+            return self.__is_amazon_tracked(order)
+
+    def __is_etsy_tracked(self, order:dict) -> dict:
+        '''flips order 'tracked' bool to True if meets rules for etsy marketplace'''
+        shipping_price = get_order_ship_price(order, self.proxy_keys)
+        order_value = get_total_price(order, self.sales_channel)
+        if shipping_price >= 21:            
+            order['shipping_service'] = 'ups'
+            order['tracked'], order['skip_service_selection'] = True, True
+        elif shipping_price > 0 or order_value > 70:
+            order['tracked'] = True
+        else:
+            pass
+        return order
+
+    def __is_amazon_tracked(self, order:dict) -> dict:
+        '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
+        order_value = get_total_price(order, self.sales_channel)
+        shipping_price = get_order_ship_price(order, self.proxy_keys)
+        country = order[self.proxy_keys['ship-country']]
+
+        print(f'calc order value in eur before proceeding. sys exit hit.')
+        import sys
+        sys.exit()
+        order_value_eur = order['total-eur']
+
+        # conditions for specific services:
+        if shipping_price >= 20:
+            order['shipping_service'] = 'ups'
+            order['tracked'], order['skip_service_selection'] = True, True
+        elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU':
+            order['shipping_service'] = 'etonas'
+            order['tracked'], order['skip_service_selection'] = True, True
+        # conditions to mark as tracked:
+        elif self.sales_channel == 'AmazonCOM' or order_value_eur > 70 or country in ['FR', 'ES', 'IT']:
+            order['tracked'] = True
+        return order
+
     def _add_order_brand_category_data(self, order:dict, skus:list) -> dict:
         '''returns order w/ added brand, category keys (title possibly for etsy based on first sku in order)'''
         if self.sales_channel == 'Etsy':
@@ -136,7 +192,7 @@ class OrderData():
         '''adds weight related data to order dict'''
         order_weight = 0.0
         package_weight = 0.0
-        self.mksdksoption = ''
+        self.vmdoption = ''
         try:
             for sku in skus:
                 inner_qty, inner_sku = get_inner_qty_sku(sku, self.pattern)
@@ -163,11 +219,11 @@ class OrderData():
                 if potential_package_weight > package_weight:
                     package_weight = potential_package_weight
                 
-                self._update_mksdksoption(sku_weight_data)
+                self._update_vmdoption(sku_weight_data)
 
             order_weight += package_weight
             order['weight'] = int(round(order_weight, 2))
-            order['mksdksoption'] = self.mksdksoption
+            order['vmdoption'] = self.vmdoption
             return order
         except:
             return self._add_invalid_weight_data(order)
@@ -183,16 +239,18 @@ class OrderData():
             # to fail float casting in _calc_weight_add_data
             return 'No package weight available'
     
-    def _update_mksdksoption(self, sku_weight_data:dict):
-        '''updates self.mksdksoption for order'''
-        potential_option = sku_weight_data['MKS/DKS']
-        if potential_option in ['MKS', 'DKS']:
-            if self.mksdksoption == '':
-                # self.mksdksoption is not set (first sku in order)
-                self.mksdksoption = potential_option
-            elif self.mksdksoption == 'MKS' and potential_option == 'DKS':
+    def _update_vmdoption(self, sku_weight_data:dict):
+        '''updates self.vmdoption for order'''
+        # HERE REVIEW
+        # UPDATE HERE FOR VKS option, check col value
+        potential_option = sku_weight_data['VMD']
+        if potential_option in ['VKS', 'MKS', 'DKS']:
+            if self.vmdoption == '':
+                # self.vmdoption is not set (first sku in order)
+                self.vmdoption = potential_option
+            elif self.vmdoption == 'MKS' and potential_option == 'DKS':
                 # upgrade to DKS if current option is MKS
-                self.mksdksoption = potential_option
+                self.vmdoption = potential_option
 
 
     def _add_invalid_weight_data(self, order:dict) -> dict:
@@ -201,7 +259,7 @@ class OrderData():
         self.no_matching_skus.append(order[self.proxy_keys['sku']])
         logging.warning(f'order: {order[self.proxy_keys["order-id"]]} cant calc weights. skus: {order[self.proxy_keys["sku"]]}')
         order['weight'] = ''
-        order['mksdksoption'] = ''
+        order['vmdoption'] = ''
         return order
     
     def export_unmapped_skus(self):
