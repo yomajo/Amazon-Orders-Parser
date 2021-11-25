@@ -161,21 +161,17 @@ NLPOST_FIXED_VALUES = {
 # corresponding to proxy keys for etsy / amazon
 NLPOST_HEADERS_MAPPING = {
     'Receiver name' : 'recipient-name',
-    'Receiver street' : '',
     'Receiver city' : 'ship-city',
     'Receiver postal code' : 'ship-postal-code',
     'Receiver country code' : 'ship-country',
     'Receiver state' : 'ship-state',
-    'Receiver phone' : '',
-    'Receiver email' : '',
-    'Weight' : 'weight',
+    'Receiver phone' : 'buyer-phone-number',
+    'Receiver email' : 'buyer-email',
     'Units' : 'quantity-purchased',
     'Description' : 'category',
     'Unit price' : 'item-price',
-    'Service name' : '',
     'Order reference' : 'order-id',
     'Export country code' : 'ship-country',
-    'HS code' : '',
     'COD Currency' : 'currency',
 }
 
@@ -335,7 +331,7 @@ LP_HEADERS = [
     ]
 
 LP_HEADERS_MAPPING = {
-    'Siuntos rūšis' : 'mksdksoption',
+    'Siuntos rūšis' : 'vmdoption',
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
     'Gavėjo el. paštas' : 'buyer-email',
@@ -456,7 +452,7 @@ AMAZON_KEYS = {
     'weight' : 'weight',
     'category' : 'category',
     'brand' : 'brand',
-    'mksdksoption' : 'mksdksoption',
+    'vmdoption' : 'vmdoption',
 }
 
 ETSY_KEYS = {
@@ -493,7 +489,7 @@ ETSY_KEYS = {
     'weight' : 'weight',
     'category' : 'category',
     'brand' : 'brand',
-    'mksdksoption' : 'mksdksoption',
+    'vmdoption' : 'vmdoption',
 }
 
 QUANTITY_PATTERN = {
