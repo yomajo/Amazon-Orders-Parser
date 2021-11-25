@@ -56,16 +56,15 @@ def get_hs_code(item_brand:str, item_category:str) -> str:
     # unable to indentify
     return ''
 
-def get_origin_country(title : str):
+def get_origin_country(title:str):
     '''returns item origin country based on product title'''
     for criteria_set in ORIGIN_COUNTRY_CRITERIAS:
         if criteria_set[0] in title.lower() and criteria_set[1] in title.lower():
             return criteria_set[-1]
     return 'CN'
 
-def get_total_price(order : dict, sales_channel : str) -> str:
+def get_total_price(order:dict, sales_channel:str, return_as_str:bool=True) -> str:
     '''returns a total order price based on sales channel'''
-    # get_total_price(order, self.sales_channel)
     try:
         if sales_channel == 'Etsy':
             # use formula: Order Value - Discount Amount + Shipping
@@ -73,13 +72,13 @@ def get_total_price(order : dict, sales_channel : str) -> str:
             discount = float(order['Discount Amount'])
             shipping = float(order['Shipping'])
             total = round(order_value - discount + shipping, 2)
-            return str(total)
+            return str(total) if return_as_str else total
         else:
             # For amazon orders, total = item-price + shipping-price
             item_price = float(order['item-price'])
             shipping_price = float(order['shipping-price'])
             total = round(item_price + shipping_price, 2)
-            return str(total)
+            return str(total) if return_as_str else total
     except KeyError as e:
         logging.critical(f'Failed in get_total_price. Sales ch: {sales_channel}; order: {order} Key err: {e}')
         print(VBA_KEYERROR_ALERT)
