@@ -194,8 +194,7 @@ class NLPostExporter(XlsxExporter):
                 export[header] = self._get_weight_in_kg(order)    
             elif header == 'HS code':
                 product_name_proxy_key = self.proxy_keys.get('title', '')
-                raw_hs_code = get_sales_channel_hs_code(order, product_name_proxy_key)
-                export[header] = self.__space_pad(raw_hs_code)
+                export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
                 logging.debug(f'Zero padded HS code pushed to workbook: {export[header]} (contains characters: {len(export[header])}')
             else:
                 export[header] = ''
@@ -208,10 +207,6 @@ class NLPostExporter(XlsxExporter):
             return ''
         package_category = 'DKS' if vmdoption == 'DKS' else 'MKS'
         return PACKAGE_DIMENSIONS[package_category][header]
-
-    def __space_pad(self, hs_code:str) -> str:
-        '''returns HS code padded with spaces if it has < 6 chars'''
-        return f'    ' + hs_code if len(hs_code) < 6 else hs_code
 
     def __strip_special_nlpost_chars(self, text:str) -> str:
         '''removes characters from 'text' arg not allowed in nlpost system'''
@@ -273,6 +268,10 @@ class EtonasExporter(XlsxExporter):
                 export[header] = first_name
             elif header == 'Last_name':
                 export[header] = last_name
+            elif header == 'GLS':
+                export[header] = '1' if order[self.proxy_keys['ship-country']] in ['UK', 'DE'] else '0'
+            elif header == 'Tracking (0 - neregistruota, 1 - registruota)':
+                export[header] = int(order['tracked'])
             elif header == 'HS':
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
             elif header == 'Origin':
