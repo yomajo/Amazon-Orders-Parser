@@ -1,7 +1,7 @@
-from parser_constants import QUANTITY_PATTERN
-from excel_utils import get_last_used_row_col, cell_to_float
-from file_utils import get_output_dir
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
+from excel_utils import get_last_used_row_col, cell_to_float
+from parser_constants import QUANTITY_PATTERN
+from file_utils import get_output_dir
 from sku_mapping import SKUMapping
 from datetime import datetime
 from forex import Forex
@@ -101,15 +101,18 @@ class OrderData():
             qty_purchased = self.__get_order_quantity(order)
             skus = order[self.proxy_keys['sku']]
 
-            # Add brand / category data to order, using first item in sku list
+            # Add brand / category data to order, using first item in sku list, edit tracked status
             order = self._add_order_brand_category_data(order, skus)
-
             order = self._check_tracked_status(order)
 
             if self._validate_calculation(qty_purchased, skus):
                 order = self._calc_weight_add_data(order, qty_purchased, skus)
             else:
                 order = self._add_invalid_weight_data(order)
+            
+            # pick shipping service
+            if self.__eligible_for_cheapest_service_selection(order):
+                order = self._pick_shipping_service(order)
         
         percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
         logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
@@ -138,10 +141,6 @@ class OrderData():
         '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
         shipping_price = get_order_ship_price(order, self.proxy_keys)
         country = order[self.proxy_keys['ship-country']]
-
-        print(f'calc order value in eur before proceeding. sys exit hit.')
-        import sys
-        sys.exit()
 
         # conditions for specific services:
         if shipping_price >= 20:
@@ -242,13 +241,14 @@ class OrderData():
     
     def _update_vmdoption(self, sku_weight_data:dict):
         '''updates self.vmdoption for order'''
-        # HERE REVIEW
-        # UPDATE HERE FOR VKS option, check col value
         potential_option = sku_weight_data['VMD']
         if potential_option in ['VKS', 'MKS', 'DKS']:
             if self.vmdoption == '':
                 # self.vmdoption is not set (first sku in order)
                 self.vmdoption = potential_option
+            elif self.vmdoption == 'VKS':
+                self.vmdoption = potential_option
+        
             elif self.vmdoption == 'MKS' and potential_option == 'DKS':
                 # upgrade to DKS if current option is MKS
                 self.vmdoption = potential_option
@@ -263,6 +263,20 @@ class OrderData():
         order['vmdoption'] = ''
         return order
     
+    def __eligible_for_cheapest_service_selection(self, order):
+        '''returns True if cheapest shipping service selection should be done for order'''
+        if not order['skip_service_selection'] and order['weight'] != '' and order['vmdoption'] != '':
+            return True
+        else:
+            return False
+
+    def _pick_shipping_service(self, order:dict) -> dict:
+        '''picks cheapest shipping service based on order category, weight, vmdoption, sales_channel, country...'''
+        # TO BE IMPLEMENTED
+        logging.debug(f'--------- Picking cheapest service not yet implemented ---------')
+        return order
+    
+
     def export_unmapped_skus(self):
         '''exports unmatched (weight or mapping) skus list to txt file'''
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
