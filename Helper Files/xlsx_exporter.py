@@ -195,7 +195,6 @@ class NLPostExporter(XlsxExporter):
             elif header == 'HS code':
                 product_name_proxy_key = self.proxy_keys.get('title', '')
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
-                logging.debug(f'Zero padded HS code pushed to workbook: {export[header]} (contains characters: {len(export[header])}')
             else:
                 export[header] = ''
         return export
