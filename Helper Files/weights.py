@@ -4,6 +4,7 @@ from file_utils import get_output_dir
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
 from sku_mapping import SKUMapping
 from datetime import datetime
+from forex import Forex
 import openpyxl
 import logging
 import os
@@ -29,23 +30,26 @@ class OrderData():
     proxy_keys: dict'''
 
     def __init__(self, orders:list, sales_channel:str, proxy_keys:dict):
-        self.orders = self.__init_default(orders)
         self.sales_channel = sales_channel
         self.proxy_keys = proxy_keys
         self.pattern = QUANTITY_PATTERN[sales_channel]
+        self.fx = Forex()
+        self.orders = self.__init_default(orders)
         
         self.weight_data = self._parse_weights_wb()
         if self.sales_channel != 'Etsy':    
             self.sku_mapping = SKUMapping(SKU_MAPPING_WB_PATH).read_sku_mapping_to_dict()
 
         self.no_matching_skus = []
-        self.invalid_orders = 0
+        self.invalid_weight_orders = 0
 
     def __init_default(self, orders:list) -> list:
         '''adds some default keys to each order'''
         for order in orders:
             order['tracked'], order['skip_service_selection'] = False, False
             order['shipping_service'] = ''
+            order_value = get_total_price(order, self.sales_channel, return_as_float=True)
+            order['total-eur'] = self.fx.convert_to_eur(order_value, order[self.proxy_keys['currency']])
         return orders
 
     def _parse_weights_wb(self) -> dict:
@@ -107,7 +111,7 @@ class OrderData():
             else:
                 order = self._add_invalid_weight_data(order)
         
-        percentage_invalid = self.invalid_orders / len(self.orders) * 100
+        percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
         logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
         return self.orders
     
@@ -121,11 +125,10 @@ class OrderData():
     def __is_etsy_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for etsy marketplace'''
         shipping_price = get_order_ship_price(order, self.proxy_keys)
-        order_value = get_total_price(order, self.sales_channel)
         if shipping_price >= 21:            
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
-        elif shipping_price > 0 or order_value > 70:
+        elif shipping_price > 0 or order['total-eur'] > 70:
             order['tracked'] = True
         else:
             pass
@@ -133,14 +136,12 @@ class OrderData():
 
     def __is_amazon_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
-        order_value = get_total_price(order, self.sales_channel)
         shipping_price = get_order_ship_price(order, self.proxy_keys)
         country = order[self.proxy_keys['ship-country']]
 
         print(f'calc order value in eur before proceeding. sys exit hit.')
         import sys
         sys.exit()
-        order_value_eur = order['total-eur']
 
         # conditions for specific services:
         if shipping_price >= 20:
@@ -150,7 +151,7 @@ class OrderData():
             order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         # conditions to mark as tracked:
-        elif self.sales_channel == 'AmazonCOM' or order_value_eur > 70 or country in ['FR', 'ES', 'IT']:
+        elif self.sales_channel == 'AmazonCOM' or order['total-eur'] > 70 or country in ['FR', 'ES', 'IT']:
             order['tracked'] = True
         return order
 
@@ -255,7 +256,7 @@ class OrderData():
 
     def _add_invalid_weight_data(self, order:dict) -> dict:
         '''adds invalid weight data to order dict'''
-        self.invalid_orders += 1
+        self.invalid_weight_orders += 1
         self.no_matching_skus.append(order[self.proxy_keys['sku']])
         logging.warning(f'order: {order[self.proxy_keys["order-id"]]} cant calc weights. skus: {order[self.proxy_keys["sku"]]}')
         order['weight'] = ''
