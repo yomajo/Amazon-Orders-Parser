@@ -60,8 +60,8 @@ def get_origin_country(title:str):
             return criteria_set[-1]
     return 'CN'
 
-def get_total_price(order:dict, sales_channel:str, return_as_str:bool=True) -> str:
-    '''returns a total order price based on sales channel'''
+def get_total_price(order:dict, sales_channel:str, return_as_float:bool=False):
+    '''returns a total order price based on sales channel. Default returns as str, optionally: as float'''
     try:
         if sales_channel == 'Etsy':
             # use formula: Order Value - Discount Amount + Shipping
@@ -69,13 +69,13 @@ def get_total_price(order:dict, sales_channel:str, return_as_str:bool=True) -> s
             discount = float(order['Discount Amount'])
             shipping = float(order['Shipping'])
             total = round(order_value - discount + shipping, 2)
-            return str(total) if return_as_str else total
+            return total if return_as_float else str(total)
         else:
             # For amazon orders, total = item-price + shipping-price
             item_price = float(order['item-price'])
             shipping_price = float(order['shipping-price'])
             total = round(item_price + shipping_price, 2)
-            return str(total) if return_as_str else total
+            return total if return_as_float else str(total)
     except KeyError as e:
         logging.critical(f'Failed in get_total_price. Sales ch: {sales_channel}; order: {order} Key err: {e}')
         print(VBA_KEYERROR_ALERT)
