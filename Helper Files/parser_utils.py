@@ -40,21 +40,18 @@ def get_sales_channel_hs_code(order:dict, product_name_proxy_key:str):
         return get_hs_code(item_brand, item_category)
 
 def get_hs_code(item_brand:str, item_category:str) -> str:
-    '''returns hs code for etonas export file based on item brand and category'''
+    '''returns hs code for etonas export file based on item brand and category. Updated on 2021.11'''
     # based on brand
-    if item_brand == 'BOMB COSM' or item_brand == 'GELLI BAFF':
-        return '3307'
-    elif item_brand == 'INJINJI':
-        return '6115'
+    if item_brand == 'BOMB COSM':
+        return '330499'
+
     # based on category
     if item_category == 'BATTERIES':
-        return '8506'
+        return '850610'
     elif item_category == 'PLAYING CARDS' or item_category == 'TAROT CARDS':
-        return '9504 40'
-    elif item_category == 'FOOTBALL':
-        return '95'
-    # unable to indentify
-    return ''
+        return '950440'
+    else:
+        return '950300'
 
 def get_origin_country(title:str):
     '''returns item origin country based on product title'''
