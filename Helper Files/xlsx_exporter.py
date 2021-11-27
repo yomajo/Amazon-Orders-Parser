@@ -94,7 +94,7 @@ class XlsxExporter():
     def _get_weight_in_kg(self, order:dict):
         '''returns order weight in kg if possible, empty str if not'''
         try:
-            return round(order['weight'] / 1000, 2)
+            return round(order['weight'] / 1000, 3)
         except:
             print(VBA_MISSING_WEIGHT_DATA_ALERT)
             return ''
