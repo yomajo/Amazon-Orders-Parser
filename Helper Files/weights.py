@@ -9,6 +9,7 @@ import openpyxl
 import logging
 import os
 
+
 # GLOBAL VARIABLES
 WB_NAME = 'WEIGHTS.xlsx'
 WEIGHT_WB_PATH = os.path.join(get_output_dir(client_file=False), WB_NAME)
@@ -112,7 +113,7 @@ class OrderData():
             
             # pick shipping service
             if self.__eligible_for_cheapest_service_selection(order):
-                order = self._pick_shipping_service(order)
+                order = self._add_shipping_service(order)
         
         percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
         logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
@@ -270,12 +271,38 @@ class OrderData():
         else:
             return False
 
-    def _pick_shipping_service(self, order:dict) -> dict:
+    def _add_shipping_service(self, order:dict) -> dict:
         '''picks cheapest shipping service based on order category, weight, vmdoption, sales_channel, country...'''
-        # TO BE IMPLEMENTED
-        logging.debug(f'--------- Picking cheapest service not yet implemented ---------')
+        service_offers = self.__collect_shipping_service_offers(order)
+        logging.debug(f'--------- Unfinished implementation ---------')
+        order['shipping_service'] = self._pick_cheapest_service(service_offers)
         return order
     
+    def __collect_shipping_service_offers(self, order:dict) -> dict:
+        '''returns shipping services offers dict from pricing sheets'''
+        service_offers = {}
+        service_offers['nlpost'] = self.__get_service_offer(order, 'nlpost')
+        service_offers['lp'] = self.__get_service_offer(order, 'lp')
+        service_offers['dpost'] = self.__get_service_offer(order, 'dpost')
+        service_offers['etonas'] = self.__get_service_offer(order, 'etonas')
+        service_offers['dpd'] = self.__get_service_offer(order, 'dpd')
+        service_offers['ups'] = self.__get_service_offer(order, 'ups')
+        return service_offers
+
+    def __get_service_offer(self, order:dict):
+        '''returns shipping service offer from pricing sheets'''
+        logging.debug(f'--------- Unfinished implementation ---------')
+        return ''
+
+    def _pick_cheapest_service(self, service_offers:dict) -> str:
+        '''returns cheapest service from service_offers dict. Evaluate only float/int values of passed dict'''
+        eligible_offers = {key: value for key, value in service_offers.items() if isinstance(value, float) or isinstance(value, int)}
+        try:
+            return min(eligible_offers, key=lambda key: eligible_offers[key])
+        except ValueError as e:
+            logging.debug(f'Unable to deterine cheapest service for order __; services dict: {service_offers}. Err: {e}. Returning empty str')
+            return ''
+
 
     def export_unmapped_skus(self):
         '''exports unmatched (weight or mapping) skus list to txt file'''
