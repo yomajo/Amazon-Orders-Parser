@@ -11,7 +11,7 @@ import os
 # GLOBAL VARIABLES
 ECB_XML_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
 SUPPORTED_CURRENCIES = ['USD', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD', 'SEK', 'PLN', 'MXN']
-RATES_JSON = 'rates.json'
+RATES_JSON = 'fx.json'
 VBA_NO_FX_RATES = 'NO FOREX DATA IN PYTHON SIDE'
 VBA_FOREX_ALERT = 'FOREX FAILURE'
 
