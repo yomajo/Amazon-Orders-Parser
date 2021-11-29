@@ -281,12 +281,12 @@ class OrderData():
     def __collect_shipping_service_offers(self, order:dict) -> dict:
         '''returns shipping services offers dict from pricing sheets'''
         service_offers = {}
-        service_offers['nlpost'] = self.__get_service_offer(order, 'nlpost')
-        service_offers['lp'] = self.__get_service_offer(order, 'lp')
-        service_offers['dpost'] = self.__get_service_offer(order, 'dpost')
-        service_offers['etonas'] = self.__get_service_offer(order, 'etonas')
-        service_offers['dpd'] = self.__get_service_offer(order, 'dpd')
-        service_offers['ups'] = self.__get_service_offer(order, 'ups')
+        service_offers['nl'] = self.__get_service_offer(order, 'NL')
+        service_offers['lp'] = self.__get_service_offer(order, 'LP')
+        service_offers['dp'] = self.__get_service_offer(order, 'DP')
+        service_offers['etonas'] = self.__get_service_offer(order, 'ETONAS')
+        service_offers['dpd'] = self.__get_service_offer(order, 'DPD')
+        service_offers['ups'] = self.__get_service_offer(order, 'UPS')
         return service_offers
 
     def __get_service_offer(self, order:dict):
