@@ -1,6 +1,6 @@
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
-from parser_constants import QUANTITY_PATTERN
+from parser_constants import QUANTITY_PATTERN, TRACKED_COUNTRIES
 from file_utils import get_output_dir
 from sku_mapping import SKUMapping
 from pricing_wb import PricingWB
@@ -153,7 +153,7 @@ class OrderData():
             order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         # conditions to mark as tracked:
-        elif self.sales_channel == 'AmazonCOM' or order['total-eur'] > 70 or country in ['FR', 'ES', 'IT']:
+        elif self.sales_channel == 'AmazonCOM' or order['total-eur'] > 70 or country in TRACKED_COUNTRIES:
             order['tracked'] = True
         return order
 
