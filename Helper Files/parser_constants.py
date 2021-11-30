@@ -68,6 +68,8 @@ CATEGORY_CRITERIAS = [
     ['kodak', '', 'KODAK', 'BATTERIES'],
     ['saft', '', 'LI-ION', 'BATTERIES'],
     ['li-ion', '', 'LI-ION', 'BATTERIES'],
+    ['camelion', '', 'CAMELION', 'BATTERIES'],
+    ['philips', '', 'PHILIPS', 'BATTERIES'],
     ['batt', '', 'ZBATTERY BRAND', 'BATTERIES'],
     ['copag', '', 'COPAG', 'PLAYING CARDS'],
     ['ellusionist', '', 'ELLUSIONIST', 'PLAYING CARDS'],
@@ -81,11 +83,29 @@ CATEGORY_CRITERIAS = [
     ['streamline', '', 'BICYCLE', 'PLAYING CARDS'],
     ['hoyle', '', 'BICYCLE', 'PLAYING CARDS'],
     ['tally', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['art of play', '', 'ART OF PLAY', 'PLAYING CARDS'],
     ['cartes', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # Additional for amazon
     ['llewellyn', '', 'LLEWELLYN', 'TAROT CARDS'],
     ['lo scarabeo', '', 'LO SCARABEO', 'TAROT CARDS'],
     ['agm', 'cards', 'AGM', 'TAROT CARDS'],
     ['agm', 'karten', 'AGM', 'TAROT CARDS'],
+    ['solarus',	'', 'SOLARUS', 'Tarot Cards'],
+    ['animal dreaming', '',	'ANIMAL DREAMING',	'Tarot Cards'],
+    ['findhorn', '', 'FINDHORN PRESS', 'Tarot Cards'],
+    ['cico', '', 'CICO BOOKS', 'Tarot Cards'],
+    ['bear', 'company', 'BEAR & COMPANY', 'Tarot Cards'],
+    ['tarcher', '', 'TARCHER', 'Tarot Cards'],
+    ['world tree', '', 'WORLD TREE PRESS', 'Tarot Cards'],
+    ['earth dancer', '', 'EARTH DANCER', 'Tarot Cards'],
+    ['inner traditions', '', 'INNER TRADITIONS', 'Tarot Cards'],
+    ['harper', '', 'HARPER ONE', 'Tarot Cards'],
+    ['touchstone', '', 'TOUCHSTONE', 'Tarot Cards'],
+    ['destiny', '', 'DESTINY', 'Tarot Cards'],
+    ['rockpool', '', 'ROCKPOOL', 'Tarot Cards'],
+    ['music design', '', 'MUSIC DESIGN', 'Tarot Cards'],
+    ['adams media', '', 'ADAMS MEDIA',	'Tarot Cards'],
+    ['welbeck',	'',	'WELLBECK', 'Tarot Cards'],
+    ['beyond words', '', 'BEYOND WORDS', 'Tarot Cards'],
     ['us games', '', 'US GAMES', 'TAROT CARDS'],
     ['blue angel', '', 'BLUE ANGELS', 'TAROT CARDS'],
     ['schiffer', '', 'SCHIFFER', 'TAROT CARDS'],
@@ -101,7 +121,80 @@ CATEGORY_CRITERIAS = [
     ['injinji', '', 'INJINJI', 'OTHERS']
     ]
 
-# New Etonas Headers:
+NLPOST_HEADERS = [
+    'Sender company',
+    'Sender name',
+    'Sender street',
+    'Sender city',
+    'Sender postal code',
+    'Sender country code',
+    'Sender state code',
+    'Sender phone',
+    'Sender email',
+    'Sender EORI',
+    'Sender VAT',
+    'Receiver company name',
+    'Receiver name',
+    'Receiver street',
+    'Receiver city',
+    'Receiver postal code',
+    'Receiver country code',
+    'Receiver state',
+    'Receiver phone',
+    'Receiver email',
+    'Receiver EORI',
+    'Receiver VAT',
+    'Type',
+    'Parcels amount',
+    'X',
+    'Y',
+    'Z',
+    'Weight',
+    'Units',
+    'Description',
+    'Unit price',
+    'Service name',
+    'Order reference',
+    'Export reason',
+    'Export country code',
+    'HS code',
+    'COD',
+    'COD Currency',
+    'Importer',
+    'identifier',
+]
+
+NLPOST_FIXED_VALUES = {
+    'Sender company' : 'Shop4Top',
+    'Sender name' : 'Vykintas Urniezius',
+    'Sender street' : 'Veiveriu street 55B',
+    'Sender city' : 'Kaunas',
+    'Sender postal code' : '46335',
+    'Sender country code' : 'LT',
+    'Sender phone' : '861066162',
+    'Sender email' : 'klausimai@shop4top.lt',
+    'Type' : 'Package',
+    'Parcels amount' : '1',
+    'Export reason' : 'Gift',
+}
+
+# corresponding to proxy keys for etsy / amazon
+NLPOST_HEADERS_MAPPING = {
+    'Receiver name' : 'recipient-name',
+    'Receiver city' : 'ship-city',
+    'Receiver postal code' : 'ship-postal-code',
+    'Receiver country code' : 'ship-country',
+    'Receiver state' : 'ship-state',
+    'Receiver phone' : 'buyer-phone-number',
+    'Receiver email' : 'buyer-email',
+    'Units' : 'quantity-purchased',
+    'Description' : 'category',
+    'Unit price' : 'item-price',
+    'Order reference' : 'order-id',
+    'Export country code' : 'ship-country',
+    'COD Currency' : 'currency',
+}
+
 ETONAS_HEADERS = [
     'Address_line_1',
     'Address_line_2',
@@ -258,7 +351,6 @@ LP_HEADERS = [
     ]
 
 LP_HEADERS_MAPPING = {
-    'Siuntos rūšis' : 'mksdksoption',
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
     'Gavėjo el. paštas' : 'buyer-email',
@@ -269,7 +361,6 @@ LP_HEADERS_MAPPING = {
     'Gavėjo pašto kodas' : 'ship-postal-code',
     'Gavėjo šalies kodas' : 'ship-country',
     'Kiekis, vnt' : 'quantity-purchased',
-    'Vertė, eur' : 'item-price',
     'Svoris (g)' : 'weight',
     }
 
@@ -277,45 +368,22 @@ LP_FIXED_VALUES = {
     'Muitinės deklaracija turinys' : 'Dovana'
     }
 
-BATTERY_BRANDS = [
-    'RENATA',
-    'VINNIC',
-    'EVERACTIVE',
-    'MAXELL',
-    'RAYOVAC',
-    'KODAK',
-    'XTAR',
-    'PANASONIC',
-    'SONY',
-    'VARTA',
-    'ENERGIZER',
-    'DURACELL',
-    'SAFT',
-    'SIEMENS',
-    'SIGNIA',
-    'SAMSUNG',
-    'SANYO',
-    'LG',
-    'GP',
-    'TADIRAN',
-    'HELLE',
-    'MURATA',
-    '5EEB459849DA77.22643238',
-    'MYSTIQUE',
-    'MLLE',
-    'CAMELION',
-    'BATTERIJ',
-    'BATTERIES',
-    'LITHIUM',
-    ]
-
-CARDS_KEYWORDS = [
-    'SATIN',
-    'MYSTIQUE',
-    'MINI MOTHERPEACE',
-    'BOLSAS',
-    'TINY UNIVERSAL',
+DPDUPS_HEADERS = [
+    'Order ID',
+    'Buyer Name',
+    'Country',
+    'Weight',
+    'Service Picked',
+    'Tracked',
+    'Sales Channel',
 ]
+
+DPDUPS_HEADERS_MAPPING = {
+    'Order ID' : 'order-id',
+    'Buyer Name' : 'recipient-name',
+    'Country' : 'ship-country',
+    'Weight' : 'weight',
+}
 
 EXPORT_CONSTANTS = {
                 'dp' : {'headers' : DPOST_HEADERS, 'mapping' : DPOST_HEADERS_MAPPING, 'fixed' : DPOST_FIXED_VALUES},
@@ -379,7 +447,7 @@ AMAZON_KEYS = {
     'weight' : 'weight',
     'category' : 'category',
     'brand' : 'brand',
-    'mksdksoption' : 'mksdksoption',
+    'vmdoption' : 'vmdoption',
 }
 
 ETSY_KEYS = {
@@ -416,7 +484,7 @@ ETSY_KEYS = {
     'weight' : 'weight',
     'category' : 'category',
     'brand' : 'brand',
-    'mksdksoption' : 'mksdksoption',
+    'vmdoption' : 'vmdoption',
 }
 
 QUANTITY_PATTERN = {

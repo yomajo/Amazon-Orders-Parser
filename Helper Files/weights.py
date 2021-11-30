@@ -1,12 +1,15 @@
-from parser_constants import AMAZON_KEYS, ETSY_KEYS, QUANTITY_PATTERN
+from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
+from parser_constants import QUANTITY_PATTERN, TRACKED_COUNTRIES
 from file_utils import get_output_dir
-from parser_utils import get_inner_qty_sku, get_product_category_or_brand
 from sku_mapping import SKUMapping
+from pricing_wb import PricingWB
 from datetime import datetime
+from forex import Forex
 import openpyxl
 import logging
 import os
+
 
 # GLOBAL VARIABLES
 WB_NAME = 'WEIGHTS.xlsx'
@@ -20,7 +23,7 @@ class OrderData():
     'Amazon SKU Mapping.xlsx' are in Helper Files folder and its data integrity, fixed headers are in place.
     
     Main methods:
-    add_orders_data() - adds category, brand, mksdksoption, weight to order dict keys
+    add_orders_data() - adds category, brand, vmdoption, weight to order dict keys
     export_unmapped_skus() - writes unmatched/unmapped skus to txt file    
 
     Arguments:
@@ -29,18 +32,28 @@ class OrderData():
     proxy_keys: dict'''
 
     def __init__(self, orders:list, sales_channel:str, proxy_keys:dict):
-        self.orders = orders
         self.sales_channel = sales_channel
         self.proxy_keys = proxy_keys
         self.pattern = QUANTITY_PATTERN[sales_channel]
+        self.fx = Forex()
+        self.pricing = PricingWB(proxy_keys)
+        self.orders = self.__init_default(orders)
         
         self.weight_data = self._parse_weights_wb()
         if self.sales_channel != 'Etsy':    
             self.sku_mapping = SKUMapping(SKU_MAPPING_WB_PATH).read_sku_mapping_to_dict()
 
         self.no_matching_skus = []
-        self.invalid_orders = 0
+        self.invalid_weight_orders = 0
 
+    def __init_default(self, orders:list) -> list:
+        '''adds some default keys to each order'''
+        for order in orders:
+            order['tracked'], order['skip_service_selection'] = False, False
+            order['shipping_service'] = ''
+            order_value = get_total_price(order, self.sales_channel, return_as_float=True)
+            order['total-eur'] = self.fx.convert_to_eur(order_value, order[self.proxy_keys['currency']])
+        return orders
 
     def _parse_weights_wb(self) -> dict:
         '''returns weights data as dict from reading excel workbook'''
@@ -78,26 +91,71 @@ class OrderData():
     def add_orders_data(self) -> list:
         '''adds properties to each order (keys):
         -weight (order weight as float)
-        -mksdksoption (string)
+        -vmdoption (string)
         -brand (string)
-        -category (string)'''
+        -category (string)
+        
+        new keys w/ shipping pricing update 2021.11
+        -tracked (bool)
+        -shipping_service
+        -skip_service_selection'''
         
         for order in self.orders:
             qty_purchased = self.__get_order_quantity(order)
             skus = order[self.proxy_keys['sku']]
 
-            # Add brand / category data to order, using first item in sku list
+            # Add brand / category data to order, using first item in sku list, edit tracked status
             order = self._add_order_brand_category_data(order, skus)
+            order = self._check_tracked_status(order)
 
             if self._validate_calculation(qty_purchased, skus):
                 order = self._calc_weight_add_data(order, qty_purchased, skus)
             else:
                 order = self._add_invalid_weight_data(order)
-        
-        percentage_invalid = self.invalid_orders / len(self.orders) * 100
-        logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
+            
+            # pick shipping service
+            if self.__eligible_for_cheapest_service_selection(order):
+                order = self._add_shipping_service(order)
+
+        self.__log_invalid()
         return self.orders
     
+    def _check_tracked_status(self, order:dict) -> dict:
+        '''adds key 'tracked' to order dict based on country, price, shipping, items purchased'''        
+        if self.sales_channel == 'Etsy':
+            return self.__is_etsy_tracked(order)
+        else:
+            return self.__is_amazon_tracked(order)
+
+    def __is_etsy_tracked(self, order:dict) -> dict:
+        '''flips order 'tracked' bool to True if meets rules for etsy marketplace'''
+        shipping_price = get_order_ship_price(order, self.proxy_keys)
+        if shipping_price >= 21:            
+            order['shipping_service'] = 'ups'
+            order['tracked'], order['skip_service_selection'] = True, True
+        elif shipping_price > 0 or order['total-eur'] > 70:
+            order['tracked'] = True
+        else:
+            pass
+        return order
+
+    def __is_amazon_tracked(self, order:dict) -> dict:
+        '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
+        shipping_price = get_order_ship_price(order, self.proxy_keys)
+        country = order[self.proxy_keys['ship-country']]
+
+        # conditions for specific services:
+        if shipping_price >= 20:
+            order['shipping_service'] = 'ups'
+            order['tracked'], order['skip_service_selection'] = True, True
+        elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU':
+            order['shipping_service'] = 'etonas'
+            order['tracked'], order['skip_service_selection'] = True, True
+        # conditions to mark as tracked:
+        elif self.sales_channel == 'AmazonCOM' or order['total-eur'] > 70 or country in TRACKED_COUNTRIES:
+            order['tracked'] = True
+        return order
+
     def _add_order_brand_category_data(self, order:dict, skus:list) -> dict:
         '''returns order w/ added brand, category keys (title possibly for etsy based on first sku in order)'''
         if self.sales_channel == 'Etsy':
@@ -136,7 +194,7 @@ class OrderData():
         '''adds weight related data to order dict'''
         order_weight = 0.0
         package_weight = 0.0
-        self.mksdksoption = ''
+        self.vmdoption = ''
         try:
             for sku in skus:
                 inner_qty, inner_sku = get_inner_qty_sku(sku, self.pattern)
@@ -163,11 +221,11 @@ class OrderData():
                 if potential_package_weight > package_weight:
                     package_weight = potential_package_weight
                 
-                self._update_mksdksoption(sku_weight_data)
+                self._update_vmdoption(sku_weight_data)
 
             order_weight += package_weight
             order['weight'] = int(round(order_weight, 2))
-            order['mksdksoption'] = self.mksdksoption
+            order['vmdoption'] = self.vmdoption
             return order
         except:
             return self._add_invalid_weight_data(order)
@@ -183,27 +241,90 @@ class OrderData():
             # to fail float casting in _calc_weight_add_data
             return 'No package weight available'
     
-    def _update_mksdksoption(self, sku_weight_data:dict):
-        '''updates self.mksdksoption for order'''
-        potential_option = sku_weight_data['MKS/DKS']
-        if potential_option in ['MKS', 'DKS']:
-            if self.mksdksoption == '':
-                # self.mksdksoption is not set (first sku in order)
-                self.mksdksoption = potential_option
-            elif self.mksdksoption == 'MKS' and potential_option == 'DKS':
+    def _update_vmdoption(self, sku_weight_data:dict):
+        '''updates self.vmdoption for order'''
+        potential_option = sku_weight_data['VMD']
+        if potential_option in ['VKS', 'MKS', 'DKS']:
+            if self.vmdoption == '':
+                # self.vmdoption is not set (first sku in order)
+                self.vmdoption = potential_option
+            elif self.vmdoption == 'VKS':
+                self.vmdoption = potential_option
+        
+            elif self.vmdoption == 'MKS' and potential_option == 'DKS':
                 # upgrade to DKS if current option is MKS
-                self.mksdksoption = potential_option
+                self.vmdoption = potential_option
 
 
     def _add_invalid_weight_data(self, order:dict) -> dict:
         '''adds invalid weight data to order dict'''
-        self.invalid_orders += 1
+        self.invalid_weight_orders += 1
         self.no_matching_skus.append(order[self.proxy_keys['sku']])
         logging.warning(f'order: {order[self.proxy_keys["order-id"]]} cant calc weights. skus: {order[self.proxy_keys["sku"]]}')
         order['weight'] = ''
-        order['mksdksoption'] = ''
+        order['vmdoption'] = ''
         return order
     
+    def __eligible_for_cheapest_service_selection(self, order):
+        '''returns True if cheapest shipping service selection should be done for order'''
+        if not order['skip_service_selection'] and order['weight'] != '' and order['vmdoption'] != '':
+            return True
+        else:
+            return False
+
+    def _add_shipping_service(self, order:dict) -> dict:
+        '''picks cheapest shipping service based on order category, weight, vmdoption, sales_channel, country...'''
+        service_offers = self.__collect_eligible_shipping_service_offers(order)
+        order['shipping_service'] = self._pick_cheapest_service(service_offers)
+        return order
+    
+    def __collect_eligible_shipping_service_offers(self, order:dict) -> dict:
+        '''returns shipping services offers dict from pricing sheets'''
+        service_offers = {}
+        service_offers['nl'] = self.__get_service_offer(order, 'NL')
+        service_offers['lp'] = self.__get_service_offer(order, 'LP')
+        service_offers['dp'] = self.__get_service_offer(order, 'DP')
+        service_offers['etonas'] = self.__get_service_offer(order, 'ETONAS')
+        if order['tracked']:
+            service_offers['dpd'] = self.__get_service_offer(order, 'DPD')
+            service_offers['ups'] = self.__get_service_offer(order, 'UPS')
+        eligible_offers = self.__filter_eligible_offers(order, service_offers)
+        return eligible_offers
+
+    def __get_service_offer(self, order:dict, service:str):
+        '''returns shipping service offer from pricing sheets'''
+        try:
+            return self.pricing.get_pricing_offer(order, service)
+        except Exception as e:
+            order_id = order[self.proxy_keys['order-id']]
+            logging.warning(f'Failed to retrieve pricing for order id: {order_id} service: {service}. Returning None. Err: {e}')
+            return None
+    
+    def __filter_eligible_offers(self, order:dict, service_offers:dict) -> dict:
+        '''selectively remove services not compatible with order contents / shipping rules'''
+        if order['category'] == 'BATTERIES':
+            # only allow lp / nlpost to be selected from
+            service_offers['dp'] = service_offers['etonas'] = service_offers['dpd'] = service_offers['ups'] = None
+        if order[self.proxy_keys['ship-country']] == 'UK':
+            service_offers['etonas'] = None
+        return service_offers
+
+    def _pick_cheapest_service(self, service_offers:dict) -> str:
+        '''returns cheapest service from service_offers dict. Evaluate only float/int values of passed dict'''
+        eligible_offers = {key: value for key, value in service_offers.items() if isinstance(value, float) or isinstance(value, int)}
+        try:
+            return min(eligible_offers, key=lambda key: eligible_offers[key])
+        except ValueError as e:
+            logging.debug(f'Unable to determine cheapest service. Services dict: {service_offers}. Returning empty str. Err: {e}. ')
+            return ''
+
+    def __log_invalid(self):
+        try:
+            percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
+            logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
+        except ZeroDivisionError:
+            logging.info(f'100% orders had sufficient weight / sku data!')
+
     def export_unmapped_skus(self):
         '''exports unmatched (weight or mapping) skus list to txt file'''
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")

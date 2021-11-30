@@ -1,10 +1,10 @@
 from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords, get_sales_channel_category_brand
 from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
 from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
-from parser_utils import get_order_ship_price, get_order_country
+from parser_utils import get_order_ship_price, get_order_country, validate_LP_siuntos_rusis_header
 from file_utils import get_output_dir, delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
-from etonas_xlsx_exporter import EtonasExporter
+from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
 from datetime import datetime
 import logging
 import csv
@@ -39,11 +39,12 @@ class ParseOrders():
         self.proxy_keys = proxy_keys
         self.sales_channel = sales_channel
         self.dpost_orders = []
-        self.dpost_tracked_orders = []
         self.lp_orders = []
         self.lp_tracked_orders = []
         self.etonas_orders = []
-        self.ups_orders = []
+        self.nlpost_orders = []
+        self.dpdups_orders = []
+
 
     def export_same_buyer_details(self):
         '''exports orders data made by same person'''
@@ -115,7 +116,6 @@ class ParseOrders():
     def get_export_ready_order(self, order : dict, headers_settings : dict) -> dict:
         '''outputs a dict, those keys correspong to target export csv headers based on passed headers_settings'''        
         export = {}
-        order_country = get_order_country(order, self.proxy_keys)
         title_proxy_key = self.proxy_keys.get('title', '')
 
         for header in headers_settings['headers']:
@@ -136,17 +136,21 @@ class ParseOrders():
                 else:
                     export[header] = get_origin_country(order[self.proxy_keys['title']])
             elif header == 'PRODUCT':
-                export[header] = get_dpost_product_header_val(order_country)
+                export[header] = get_dpost_product_header_val(order)
             elif header == 'CUST_REF':
                 export[header] = order[self.proxy_keys['recipient-name']][:20]
 
             # LP specific headers
+            elif header == 'Siuntos rūšis':
+                export[header] = validate_LP_siuntos_rusis_header(order['vmdoption'], order['tracked'])
             elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                export[header] = get_lp_registered_priority_value(order, self.sales_channel, self.proxy_keys)
+                export[header] = get_lp_registered_priority_value(order)
             elif header == 'Delivery Method':
                 service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
                 optional_str = ' EXPEDITED' if order.get(service_level_proxy_key, '') == 'Expedited' else ''
-                export[header] = order[self.proxy_keys['currency']] + optional_str
+                export[header] = order.get(service_level_proxy_key, '') + optional_str
+            elif header == 'Vertė, eur':
+                export[header] = order['total-eur']
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
@@ -216,23 +220,37 @@ class ParseOrders():
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
         logging.info(f'Sorting orders by shippment company specific to {self.sales_channel} ruleset')
         for order in self.all_orders:
-            if self.sales_channel == 'AmazonEU':
-                self.sort_EU_order_by_shipment_company(order, skip_etonas)
-            elif self.sales_channel == 'AmazonCOM':
-                self.sort_COM_order_by_shipment_company(order)
-            elif self.sales_channel == 'Etsy':
-                self.sort_etsy_order_by_shipment_company(order)
+            if order['shipping_service'] == 'nl':
+                self.nlpost_orders.append(order)
+            elif order['shipping_service'] == 'lp' and order['tracked']:
+                self.lp_tracked_orders.append(order)
+            elif order['shipping_service'] == 'lp' and order['tracked'] == False:
+                self.lp_orders.append(order)
+            elif order['shipping_service'] == 'dp':
+                self.dpost_orders.append(order)
+            elif order['shipping_service'] == 'etonas' and not skip_etonas:
+                self.etonas_orders.append(order)
+            elif order['shipping_service'] == 'ups' or order['shipping_service'] == 'dpd':
+                self.dpdups_orders.append(order)
+            else:
+                # cheapest service was not selected, defaulting to older sorting based on sales channel and order specifics
+                if self.sales_channel == 'AmazonEU':
+                    self.sort_EU_order_by_shipment_company(order, skip_etonas)
+                elif self.sales_channel == 'AmazonCOM':
+                    self.sort_COM_order_by_shipment_company(order)
+                elif self.sales_channel == 'Etsy':
+                    self.sort_etsy_order_by_shipment_company(order)
         self.exit_no_new_orders()
     
     def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
         '''sorts individual order from AMAZON EU by shipment company'''
         if order[self.proxy_keys['ship-service-level']] == 'Expedited':
-            self.lp_tracked_orders.append(order)
+            self.dpdups_orders.append(order)
         elif get_order_country(order, self.proxy_keys) in TRACKED_COUNTRIES:
             if order_contains_batteries(order):
                 self.lp_tracked_orders.append(order)
             else:
-                self.dpost_tracked_orders.append(order)
+                self.dpost_orders.append(order)
         elif order_contains_batteries(order) or order_contains_cards_keywords(order) or get_order_country(order, self.proxy_keys) in LP_COUNTRIES:
             self.lp_orders.append(order)
         elif get_order_country(order, self.proxy_keys) in ['GB', 'UK']:
@@ -244,19 +262,18 @@ class ParseOrders():
                     self.dpost_orders.append(order)
                 elif uk_order_contains_lp_keywords(order):
                     self.lp_orders.append(order)
-                else:
+                else:                    
                     self.etonas_orders.append(order)
+        
         elif get_order_ship_price(order, self.proxy_keys) >= 10:
-            self.ups_orders.append(order)
+            self.dpdups_orders.append(order)
         else:
             self.dpost_orders.append(order)
 
     def sort_COM_order_by_shipment_company(self, order:dict):
         '''sorts individual order from AMAZON COM by shipment company'''
-        if order[self.proxy_keys['ship-service-level']] == 'Expedited':
-            self.lp_tracked_orders.append(order)
-        elif get_order_ship_price(order, self.proxy_keys) >= 10:
-            self.ups_orders.append(order)
+        if order[self.proxy_keys['ship-service-level']] == 'Expedited' or get_order_ship_price(order, self.proxy_keys) >= 10:
+            self.dpdups_orders.append(order)
         else:
             self.lp_tracked_orders.append(order)
 
@@ -264,16 +281,16 @@ class ParseOrders():
         '''sorts individual order from Etsy by shipment company'''
         shipping_price = get_order_ship_price(order, self.proxy_keys)
         if shipping_price >= 21:
-            self.ups_orders.append(order)
-        elif shipping_price > 0:
+            self.dpdups_orders.append(order)
+        elif shipping_price > 0 or order['tracked']:
             self.lp_tracked_orders.append(order)
         else:
             self.lp_orders.append(order)
     
     def exit_no_new_orders(self):
         '''terminates python program, closes db connection, warns VBA'''
-        if not self.etonas_orders and not self.dpost_orders and not self.ups_orders and not self.lp_orders \
-                and not self.dpost_tracked_orders and not self.lp_tracked_orders:
+        if not self.etonas_orders and not self.dpost_orders and not self.nlpost_orders and not self.lp_orders \
+                and not self.dpdups_orders and not self.lp_tracked_orders:
             logging.info(f'No new orders for processing. Terminating, alerting VBA.')
             self.db_client.session.close()
             print(VBA_NO_NEW_JOB)
@@ -286,9 +303,9 @@ class ParseOrders():
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'{self.sales_channel}-Same Buyer {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'{self.sales_channel}-Etonas {date_stamp}.xlsx')
+        self.nlpost_filename = os.path.join(output_dir, f'{self.sales_channel}-NLPost {date_stamp}.xlsx')
         self.dpost_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost {date_stamp}.csv')
-        self.dpost_tracked_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost Tracked {date_stamp}.csv')
-        self.ups_filename = os.path.join(output_dir, f'{self.sales_channel}-UPS {date_stamp}.csv')
+        self.dpdups_filename = os.path.join(output_dir, f'{self.sales_channel}-DPDUPS {date_stamp}.xlsx')        
         self.lp_filename = os.path.join(lp_output_dir, f'{self.sales_channel}-LP.csv')
         self.lp_tracked_filename = os.path.join(lp_output_dir, f'{self.sales_channel}-LP-Tracked.csv')
 
@@ -304,17 +321,11 @@ class ParseOrders():
             dpost_content = self.get_csv_export_ready_data(self.dpost_orders, 'dp')
             self.export_csv(self.dpost_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
 
-    def export_dpost_tracked(self):
-        '''export csv file for Deutsche Post (TRACKED orders) shipping service'''
-        if self.dpost_tracked_orders:
-            dpost_content = self.get_csv_export_ready_data(self.dpost_tracked_orders, 'dp')
-            self.export_csv(self.dpost_tracked_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
-
-    def export_ups(self):
+    def export_dpdups(self):
         '''export csv file for UPS shipping service'''
-        if self.ups_orders:
-            ups_content = self.get_csv_export_ready_data(self.ups_orders, 'dp')
-            self.export_csv(self.ups_filename, EXPORT_CONSTANTS['dp']['headers'], ups_content)
+        if self.dpdups_orders:
+            DPDUPSExporter(self.dpdups_orders, self.dpdups_filename, self.sales_channel, self.proxy_keys).export()
+            logging.info(f'XLSX {self.dpdups_filename} created. Orders inside: {len(self.dpdups_orders)}')
 
     def export_lp(self):
         '''export csv file for Lietuvos Pastas shipping service'''
@@ -334,6 +345,12 @@ class ParseOrders():
             EtonasExporter(self.etonas_orders, self.etonas_filename, self.sales_channel, self.proxy_keys).export()
             logging.info(f'XLSX {self.etonas_filename} created. Orders inside: {len(self.etonas_orders)}')
     
+    def export_nlpost(self):
+        '''export xlsx file for NLPost shipping service'''
+        if self.nlpost_orders:
+            NLPostExporter(self.nlpost_orders, self.nlpost_filename, self.sales_channel, self.proxy_keys).export()
+            logging.info(f'XLSX {self.nlpost_filename} created. Orders inside: {len(self.nlpost_orders)}')
+
     def push_orders_to_db(self):
         '''adds all orders in this class to orders table in db'''
         count_added_to_db = self.db_client.add_orders_to_db()
@@ -343,14 +360,14 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        self.export_same_buyer_details()
-        self.export_dpost_tracked()
-        self.export_dpost()
-        self.export_ups()
+        # self.export_same_buyer_details()
+        # self.export_dpost()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
-        self.push_orders_to_db()
+        self.export_nlpost()
+        self.export_dpdups()
+        # self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')
     
@@ -364,14 +381,15 @@ class ParseOrders():
             self.test_exports(testing, skip_etonas)
             return
         self.export_same_buyer_details()
-        self.export_dpost_tracked()
         self.export_dpost()
-        self.export_ups()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
+        self.export_nlpost()
+        self.export_dpdups()
         self.push_orders_to_db()
         self.db_client.session.close()
+
 
 if __name__ == "__main__":
     pass
