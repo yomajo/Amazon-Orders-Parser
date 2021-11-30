@@ -351,7 +351,6 @@ LP_HEADERS = [
     ]
 
 LP_HEADERS_MAPPING = {
-    'Siuntos rūšis' : 'vmdoption',
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
     'Gavėjo el. paštas' : 'buyer-email',
@@ -362,7 +361,6 @@ LP_HEADERS_MAPPING = {
     'Gavėjo pašto kodas' : 'ship-postal-code',
     'Gavėjo šalies kodas' : 'ship-country',
     'Kiekis, vnt' : 'quantity-purchased',
-    'Vertė, eur' : 'item-price',
     'Svoris (g)' : 'weight',
     }
 
@@ -370,45 +368,22 @@ LP_FIXED_VALUES = {
     'Muitinės deklaracija turinys' : 'Dovana'
     }
 
-BATTERY_BRANDS = [
-    'RENATA',
-    'VINNIC',
-    'EVERACTIVE',
-    'MAXELL',
-    'RAYOVAC',
-    'KODAK',
-    'XTAR',
-    'PANASONIC',
-    'SONY',
-    'VARTA',
-    'ENERGIZER',
-    'DURACELL',
-    'SAFT',
-    'SIEMENS',
-    'SIGNIA',
-    'SAMSUNG',
-    'SANYO',
-    'LG',
-    'GP',
-    'TADIRAN',
-    'HELLE',
-    'MURATA',
-    '5EEB459849DA77.22643238',
-    'MYSTIQUE',
-    'MLLE',
-    'CAMELION',
-    'BATTERIJ',
-    'BATTERIES',
-    'LITHIUM',
-    ]
-
-CARDS_KEYWORDS = [
-    'SATIN',
-    'MYSTIQUE',
-    'MINI MOTHERPEACE',
-    'BOLSAS',
-    'TINY UNIVERSAL',
+DPDUPS_HEADERS = [
+    'Order ID',
+    'Buyer Name',
+    'Country',
+    'Weight',
+    'Service Picked',
+    'Tracked',
+    'Sales Channel',
 ]
+
+DPDUPS_HEADERS_MAPPING = {
+    'Order ID' : 'order-id',
+    'Buyer Name' : 'recipient-name',
+    'Country' : 'ship-country',
+    'Weight' : 'weight',
+}
 
 EXPORT_CONSTANTS = {
                 'dp' : {'headers' : DPOST_HEADERS, 'mapping' : DPOST_HEADERS_MAPPING, 'fixed' : DPOST_FIXED_VALUES},

@@ -1,4 +1,4 @@
-from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, BATTERY_BRANDS, CARDS_KEYWORDS
+from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
 from parser_constants import DP_KEYWORDS, TRACKED_COUNTRIES, LP_UK_BRANDS
 from countries import COUNTRY_CODES
 from string import ascii_letters
@@ -86,18 +86,20 @@ def get_total_price(order:dict, sales_channel:str, return_as_float:bool=False):
         sys.exit()
 
 def order_contains_batteries(order:dict) -> bool:
-    '''returns True if order item is batteries (uses list of brand words)'''
-    for brand in BATTERY_BRANDS:
-        if brand in order['product-name'].upper():
-            return True
-    return False
+    '''returns True if order['category'] is 'BATTERIES' '''
+    try:
+        return True if order['category'] == 'BATTERIES' else False
+    except Exception as e:
+        logging.critical(f'Failed in util order_contains_batteries func. order: {order}. Err: {e}')
+        return False
 
 def order_contains_cards_keywords(order:dict) -> bool:
-    '''returns True if order item is batteries (uses list of brand words)'''
-    for keyword in CARDS_KEYWORDS:
-        if keyword in order['product-name'].upper():
-            return True
-    return False
+    '''returns True if order['category'] is 'PLAYING CARDS' or 'TAROT CARDS' '''
+    try:
+        return True if order['category'] in ['PLAYING CARDS', 'TAROT CARDS'] else False
+    except Exception as e:
+        logging.critical(f'Failed in order_contains_cards_keywords func. order: {order}. Err: {e}')
+        return False
 
 def uk_order_contains_dp_keywords(order:dict) -> bool:
     '''returns True if order item contains country-specific keywords (uses list of brand words)'''
@@ -113,11 +115,13 @@ def uk_order_contains_lp_keywords(order:dict) -> bool:
             return True
     return False
 
-def get_dpost_product_header_val(ship_country:str) -> str:
+def get_dpost_product_header_val(order:dict) -> str:
     '''returns PRODUCT header value for Deutsche Post csv'''
-    if ship_country in TRACKED_COUNTRIES:
-        return 'GPT'    
-    return 'GMP'
+    try:
+        return 'GPT' if order['tracked'] else 'GMP' 
+    except Exception as e:
+        logging.critical(f'Failed while accessing order category key in get_dpost_product_header_val util func. Order: {order} Returning GMP. Err: {e}')
+        return 'GMP'
 
 def clean_phone_number(phone_number:str) -> str:
     '''cleans phone numbers. Conditional reformatting for US based numbers
@@ -139,24 +143,13 @@ def replace_phone_zero(phone_number:str) -> str:
     '''returns phone number with 00 insted of +. Example: +1-213-442 returns 001-213-442'''
     return phone_number.replace('+', '00')
 
-def get_lp_registered_priority_value(order:dict, sales_channel:str, proxy_keys:dict) -> str:
+def get_lp_registered_priority_value(order:dict) -> str:
     '''based on ship country and sales channel returns 1 or 0 as string to fill in
     Lietuvos Pastas 'Registruota' / 'Pirmenybinė/nepirmenybinė' header values'''
-    shipping_price = get_order_ship_price(order, proxy_keys)
-    if sales_channel == 'Etsy':
-        if shipping_price > 0:
-            return '1'
-        else:
-            return ''
-    elif sales_channel == 'AmazonCOM':
-        return '1'
-    elif sales_channel == 'AmazonEU':
-        if order['ship-country'] in TRACKED_COUNTRIES:
-            return '1'
-        else:
-            return ''
-    else:
-        logging.critical(f'Unexpected sales_channel got up to get_lp_registruota_value func: {sales_channel}. Retuning empty str')
+    try:
+        return '1' if order['tracked'] else ''
+    except Exception as e:
+        logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
         return ''
 
 def get_order_ship_price(order:dict, proxy_keys:dict) -> float:
@@ -252,6 +245,15 @@ def alert_VBA_duplicate_mapping_sku(sku_code:str):
     '''duplicate SKU code found when reading mapping xlsx, alerts VBA, logs sku_code with warning level'''
     logging.warning(f'Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: {sku_code}')
     print(f'DUPLICATE SKU IN MAPPING: {sku_code}')
+
+def validate_LP_siuntos_rusis_header(vmdoption:str, tracked:bool):
+    '''returns 'siuntos rusis' header value for LP csv'''
+    if vmdoption == 'VKS' and tracked:
+        return 'P2P_3_XS'
+    elif vmdoption == 'VKS' and not tracked:
+        return 'P2P_1_XS'
+    else:
+        return vmdoption
 
 
 if __name__ == "__main__":
