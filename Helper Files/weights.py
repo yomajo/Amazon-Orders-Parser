@@ -116,9 +116,8 @@ class OrderData():
             # pick shipping service
             if self.__eligible_for_cheapest_service_selection(order):
                 order = self._add_shipping_service(order)
-        
-        percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
-        logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
+
+        self.__log_invalid()
         return self.orders
     
     def _check_tracked_status(self, order:dict) -> dict:
@@ -319,6 +318,12 @@ class OrderData():
             logging.debug(f'Unable to determine cheapest service. Services dict: {service_offers}. Returning empty str. Err: {e}. ')
             return ''
 
+    def __log_invalid(self):
+        try:
+            percentage_invalid = self.invalid_weight_orders / len(self.orders) * 100
+            logging.info(f'{percentage_invalid:.2f}% orders contain SKU\'s that are invalid for weight calculation')
+        except ZeroDivisionError:
+            logging.info(f'100% orders had sufficient weight / sku data!')
 
     def export_unmapped_skus(self):
         '''exports unmatched (weight or mapping) skus list to txt file'''
