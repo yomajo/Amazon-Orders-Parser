@@ -1,6 +1,7 @@
 from parser_utils import get_origin_country, get_total_price, get_sales_channel_hs_code
-from parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
 from parser_constants import NLPOST_HEADERS, NLPOST_HEADERS_MAPPING, NLPOST_FIXED_VALUES
+from parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
+from parser_constants import DPDUPS_HEADERS, DPDUPS_HEADERS_MAPPING
 import logging
 import openpyxl
 import sys
@@ -12,7 +13,8 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_ETONAS_CHARTLIMIT_ALERT = 'ETONAS_CHARLIMIT_WARNING'
 VBA_NLPOST_CHARTLIMIT_ALERT = 'NLPOST_CHARLIMIT_WARNING'
 VBA_MISSING_WEIGHT_DATA_ALERT = 'ETONAS/NLPOST MISSING_WEIGHT_WARNING'
-HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEADERS_MAPPING}, 
+HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEADERS_MAPPING},
+                'dpdups' : {'headers' : DPDUPS_HEADERS, 'mapping': DPDUPS_HEADERS_MAPPING},
                 'nlpost': {'headers' : NLPOST_HEADERS, 'mapping': NLPOST_HEADERS_MAPPING, 'fixed': NLPOST_FIXED_VALUES}}
 PACKAGE_DIMENSIONS = {'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
                     'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
@@ -39,7 +41,12 @@ class XlsxExporter():
 
     def __get_mode(self):
         '''sets self.mode variable to differentiate Etonas / NLPost workbook generation'''
-        self.mode = 'etonas' if self.__class__.__name__.startswith('Etonas') else 'nlpost'
+        if self.__class__.__name__.startswith('Etonas'):
+            self.mode = 'etonas'
+        elif self.__class__.__name__.startswith('NLPost'):
+            self.mode = 'nlpost'
+        elif self.__class__.__name__.startswith('DPDUPS'):
+            self.mode = 'dpdups'
         logging.debug(f'Using XlsxExporter in {self.mode} mode. Parsing {len(self.input_orders)} orders, exporting to path: {self.export_path}')
 
 
@@ -59,8 +66,10 @@ class XlsxExporter():
         '''refactors order based on self.mode via prepare_etonas_order_contents or prepare_nlpost_order_contents methods'''
         if self.mode == 'etonas':
             reduced_order = self.prepare_etonas_order_contents(order)
-        else:
+        elif self.mode == 'nlpost':
             reduced_order = self.prepare_nlpost_order_contents(order)
+        elif self.mode == 'dpdups':
+            reduced_order = self.prepare_dpdups_order_contents(order)
         return reduced_order
 
     def prepare_etonas_order_contents(self, order:dict) -> dict:
@@ -69,6 +78,11 @@ class XlsxExporter():
         return order
     
     def prepare_nlpost_order_contents(self, order:dict) -> dict:
+        '''implemented in inheriting class'''
+        logging.warning(f'You should not be using generic class to create xlsx output. Warning from: prepare_nlpost_order_contents method')
+        return order
+
+    def prepare_dpdups_order_contents(self, order:dict) -> dict:
         '''implemented in inheriting class'''
         logging.warning(f'You should not be using generic class to create xlsx output. Warning from: prepare_nlpost_order_contents method')
         return order
@@ -287,6 +301,37 @@ class EtonasExporter(XlsxExporter):
                 export[header] = self._get_weight_in_kg(order)
             else:
                 export[header] = ''
+        return export
+
+
+class DPDUPSExporter(XlsxExporter):
+    '''Creates Excel orders workbook for DPD / UPS orders. Uses generic parent XlsxExporter class. 
+    class name must include word 'DPDUPS'.
+    
+    only overwritten method: prepare_dpdups_order_contents
+    
+    Args:
+    -input_orders: list of orders (dicts) as accepted by class
+    -export_path: workbook path to be saved at
+    -sales_channel: str option AmazonEU / AmazonCOM / Etsy
+    -proxy_keys: dict to handle both Amazon and Etsy sales channels'''
+    
+ 
+    def prepare_dpdups_order_contents(self, order:dict) -> dict:
+        '''returns ready-to-write order data dict based on DPDUPS file headers'''
+        export = {}        
+        for header in DPDUPS_HEADERS:
+            if header in DPDUPS_HEADERS_MAPPING.keys():
+                target_key = self.proxy_keys.get(DPDUPS_HEADERS_MAPPING[header], '')
+                export[header] = order.get(target_key, '')
+
+            elif header == 'Service Picked':
+                export[header] = order['shipping_service']
+            elif header == 'Tracked':
+                export[header] = order['tracked']
+            elif header == 'Sales Channel':
+                export[header] = self.sales_channel
+
         return export
 
 
