@@ -3,6 +3,7 @@ from excel_utils import get_last_used_row_col, cell_to_float
 from parser_constants import QUANTITY_PATTERN
 from file_utils import get_output_dir
 from sku_mapping import SKUMapping
+from pricing_wb import PricingWB
 from datetime import datetime
 from forex import Forex
 import openpyxl
@@ -35,6 +36,7 @@ class OrderData():
         self.proxy_keys = proxy_keys
         self.pattern = QUANTITY_PATTERN[sales_channel]
         self.fx = Forex()
+        self.pricing = PricingWB(proxy_keys)
         self.orders = self.__init_default(orders)
         
         self.weight_data = self._parse_weights_wb()
@@ -274,7 +276,6 @@ class OrderData():
     def _add_shipping_service(self, order:dict) -> dict:
         '''picks cheapest shipping service based on order category, weight, vmdoption, sales_channel, country...'''
         service_offers = self.__collect_shipping_service_offers(order)
-        logging.debug(f'--------- Unfinished implementation ---------')
         order['shipping_service'] = self._pick_cheapest_service(service_offers)
         return order
     
@@ -285,14 +286,19 @@ class OrderData():
         service_offers['lp'] = self.__get_service_offer(order, 'LP')
         service_offers['dp'] = self.__get_service_offer(order, 'DP')
         service_offers['etonas'] = self.__get_service_offer(order, 'ETONAS')
-        service_offers['dpd'] = self.__get_service_offer(order, 'DPD')
-        service_offers['ups'] = self.__get_service_offer(order, 'UPS')
+        if order['tracked']:
+            service_offers['dpd'] = self.__get_service_offer(order, 'DPD')
+            service_offers['ups'] = self.__get_service_offer(order, 'UPS')
         return service_offers
 
-    def __get_service_offer(self, order:dict):
+    def __get_service_offer(self, order:dict, service:str):
         '''returns shipping service offer from pricing sheets'''
-        logging.debug(f'--------- Unfinished implementation ---------')
-        return ''
+        try:
+            return self.pricing.get_pricing_offer(order, service)
+        except Exception as e:
+            order_id = order[self.proxy_keys['order-id']]
+            logging.warning(f'Failed to retrieve pricing for order id: {order_id} service: {service}. Returning None. Err: {e}')
+            return None
 
     def _pick_cheapest_service(self, service_offers:dict) -> str:
         '''returns cheapest service from service_offers dict. Evaluate only float/int values of passed dict'''
@@ -300,7 +306,7 @@ class OrderData():
         try:
             return min(eligible_offers, key=lambda key: eligible_offers[key])
         except ValueError as e:
-            logging.debug(f'Unable to deterine cheapest service for order __; services dict: {service_offers}. Err: {e}. Returning empty str')
+            logging.debug(f'Unable to determine cheapest service. Services dict: {service_offers}. Returning empty str. Err: {e}. ')
             return ''
 
 
