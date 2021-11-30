@@ -275,11 +275,11 @@ class OrderData():
 
     def _add_shipping_service(self, order:dict) -> dict:
         '''picks cheapest shipping service based on order category, weight, vmdoption, sales_channel, country...'''
-        service_offers = self.__collect_shipping_service_offers(order)
+        service_offers = self.__collect_eligible_shipping_service_offers(order)
         order['shipping_service'] = self._pick_cheapest_service(service_offers)
         return order
     
-    def __collect_shipping_service_offers(self, order:dict) -> dict:
+    def __collect_eligible_shipping_service_offers(self, order:dict) -> dict:
         '''returns shipping services offers dict from pricing sheets'''
         service_offers = {}
         service_offers['nl'] = self.__get_service_offer(order, 'NL')
@@ -289,7 +289,8 @@ class OrderData():
         if order['tracked']:
             service_offers['dpd'] = self.__get_service_offer(order, 'DPD')
             service_offers['ups'] = self.__get_service_offer(order, 'UPS')
-        return service_offers
+        eligible_offers = self.__filter_eligible_offers(order, service_offers)
+        return eligible_offers
 
     def __get_service_offer(self, order:dict, service:str):
         '''returns shipping service offer from pricing sheets'''
@@ -299,6 +300,15 @@ class OrderData():
             order_id = order[self.proxy_keys['order-id']]
             logging.warning(f'Failed to retrieve pricing for order id: {order_id} service: {service}. Returning None. Err: {e}')
             return None
+    
+    def __filter_eligible_offers(self, order:dict, service_offers:dict) -> dict:
+        '''selectively remove services not compatible with order contents / shipping rules'''
+        if order['category'] == 'BATTERIES':
+            # only allow lp / nlpost to be selected from
+            service_offers['dp'] = service_offers['etonas'] = service_offers['dpd'] = service_offers['ups'] = None
+        if order[self.proxy_keys['ship-country']] == 'UK':
+            service_offers['etonas'] = None
+        return service_offers
 
     def _pick_cheapest_service(self, service_offers:dict) -> str:
         '''returns cheapest service from service_offers dict. Evaluate only float/int values of passed dict'''
