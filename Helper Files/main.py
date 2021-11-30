@@ -7,13 +7,15 @@ from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
 from datetime import datetime
 import logging
+import time
 import sys
 import csv
 import os
 
+
 # GLOBAL VARIABLES
 TESTING = False
-SALES_CHANNEL = 'AmazonEU'
+SALES_CHANNEL = 'Etsy'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -22,8 +24,8 @@ VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-11-incomplete.csv'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.11.23.txt'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-11-incomplete.csv'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.11.23.txt'
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.11.11 37551826943018942 EU.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
@@ -88,6 +90,7 @@ def parse_args(testing=False):
 
 def main():
     '''Main function executing parsing of provided txt/csv file and outputing csv, xlsx files'''
+    start_time = time.perf_counter()
     logging.info(f'\n\n NEW RUN STARTING: {datetime.today().strftime("%Y.%m.%d %H:%M")}')    
     source_fpath, sales_channel, skip_etonas = parse_args(testing=TESTING)
     
@@ -110,7 +113,8 @@ def main():
     # Parse orders, export target files
     ParseOrders(weighted_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
     print(VBA_OK)
-    logging.info(f'\nRUN ENDED: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
+    runtime = time.perf_counter() - start_time
+    logging.info(f'\nRUN ENDED in: {runtime:.2f} sec. Timestamp: {datetime.today().strftime("%Y.%m.%d %H:%M")}\n')
 
 
 if __name__ == "__main__":
