@@ -10,7 +10,7 @@ import os
 
 # GLOBAL VARIABLES
 ECB_XML_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
-SUPPORTED_CURRENCIES = ['USD', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD', 'SEK', 'PLN', 'MXN']
+SUPPORTED_CURRENCIES = ['USD', 'GBP', 'CAD', 'CDN', 'AUD', 'HKD', 'SGD', 'SEK', 'PLN', 'MXN']
 RATES_JSON = 'fx.json'
 VBA_NO_FX_RATES = 'NO FOREX DATA IN PYTHON SIDE'
 VBA_FOREX_ALERT = 'FOREX FAILURE'
@@ -140,7 +140,8 @@ class Forex():
     def convert_to_eur(self, amount:float, currency:str):
         '''converts amount of currency to EUR, works w/ currencies in SUPPORTED_CURRENCIES'''
         if currency.upper() in SUPPORTED_CURRENCIES:
-            return round(amount / self.rates[currency], 2)
+            currency_adj = 'CAD' if currency == 'CDN' else currency
+            return round(amount / self.rates[currency_adj], 2)
         elif currency.upper() == 'EUR':
             return amount
         else:
