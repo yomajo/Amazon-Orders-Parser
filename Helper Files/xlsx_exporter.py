@@ -228,11 +228,7 @@ class NLPostExporter(XlsxExporter):
     def __get_nlpost_service_name(self, order:dict) -> str:
         '''returns value for NLPost column 'Service name' based on order details'''
         if order['tracked']:
-            if order['vmdoption'] == 'DKS':
-                return 'PS4'
-            else:
-                logging.warning(f'Order with key "vmdoption" and value {order["vmdoption"]} triggered VBA warning for NLPost service name')
-                return 'No data'
+            return 'PS4'
         else:
             # PEC0 for all Untracked orders
             return 'PEC0'
