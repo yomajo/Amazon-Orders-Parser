@@ -1,7 +1,7 @@
 import sqlalchemy.sql.default_comparator    #neccessary for executable packing
 from parser_constants import EXPECTED_SALES_CHANNELS, AMAZON_KEYS, ETSY_KEYS
 from parser_utils import clean_phone_number, get_country_code, split_sku
-from file_utils import get_output_dir, is_windows_machine
+from file_utils import get_output_dir, is_windows_machine, dump_to_json
 from weights import OrderData
 from database import SQLAlchemyOrdersDB
 from parse_orders import ParseOrders
@@ -15,7 +15,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = False
-SALES_CHANNEL = 'Etsy'
+SALES_CHANNEL = 'AmazonCOM'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -24,9 +24,9 @@ VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-11-incomplete.csv'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.11.23.txt'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.11.11 37551826943018942 EU.txt'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-11-incomplete.csv'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\EU 2021.12.01.txt'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\Collected exports\COM 2021.12.01.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
@@ -73,6 +73,7 @@ def parse_args(testing=False):
     '''returns arguments passed from VBA or hardcoded test environment'''
     if testing:
         print('--- RUNNING IN TESTING MODE. Using hardcoded args---')
+        logging.warning('--- RUNNING IN TESTING MODE. Using hardcoded args---')
         return ORDERS_SOURCE_FILE, SALES_CHANNEL, SKIP_ETONAS_FLAG
 
     try:
@@ -108,7 +109,12 @@ def main():
     logging.info(f'Passing new orders to add category, brand, (/mapped) weight data')
     orders_data_client = OrderData(new_orders, sales_channel, proxy_keys)
     weighted_orders = orders_data_client.add_orders_data()
-    orders_data_client.export_unmapped_skus()
+    
+    if TESTING:
+        logging.warning(f'TESTING MODE. Unmapped sku export disabled. orders exported to json')
+        dump_to_json(weighted_orders, 'debugging_orders.json')
+    else:
+        orders_data_client.export_unmapped_skus()
 
     # Parse orders, export target files
     ParseOrders(weighted_orders, db_client, proxy_keys, sales_channel).export_orders(testing=TESTING, skip_etonas=skip_etonas)
