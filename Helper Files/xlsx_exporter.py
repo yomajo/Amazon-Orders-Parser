@@ -227,6 +227,9 @@ class NLPostExporter(XlsxExporter):
 
     def __get_nlpost_service_name(self, order:dict) -> str:
         '''returns value for NLPost column 'Service name' based on order details'''
+        if order['vmdoption'] == '':
+            return 'No Data'
+
         if order['tracked']:
             return 'PS4'
         else:
