@@ -1,6 +1,6 @@
-from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords, get_sales_channel_category_brand
+from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords
 from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
-from parser_utils import get_dpost_product_header_val, get_lp_registered_priority_value, uk_order_contains_lp_keywords
+from parser_utils import get_dpost_product_header_val, get_lp_priority, get_lp_registered, uk_order_contains_lp_keywords
 from parser_utils import get_order_ship_price, get_order_country, validate_LP_siuntos_rusis_header
 from file_utils import get_output_dir, delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
@@ -143,8 +143,10 @@ class ParseOrders():
             # LP specific headers
             elif header == 'Siuntos rūšis':
                 export[header] = validate_LP_siuntos_rusis_header(order['vmdoption'], order['tracked'])
-            elif header == 'Registruota' or header == 'Pirmenybinė/nepirmenybinė':
-                export[header] = get_lp_registered_priority_value(order)
+            elif header == 'Registruota':
+                export[header] = get_lp_registered(order)
+            elif header == 'Pirmenybinė/nepirmenybinė':
+                export[header] = get_lp_priority(order)
             elif header == 'Delivery Method':
                 service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
                 optional_str = ' EXPEDITED' if order.get(service_level_proxy_key, '') == 'Expedited' else ''
