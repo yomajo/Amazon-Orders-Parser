@@ -1,0 +1,159 @@
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.01 10:27
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Database has been created at c:\Coding\Amazon Orders Parser\Helper Files\orders.db
+INFO:root:Returning 467/467 new/loaded orders for further processing
+INFO:root:Loaded file contains: 467. Further processing: 467 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
+INFO:root:Current sku mapping dict has 1421 entries
+WARNING:root:order: 09240625003595 cant calc weights. skus: ['(10 vnt.) LR626 10BL AG4 CAMELION ALK']
+WARNING:root:order: 52677291278515 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 15643406426195 cant calc weights. skus: ['0W-NI10-UZ3M']
+WARNING:root:order: 34437384937939 cant calc weights. skus: ['7426939246464']
+WARNING:root:order: 22054635516331 cant calc weights. skus: ['(4 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 55614320130867 cant calc weights. skus: ['0W-NI10-UZ3M']
+WARNING:root:order: 66289406725283 cant calc weights. skus: ['(5 vnt.) 377 BAT. MAXELL (SR626SW)']
+WARNING:root:order: 56163409821771 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 21425377764451 cant calc weights. skus: ['G8-HW5L-YOO5']
+WARNING:root:order: 59330603361859 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 66866736168539 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 51076871213059 cant calc weights. skus: ['(2 vnt.) FR03 2BL CAMELION LITHIUM']
+WARNING:root:order: 44173069680027 cant calc weights. skus: ['(10 vnt.) LR44/G13 2BL LR44 / A76 BAT']
+WARNING:root:order: 24266058789971 cant calc weights. skus: ['(10 vnt.) CR2025 5BL 3V VINNIC']
+WARNING:root:order: 50069612476411 cant calc weights. skus: ['2J-ROBC-JI6W']
+WARNING:root:order: 02340164418811 cant calc weights. skus: ['OZ-LFJK-MPUF']
+WARNING:root:order: 60437112622291 cant calc weights. skus: ['(1 vnt.) 10025395']
+WARNING:root:order: 15118413889123 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 42350319710235 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 28554789935211 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 05223649119323 cant calc weights. skus: ['(10 vnt.) 395 BAT. MAXELL (SR927SW, 399)']
+WARNING:root:order: 00106911039811 cant calc weights. skus: ['OZ-LFJK-MPUF']
+WARNING:root:order: 16370996952363 cant calc weights. skus: ['(2 vnt.) R20/D 2BL CAMELION SUPER HEAVY']
+WARNING:root:order: 29443885448859 cant calc weights. skus: ['E3-ASKZ-BOOU']
+WARNING:root:order: 04390931872739 cant calc weights. skus: ['(10 vnt.) LR1120 10BL AG8 CAMELION ALK']
+WARNING:root:order: 07790340282827 cant calc weights. skus: ['(1 vnt.) 10025395']
+WARNING:root:order: 09023177739179 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 22859461896435 cant calc weights. skus: ['OZ-LFJK-MPUF']
+WARNING:root:order: 36954637710443 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 28090833350523 cant calc weights. skus: ['(10 vnt.) LR1142 10BL L1142F VINNIC AG12']
+WARNING:root:order: 01754611381707 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 11556763009587 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 37159453701539 cant calc weights. skus: ['NP-CQIH-9M5C']
+WARNING:root:order: 55757992162899 cant calc weights. skus: ['(5 vnt.) 377 BAT. MAXELL (SR626SW)']
+WARNING:root:order: 44971380282851 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 54232583252171 cant calc weights. skus: ['(1 vnt.) 10025395']
+WARNING:root:order: 37211015334043 cant calc weights. skus: ['(1 vnt.) 10025395']
+WARNING:root:order: 13492654586571 cant calc weights. skus: ['(1 vnt.) LR23A 1BL CAMELION ALK PLUS 23A']
+WARNING:root:order: 47083241768235 cant calc weights. skus: ['(1 vnt.) 10025395']
+INFO:root:8.35% orders contain SKU's that are invalid for weight calculation
+INFO:root:39 skus without complete weight data or amazon mapping were written to txt file: c:\Coding\Amazon Orders Parser\Not matching SKUs 2021.12.01 10.27.txt
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv created. Orders inside: 37
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv created. Orders inside: 11
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-Etonas 2021.12.01 10.27.xlsx created. Orders inside: 1
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key Receiver street and value The Retail Data Partnership Ltd, Unit 2a Wakely Works Meadowpark Ridge Industrial Estate, Bourne Road  triggered VBA warning for charlimit set by NLPost
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-NLPost 2021.12.01 10.27.xlsx created. Orders inside: 224
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-DPDUPS 2021.12.01 10.27.xlsx created. Orders inside: 2
+INFO:root:
+RUN ENDED in: 4.11 sec. Timestamp: 2021.12.01 10:27
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.01 10:59
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 68/68 new/loaded orders for further processing
+INFO:root:Loaded file contains: 68. Further processing: 68 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
+INFO:root:Current sku mapping dict has 1421 entries
+WARNING:root:order: 19325078538938 cant calc weights. skus: ['MW-4OLT-W43K']
+WARNING:root:order: 69408295842282 cant calc weights. skus: ['(20 vnt.) LR1131 10BL L1131F VINNIC AG10']
+WARNING:root:order: 14253361057138 cant calc weights. skus: ['VX-7QVT-2VE5']
+WARNING:root:order: 41510412634450 cant calc weights. skus: ['VX-7QVT-2VE5']
+INFO:root:5.88% orders contain SKU's that are invalid for weight calculation
+INFO:root:4 skus without complete weight data or amazon mapping were written to txt file: c:\Coding\Amazon Orders Parser\Not matching SKUs 2021.12.01 10.59.txt
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\AmazonCOM-DPost 2021.12.01 10.59.csv created. Orders inside: 4
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv created. Orders inside: 19
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value VKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+WARNING:root:Order with key "vmdoption" and value MKS triggered VBA warning for NLPost service name
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-NLPost 2021.12.01 10.59.xlsx created. Orders inside: 38
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-DPDUPS 2021.12.01 10.59.xlsx created. Orders inside: 7
+INFO:root:
+RUN ENDED in: 2.80 sec. Timestamp: 2021.12.01 10:59
+
