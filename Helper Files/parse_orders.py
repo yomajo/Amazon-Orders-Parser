@@ -279,10 +279,9 @@ class ParseOrders():
 
     def sort_etsy_order_by_shipment_company(self, order:dict):
         '''sorts individual order from Etsy by shipment company'''
-        shipping_price = get_order_ship_price(order, self.proxy_keys)
-        if shipping_price >= 21:
+        if order['shipping-eur'] >= 21:
             self.dpdups_orders.append(order)
-        elif shipping_price > 0 or order['tracked']:
+        elif order['shipping-eur'] > 0 or order['tracked']:
             self.lp_tracked_orders.append(order)
         else:
             self.lp_orders.append(order)
@@ -322,7 +321,7 @@ class ParseOrders():
             self.export_csv(self.dpost_filename, EXPORT_CONSTANTS['dp']['headers'], dpost_content)
 
     def export_dpdups(self):
-        '''export csv file for UPS shipping service'''
+        '''export csv file for DPD/UPS shipping services'''
         if self.dpdups_orders:
             DPDUPSExporter(self.dpdups_orders, self.dpdups_filename, self.sales_channel, self.proxy_keys).export()
             logging.info(f'XLSX {self.dpdups_filename} created. Orders inside: {len(self.dpdups_orders)}')
@@ -361,7 +360,7 @@ class ParseOrders():
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         # self.export_same_buyer_details()
-        # self.export_dpost()
+        self.export_dpost()
         self.export_lp()
         self.export_lp_tracked()
         self.export_etonas()
