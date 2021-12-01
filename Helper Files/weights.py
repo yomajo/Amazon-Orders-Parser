@@ -29,7 +29,11 @@ class OrderData():
     Arguments:
     orders: list of order dicts
     sales_channel: str
-    proxy_keys: dict'''
+    proxy_keys: dict
+    
+    list of added keys by class init and add_orders_data:
+    ['total-eur', 'shipping-eur', 'tracked', 'skip_service_selection', 'shipping_service',
+    'category', 'brand', 'vmdoption', 'weight']'''
 
     def __init__(self, orders:list, sales_channel:str, proxy_keys:dict):
         self.sales_channel = sales_channel
@@ -51,8 +55,13 @@ class OrderData():
         for order in orders:
             order['tracked'], order['skip_service_selection'] = False, False
             order['shipping_service'] = ''
+
+            currency = order[self.proxy_keys['currency']]
             order_value = get_total_price(order, self.sales_channel, return_as_float=True)
-            order['total-eur'] = self.fx.convert_to_eur(order_value, order[self.proxy_keys['currency']])
+            shipping_price = get_order_ship_price(order, self.proxy_keys)
+
+            order['total-eur'] = self.fx.convert_to_eur(order_value, currency)
+            order['shipping-eur'] = self.fx.convert_to_eur(shipping_price, currency)
         return orders
 
     def _parse_weights_wb(self) -> dict:
@@ -95,10 +104,7 @@ class OrderData():
         -brand (string)
         -category (string)
         
-        new keys w/ shipping pricing update 2021.11
-        -tracked (bool)
-        -shipping_service
-        -skip_service_selection'''
+        for complete list of keys added to each order refer to class docstring'''
         
         for order in self.orders:
             qty_purchased = self.__get_order_quantity(order)
@@ -129,11 +135,10 @@ class OrderData():
 
     def __is_etsy_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for etsy marketplace'''
-        shipping_price = get_order_ship_price(order, self.proxy_keys)
-        if shipping_price >= 21:            
+        if order['shipping-eur'] >= 21:            
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
-        elif shipping_price > 0 or order['total-eur'] > 70:
+        elif order['shipping-eur'] > 0 or order['total-eur'] > 70:
             order['tracked'] = True
         else:
             pass
@@ -141,11 +146,10 @@ class OrderData():
 
     def __is_amazon_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
-        shipping_price = get_order_ship_price(order, self.proxy_keys)
         country = order[self.proxy_keys['ship-country']]
 
         # conditions for specific services:
-        if shipping_price >= 20:
+        if order['shipping-eur'] >= 20:
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
         elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU':
