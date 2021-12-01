@@ -143,14 +143,22 @@ def replace_phone_zero(phone_number:str) -> str:
     '''returns phone number with 00 insted of +. Example: +1-213-442 returns 001-213-442'''
     return phone_number.replace('+', '00')
 
-def get_lp_registered_priority_value(order:dict) -> str:
-    '''based on ship country and sales channel returns 1 or 0 as string to fill in
-    Lietuvos Pastas 'Registruota' / 'Pirmenybinė/nepirmenybinė' header values'''
+def get_lp_registered(order:dict) -> str:
+    '''returns 1 or 0 as string to fill in Lietuvos Pastas 'Registruota' header value'''
     try:
         return '1' if order['tracked'] else ''
     except Exception as e:
         logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
         return ''
+
+def get_lp_priority(order:dict) -> str:
+    '''returns 1 or 0 as string to fill in Lietuvos Pastas 'Pirmenybinė/nepirmenybinė' header value'''
+    try:
+        return '1' if order['vmdoption'] != '' and order['vmdoption'] != 'VKS' else ''
+    except Exception as e:
+        logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
+        return ''
+
 
 def get_order_ship_price(order:dict, proxy_keys:dict) -> float:
     '''returns order shipping price as float'''
