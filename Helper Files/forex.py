@@ -47,6 +47,7 @@ class Forex():
         rates = self.__get_new_rates_obj()
         # handling case if older file exists, but new fails to download and __get_new_rates_obj returns {}
         if rates:
+            logging.info(f'FX rates have been updated. Last update date: {rates["last_updated"]}')
             return dump_to_json(rates, RATES_JSON)
         else:
             return self.json_path
@@ -139,10 +140,11 @@ class Forex():
     
     def convert_to_eur(self, amount:float, currency:str):
         '''converts amount of currency to EUR, works w/ currencies in SUPPORTED_CURRENCIES'''
-        if currency.upper() in SUPPORTED_CURRENCIES:
+        currency = currency.upper()
+        if currency in SUPPORTED_CURRENCIES:
             currency_adj = 'CAD' if currency == 'CDN' else currency
             return round(amount / self.rates[currency_adj], 2)
-        elif currency.upper() == 'EUR':
+        elif currency == 'EUR':
             return amount
         else:
             logging.warning(f'Attempted currency conversion w/ unsupported currency: {currency}. Alerting VBA, returning original amount')
