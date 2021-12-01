@@ -103,7 +103,7 @@ class OrderData():
         -vmdoption (string)
         -brand (string)
         -category (string)
-        
+
         for complete list of keys added to each order refer to class docstring'''
         
         for order in self.orders:
@@ -152,7 +152,7 @@ class OrderData():
         if order['shipping-eur'] >= 20:
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
-        elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU':
+        elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU' and order['vmdoption'] != 'MKS':
             order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         # conditions to mark as tracked:
