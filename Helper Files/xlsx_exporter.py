@@ -18,6 +18,7 @@ HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEAD
                 'nlpost': {'headers' : NLPOST_HEADERS, 'mapping': NLPOST_HEADERS_MAPPING, 'fixed': NLPOST_FIXED_VALUES}}
 PACKAGE_DIMENSIONS = {'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
                     'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
+FILL_HIGHLIGHT = openpyxl.styles.PatternFill(fill_type='solid', fgColor='F8CBAD')
 
 
 class XlsxExporter():
@@ -173,6 +174,8 @@ class NLPostExporter(XlsxExporter):
     def prepare_nlpost_order_contents(self, order:dict) -> dict:
         '''returns ready-to-write order data dict based on NLPost file headers'''
         export = {}
+        # add 'highglight' key
+        export['highlight'] = self.__highlight_order_row(order['weight'], order['vmdoption'])
         for header in NLPOST_HEADERS:
             if header in NLPOST_FIXED_VALUES.keys():
                 export[header] = NLPOST_FIXED_VALUES[header]
@@ -213,6 +216,19 @@ class NLPostExporter(XlsxExporter):
                 export[header] = ''
         return export
 
+    def __highlight_order_row(self, weight, vmdoption:str) -> bool:
+        '''returns True if order row should be highlighted when writing to xlsx'''
+        if weight != '' and vmdoption in ['VKS', 'MKS', 'DKS']:
+            if vmdoption == 'VKS' and weight > 50:
+                return True
+            elif vmdoption == 'MKS' and weight > 500:
+                return True
+            elif  weight > 2000:
+                return True
+            else:
+                return False
+        return False
+
     def __get_package_dimension(self, vmdoption:str, header:str) -> str:
         '''returns package dimension in cm, formatted for NLPost'''
         if vmdoption not in ['VKS', 'MKS', 'DKS']:
@@ -239,6 +255,17 @@ class NLPostExporter(XlsxExporter):
     def __make_batteries_alkaline(self, contents:str) -> str:
         '''replaces batteries with alkaline batteries string if applicable'''
         return contents.replace('BATTERIES', 'ALKALINE BATTERIES')
+    
+    def _write_orders(self, ws:object, headers:list, orders:list):
+        for row, col in self.range_generator(orders, headers):
+            working_dict = orders[row]
+            key_pointer = headers[col]
+            # offsets due to excel vs python numbering  + headers in row 1 + self.row_offset (first empty row for nlpost)
+            ws.cell(row + 2 + self.row_offset, col + 1).value = working_dict[key_pointer]
+            # highlight based on highlight key in refactored order dict
+            if working_dict['highlight']:
+                for c in range(1, len(headers) + 1):
+                    ws.cell(row + 2 + self.row_offset, c).fill = FILL_HIGHLIGHT
 
 
 
