@@ -1,7 +1,7 @@
 from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords
 from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
 from parser_utils import get_dpost_product_header_val, get_lp_priority, get_lp_registered, uk_order_contains_lp_keywords
-from parser_utils import get_order_ship_price, get_order_country, validate_LP_siuntos_rusis_header
+from parser_utils import get_order_country, validate_LP_siuntos_rusis_header
 from file_utils import get_output_dir, delete_file
 from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
 from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
@@ -267,14 +267,14 @@ class ParseOrders():
                 else:                    
                     self.etonas_orders.append(order)
         
-        elif get_order_ship_price(order, self.proxy_keys) >= 10:
+        elif order['shipping-eur'] >= 10:
             self.dpdups_orders.append(order)
         else:
             self.dpost_orders.append(order)
 
     def sort_COM_order_by_shipment_company(self, order:dict):
         '''sorts individual order from AMAZON COM by shipment company'''
-        if order[self.proxy_keys['ship-service-level']] == 'Expedited' or get_order_ship_price(order, self.proxy_keys) >= 10:
+        if order[self.proxy_keys['ship-service-level']] == 'Expedited' or order['shipping-eur'] >= 10:
             self.dpdups_orders.append(order)
         else:
             self.lp_tracked_orders.append(order)
