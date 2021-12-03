@@ -308,7 +308,8 @@ class EtonasExporter(XlsxExporter):
             elif header == 'Last_name':
                 export[header] = last_name
             elif header == 'GLS':
-                export[header] = '1' if order[self.proxy_keys['ship-country']] in ['UK', 'DE'] else '0'
+                # fixed value, group if more fixed values were to emerge in future
+                export[header] = '0'
             elif header == 'Tracking (0 - neregistruota, 1 - registruota)':
                 export[header] = int(order['tracked'])
             elif header == 'HS':

@@ -175,6 +175,7 @@ NLPOST_FIXED_VALUES = {
     'Sender email' : 'klausimai@shop4top.lt',
     'Type' : 'Package',
     'Parcels amount' : '1',
+    'Units' : '1',
     'Export reason' : 'Gift',
 }
 
@@ -187,7 +188,6 @@ NLPOST_HEADERS_MAPPING = {
     'Receiver state' : 'ship-state',
     'Receiver phone' : 'buyer-phone-number',
     'Receiver email' : 'buyer-email',
-    'Units' : 'quantity-purchased',
     'Description' : 'category',
     'Unit price' : 'item-price',
     'Order reference' : 'order-id',
