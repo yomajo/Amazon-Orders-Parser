@@ -1,34 +1,3 @@
-# Includes strange code for Greece (EL)
-EU_COUNTRY_CODES = [
-    'BE',
-    'BG',
-    'CZ',
-    'DK',
-    'DE',
-    'EE',
-    'IE',
-    'EL',
-    'GR',
-    'ES',
-    'FR',
-    'HR',
-    'IT',
-    'CY',
-    'LV',
-    'LT',
-    'LU',
-    'HU',
-    'MT',
-    'NL',
-    'AT',
-    'PL',
-    'PT',
-    'RO',
-    'SI',
-    'SK',
-    'FI',
-    'SE'
-]
 
 ORIGIN_COUNTRY_CRITERIAS = [
     ['copag', '', 'BR'],
@@ -189,7 +158,6 @@ NLPOST_HEADERS_MAPPING = {
     'Receiver phone' : 'buyer-phone-number',
     'Receiver email' : 'buyer-email',
     'Description' : 'category',
-    'Unit price' : 'item-price',
     'Order reference' : 'order-id',
     'Export country code' : 'ship-country',
     'COD Currency' : 'currency',
@@ -390,26 +358,11 @@ EXPORT_CONSTANTS = {
                 'lp' : {'headers' : LP_HEADERS, 'mapping' : LP_HEADERS_MAPPING, 'fixed' : LP_FIXED_VALUES}
                 }
 
-LP_COUNTRIES = [
-    'IE',
-    'SE',
-    'LT',
-    'FI',
-    'EE',
-    'LV',
-    'NO',
-    'CH',
-    'IS',
-    'PL'
-]
-
 DP_KEYWORDS = ['BICYCLE', 'THEORY11,', 'ELLUSIONIST']
 
 EXPECTED_SALES_CHANNELS = ['AmazonCOM', 'AmazonEU', 'Etsy']
 
 LP_UK_BRANDS = ['MYSTICAL LENORMAND', 'MLLE', 'KIPPER MYSTIQUE', 'MYSTICAL KIPPER']
-
-TRACKED_COUNTRIES = ['ES', 'FR', 'IT']
 
 AMAZON_KEYS = {
     'order-id' : 'order-item-id',

@@ -1,9 +1,10 @@
-from parser_utils import get_total_price, order_contains_batteries, order_contains_cards_keywords
+from parser_utils import order_contains_batteries, order_contains_cards_keywords, get_dpost_product_header_val
 from parser_utils import uk_order_contains_dp_keywords, get_origin_country, shorten_word_sequence
-from parser_utils import get_dpost_product_header_val, get_lp_priority, get_lp_registered, uk_order_contains_lp_keywords
+from parser_utils import get_lp_priority, get_lp_registered, uk_order_contains_lp_keywords
 from parser_utils import get_order_country, validate_LP_siuntos_rusis_header
 from file_utils import get_output_dir, delete_file
-from parser_constants import EXPORT_CONSTANTS, EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
+from countries import EU_COUNTRY_CODES, LP_COUNTRIES, TRACKED_COUNTRIES
+from parser_constants import EXPORT_CONSTANTS
 from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
 from datetime import datetime
 import logging
@@ -151,14 +152,12 @@ class ParseOrders():
                 service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
                 optional_str = ' EXPEDITED' if order.get(service_level_proxy_key, '') == 'Expedited' else ''
                 export[header] = order.get(service_level_proxy_key, '') + optional_str
-            elif header == 'Vertė, eur':
-                export[header] = order['total-eur']
 
             # Common headers
             elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
                 export[header] = order['category']
             elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
-                export[header] = get_total_price(order, self.sales_channel)
+                export[header] = order['total-engineered']
             else:
                 export[header] = ''
         return export
@@ -362,12 +361,12 @@ class ParseOrders():
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         # self.export_same_buyer_details()
-        self.export_dpost()
-        self.export_lp()
-        self.export_lp_tracked()
-        self.export_etonas()
-        self.export_nlpost()
-        self.export_dpdups()
+        # self.export_dpost()
+        # self.export_lp()
+        # self.export_lp_tracked()
+        # self.export_etonas()
+        # self.export_nlpost()
+        # self.export_dpdups()
         # self.push_orders_to_db()
         self.db_client.session.close()
         print(f'Finished executing ParseOrders.test_exports(testing={testing}) ')

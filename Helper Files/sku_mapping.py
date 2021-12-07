@@ -1,7 +1,6 @@
-from excel_utils import get_last_used_row_col
 from parser_utils import alert_VBA_duplicate_mapping_sku
+from excel_utils import get_last_used_row_col
 import openpyxl
-import os
 import logging
 
 

@@ -1,7 +1,7 @@
-from parser_utils import get_origin_country, get_total_price, get_sales_channel_hs_code
 from parser_constants import NLPOST_HEADERS, NLPOST_HEADERS_MAPPING, NLPOST_FIXED_VALUES
 from parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
 from parser_constants import DPDUPS_HEADERS, DPDUPS_HEADERS_MAPPING
+from parser_utils import get_origin_country, get_sales_channel_hs_code
 import logging
 import openpyxl
 import sys
@@ -212,6 +212,8 @@ class NLPostExporter(XlsxExporter):
             elif header == 'HS code':
                 product_name_proxy_key = self.proxy_keys.get('title', '')
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
+            elif header == 'Unit price':
+                export[header] = order['total-engineered']
             else:
                 export[header] = ''
         return export
@@ -323,7 +325,7 @@ class EtonasExporter(XlsxExporter):
                 target_key = self.proxy_keys['currency']
                 export[header] = order[target_key].lower()
             elif header == 'Price per quantity':
-                export[header] = get_total_price(order, self.sales_channel)
+                export[header] = order['total-engineered']
             elif header == 'Weight(Kg)':
                 export[header] = self._get_weight_in_kg(order)
             else:

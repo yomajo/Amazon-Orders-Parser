@@ -1,8 +1,8 @@
-from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
-from parser_constants import DP_KEYWORDS, TRACKED_COUNTRIES, LP_UK_BRANDS
-from countries import COUNTRY_CODES
+from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, DP_KEYWORDS, LP_UK_BRANDS
+from countries import COUNTRY_CODES, GIFT_COUNTRIES
 from string import ascii_letters
 import logging
+import random
 import sys
 import re
 
@@ -263,6 +263,23 @@ def validate_LP_siuntos_rusis_header(vmdoption:str, tracked:bool):
     else:
         return vmdoption
 
+def engineer_total(country_code:str, order_total:float, order_id:str) -> float:
+    '''based on order_total and country_code, returns financially engineered total for export files'''
+    try:
+        if country_code in ['BR', 'BY'] and order_total > 10:
+            engineered_total = round(random.uniform(6, 9.98), 2)
+            logging.warning(f'{order_id} (to: {country_code}) total-engineered key has new random value: {engineered_total}')            
+            return engineered_total
+        elif country_code in GIFT_COUNTRIES and order_total > 20:
+            engineered_total = round(random.uniform(15, 19.98), 2)
+            logging.warning(f'{order_id} (to: {country_code}) total-engineered key has new random value: {engineered_total}')
+            return engineered_total
+        else:
+            return order_total
+    except Exception as e:
+        logging.error(f'engineer_total function error on order_id: {order_id}. Args: country: {country_code}, order_total: {order_total}. \
+            Returning original order_total. Err: {e}')
+        return order_total
 
 if __name__ == "__main__":
     pass

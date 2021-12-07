@@ -1,28 +1,31 @@
 INFO:root:
 
- NEW RUN STARTING: 2021.12.02 12:35
+ NEW RUN STARTING: 2021.12.07 16:22
 WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
 INFO:root:Returning 63/63 new/loaded orders for further processing
 INFO:root:Loaded file contains: 63. Further processing: 63 orders
 INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-06
+WARNING:root:29055150350538 (to: CA) total-engineered key has new random value: 17.09
+WARNING:root:36436660919290 (to: CA) total-engineered key has new random value: 18.66
+WARNING:root:16493692204538 (to: CA) total-engineered key has new random value: 17.62
+WARNING:root:08920304403882 (to: CA) total-engineered key has new random value: 18.74
+WARNING:root:26984848405114 (to: CA) total-engineered key has new random value: 17.36
+WARNING:root:17546547566434 (to: CA) total-engineered key has new random value: 18.35
 WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
 WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
-INFO:root:Current sku mapping dict has 1421 entries
-WARNING:root:order: 19325078538938 cant calc weights. skus: ['MW-4OLT-W43K']
+INFO:root:Current sku mapping dict has 1423 entries
 WARNING:root:order: 69408295842282 cant calc weights. skus: ['(20 vnt.) LR1131 10BL L1131F VINNIC AG10']
 WARNING:root:order: 14253361057138 cant calc weights. skus: ['VX-7QVT-2VE5']
 WARNING:root:order: 41510412634450 cant calc weights. skus: ['VX-7QVT-2VE5']
 WARNING:root:order: 58990167844378 cant calc weights. skus: ['(10 vnt.) LR721 10BL CAMELION AG11 ALK.']
-INFO:root:7.94% orders contain SKU's that are invalid for weight calculation
+INFO:root:6.35% orders contain SKU's that are invalid for weight calculation
 WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
 WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
 WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
 INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
 INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
-INFO:root:CSV c:\Coding\Amazon Orders Parser\AmazonCOM-DPost 2021.12.02 12.35.csv created. Orders inside: 3
-INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv created. Orders inside: 25
-INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-NLPost 2021.12.02 12.35.xlsx created. Orders inside: 33
-INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-DPDUPS 2021.12.02 12.35.xlsx created. Orders inside: 2
 INFO:root:
-RUN ENDED in: 2.76 sec. Timestamp: 2021.12.02 12:35
+RUN ENDED in: 2.69 sec. Timestamp: 2021.12.07 16:22
 

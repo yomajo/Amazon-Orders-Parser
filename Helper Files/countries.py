@@ -1,3 +1,63 @@
+TRACKED_COUNTRIES = ['ES', 'FR', 'IT']
+
+GIFT_COUNTRIES = [
+    'CL',
+    'CA',
+    'BR',
+    'AR',
+    'BO',
+    'BY',
+    'KZ',
+    'CN',
+    'PE',
+    'BA',
+]
+
+LP_COUNTRIES = [
+    'IE',
+    'SE',
+    'LT',
+    'FI',
+    'EE',
+    'LV',
+    'NO',
+    'CH',
+    'IS',
+    'PL'
+]
+
+# Includes strange code for Greece (EL)
+EU_COUNTRY_CODES = [
+    'BE',
+    'BG',
+    'CZ',
+    'DK',
+    'DE',
+    'EE',
+    'IE',
+    'EL',
+    'GR',
+    'ES',
+    'FR',
+    'HR',
+    'IT',
+    'CY',
+    'LV',
+    'LT',
+    'LU',
+    'HU',
+    'MT',
+    'NL',
+    'AT',
+    'PL',
+    'PT',
+    'RO',
+    'SI',
+    'SK',
+    'FI',
+    'SE'
+]
+
 COUNTRY_CODES = {
     'AFGHANISTAN':'AF',
     'ÄGYPTEN':'EG',
