@@ -1,6 +1,7 @@
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
-from parser_constants import QUANTITY_PATTERN, TRACKED_COUNTRIES
+from parser_constants import QUANTITY_PATTERN
+from countries import TRACKED_COUNTRIES
 from file_utils import get_output_dir
 from sku_mapping import SKUMapping
 from pricing_wb import PricingWB

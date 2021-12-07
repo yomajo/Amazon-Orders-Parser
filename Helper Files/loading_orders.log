@@ -26,3 +26,96 @@ INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-DPDUPS 2021.12.02 12.35.
 INFO:root:
 RUN ENDED in: 2.76 sec. Timestamp: 2021.12.02 12:35
 
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.06 12:14
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 340/340 new/loaded orders for further processing
+INFO:root:Loaded file contains: 340. Further processing: 340 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-03
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
+INFO:root:Current sku mapping dict has 1423 entries
+WARNING:root:order: 36954637710443 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 28090833350523 cant calc weights. skus: ['(10 vnt.) LR1142 10BL L1142F VINNIC AG12']
+WARNING:root:order: 01754611381707 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 11556763009587 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 37159453701539 cant calc weights. skus: ['NP-CQIH-9M5C']
+WARNING:root:order: 55757992162899 cant calc weights. skus: ['(5 vnt.) 377 BAT. MAXELL (SR626SW)']
+WARNING:root:order: 44971380282851 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 13492654586571 cant calc weights. skus: ['(1 vnt.) LR23A 1BL CAMELION ALK PLUS 23A']
+WARNING:root:order: 05307836161467 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 39280284017459 cant calc weights. skus: ['EX50(UK)']
+WARNING:root:order: 21801598214019 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 10899812175115 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 10992305896195 cant calc weights. skus: ['(8 vnt.) LR01/N 2BL E90 LR1 MN9100']
+WARNING:root:order: 06428587732107 cant calc weights. skus: ['(4 vnt.) AAA/R03P 4BL CAMELION SUPER']
+WARNING:root:order: 34035945170723 cant calc weights. skus: ['(8 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 26998861808275 cant calc weights. skus: ['NP-CQIH-9M5C']
+WARNING:root:order: 22667691275211 cant calc weights. skus: ['(1 vnt.) 370 / 371 BAT. 1.5V SR 920 SW']
+WARNING:root:order: 64690890143643 cant calc weights. skus: ['G8-HW5L-YOO5']
+WARNING:root:order: 13788016496995 cant calc weights. skus: ['7426939246464']
+WARNING:root:order: 18954025691859 cant calc weights. skus: ['IL-HKSH-UGXV']
+WARNING:root:order: 54699955762299 cant calc weights. skus: ['(1 vnt.) 3LR12 1BL CAMELION SUPER HEAVY']
+WARNING:root:order: 32798866750971 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 30966098050331 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 68600428114787 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 59605130230531 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+INFO:root:7.35% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\AmazonEU-DPost 2021.12.06 12.14.csv created. Orders inside: 170
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv created. Orders inside: 21
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv created. Orders inside: 8
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-NLPost 2021.12.06 12.14.xlsx created. Orders inside: 140
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-DPDUPS 2021.12.06 12.14.xlsx created. Orders inside: 1
+INFO:root:
+RUN ENDED in: 4.16 sec. Timestamp: 2021.12.06 12:14
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.06 12:27
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 340/340 new/loaded orders for further processing
+INFO:root:Loaded file contains: 340. Further processing: 340 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-03
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
+INFO:root:Current sku mapping dict has 1423 entries
+WARNING:root:order: 36954637710443 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 28090833350523 cant calc weights. skus: ['(10 vnt.) LR1142 10BL L1142F VINNIC AG12']
+WARNING:root:order: 01754611381707 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 11556763009587 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 55757992162899 cant calc weights. skus: ['(5 vnt.) 377 BAT. MAXELL (SR626SW)']
+WARNING:root:order: 44971380282851 cant calc weights. skus: ['4A-HW5K-B9B6']
+WARNING:root:order: 13492654586571 cant calc weights. skus: ['(1 vnt.) LR23A 1BL CAMELION ALK PLUS 23A']
+WARNING:root:order: 05307836161467 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 39280284017459 cant calc weights. skus: ['EX50(UK)']
+WARNING:root:order: 21801598214019 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 10899812175115 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 10992305896195 cant calc weights. skus: ['(8 vnt.) LR01/N 2BL E90 LR1 MN9100']
+WARNING:root:order: 06428587732107 cant calc weights. skus: ['(4 vnt.) AAA/R03P 4BL CAMELION SUPER']
+WARNING:root:order: 34035945170723 cant calc weights. skus: ['(8 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 22667691275211 cant calc weights. skus: ['(1 vnt.) 370 / 371 BAT. 1.5V SR 920 SW']
+WARNING:root:order: 64690890143643 cant calc weights. skus: ['G8-HW5L-YOO5']
+WARNING:root:order: 13788016496995 cant calc weights. skus: ['7426939246464']
+WARNING:root:order: 18954025691859 cant calc weights. skus: ['IL-HKSH-UGXV']
+WARNING:root:order: 54699955762299 cant calc weights. skus: ['(1 vnt.) 3LR12 1BL CAMELION SUPER HEAVY']
+WARNING:root:order: 32798866750971 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 30966098050331 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 68600428114787 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 59605130230531 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+INFO:root:6.76% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.12 sec. Timestamp: 2021.12.06 12:27
+

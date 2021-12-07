@@ -1,5 +1,4 @@
-from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
-from parser_constants import DP_KEYWORDS, TRACKED_COUNTRIES, LP_UK_BRANDS
+from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, DP_KEYWORDS, LP_UK_BRANDS
 from countries import COUNTRY_CODES
 from string import ascii_letters
 import logging
