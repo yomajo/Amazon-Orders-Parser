@@ -158,7 +158,6 @@ NLPOST_HEADERS_MAPPING = {
     'Receiver phone' : 'buyer-phone-number',
     'Receiver email' : 'buyer-email',
     'Description' : 'category',
-    'Unit price' : 'item-price',
     'Order reference' : 'order-id',
     'Export country code' : 'ship-country',
     'COD Currency' : 'currency',

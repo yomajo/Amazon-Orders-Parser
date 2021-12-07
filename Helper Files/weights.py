@@ -1,4 +1,5 @@
-from parser_utils import get_inner_qty_sku, get_product_category_or_brand, get_order_ship_price, get_total_price
+from parser_utils import get_inner_qty_sku, get_product_category_or_brand, engineer_total
+from parser_utils import get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
 from parser_constants import QUANTITY_PATTERN
 from countries import TRACKED_COUNTRIES
@@ -63,6 +64,8 @@ class OrderData():
 
             order['total-eur'] = self.fx.convert_to_eur(order_value, currency)
             order['shipping-eur'] = self.fx.convert_to_eur(shipping_price, currency)
+            # Routing is based on total-eur, but total-engineered is used in export files (usually same as total-eur)
+            order['total-engineered'] = engineer_total(order[self.proxy_keys['ship-country']], order['total-eur'], order[self.proxy_keys['order-id']])
         return orders
 
     def _parse_weights_wb(self) -> dict:
