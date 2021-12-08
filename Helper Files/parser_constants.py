@@ -25,7 +25,8 @@ CATEGORY_CRITERIAS = [
     ['sony', '', 'SONY', 'BATTERIES'],
     ['vinnic', '', 'VINNIC', 'BATTERIES'],
     ['siemens', '', 'SIEMENS', 'BATTERIES'],
-    ['gp', 'batt', 'GP'	'BATTERIES'],
+    ['gp', 'batt', 'GP', 'BATTERIES'],
+    ['gp', 'recyko', 'GP', 'BATTERIES'],
     ['everactive', '', 'EVERACTIVE', 'BATTERIES'],
     ['eneloop', '', 'P ENELOOP', 'BATTERIES'],
     ['panasonic', '', 'PANASONIC', 'BATTERIES'],
@@ -40,20 +41,7 @@ CATEGORY_CRITERIAS = [
     ['camelion', '', 'CAMELION', 'BATTERIES'],
     ['philips', '', 'PHILIPS', 'BATTERIES'],
     ['batt', '', 'ZBATTERY BRAND', 'BATTERIES'],
-    ['copag', '', 'COPAG', 'PLAYING CARDS'],
-    ['ellusionist', '', 'ELLUSIONIST', 'PLAYING CARDS'],
-    ['cartamundi', '', 'CARTAMUNDI', 'PLAYING CARDS'],
-    ['fournier', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['bicycle', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['aviator', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['bee', 'deck', 'BICYCLE', 'PLAYING CARDS'],
-    ['theory', '', 'THEORY11', 'PLAYING CARDS'],
-    ['maverick', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['streamline', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['hoyle', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['tally', '', 'BICYCLE', 'PLAYING CARDS'],
-    ['art of play', '', 'ART OF PLAY', 'PLAYING CARDS'],
-    ['cartes', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # Additional for amazon
+
     ['llewellyn', '', 'LLEWELLYN', 'TAROT CARDS'],
     ['lo scarabeo', '', 'LO SCARABEO', 'TAROT CARDS'],
     ['agm', 'cards', 'AGM', 'TAROT CARDS'],
@@ -78,8 +66,26 @@ CATEGORY_CRITERIAS = [
     ['us games', '', 'US GAMES', 'TAROT CARDS'],
     ['blue angel', '', 'BLUE ANGELS', 'TAROT CARDS'],
     ['schiffer', '', 'SCHIFFER', 'TAROT CARDS'],
+    ['fournier', 'tarot', 'FOURNIER', 'TAROT CARDS'],
+    ['copag', 'casino', 'COPAG', 'TAROT CARDS'],
     ['tarot', '', 'OTHER CARDS BRAND', 'TAROT CARDS'], # Generic for Tarot cards
+
+    ['copag', '', 'COPAG', 'PLAYING CARDS'],
+    ['ellusionist', '', 'ELLUSIONIST', 'PLAYING CARDS'],
+    ['cartamundi', '', 'CARTAMUNDI', 'PLAYING CARDS'],
+    ['fournier', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['bicycle', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['aviator', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['bee', 'deck', 'BICYCLE', 'PLAYING CARDS'],
+    ['theory', '', 'THEORY11', 'PLAYING CARDS'],
+    ['maverick', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['streamline', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['hoyle', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['tally', '', 'BICYCLE', 'PLAYING CARDS'],
+    ['art of play', '', 'ART OF PLAY', 'PLAYING CARDS'],
+    ['cartes', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # Additional for amazon
     ['cards', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # another generic for playing cards
+    
     ['FOOTBALL', '', 'FOOTBOOL', 'FOOTBALL'],
     ['fußball', '', 'FOOTBOOL', 'FOOTBALL'],
     ['nfl', '', 'FOOTBOOL', 'FOOTBALL'],
@@ -445,3 +451,7 @@ QUANTITY_PATTERN = {
     'AmazonEU' : r'^\(\d+\svnt.\)\s',
     'Etsy' : r'^\d+\svnt.\s',
     }
+
+
+if __name__ == '__main__':
+    pass

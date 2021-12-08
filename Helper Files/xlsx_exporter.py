@@ -220,15 +220,14 @@ class NLPostExporter(XlsxExporter):
 
     def __highlight_order_row(self, weight, vmdoption:str) -> bool:
         '''returns True if order row should be highlighted when writing to xlsx'''
-        if weight != '' and vmdoption in ['VKS', 'MKS', 'DKS']:
-            if vmdoption == 'VKS' and weight > 50:
+        if weight != '':
+            if weight > 2000:
                 return True
-            elif vmdoption == 'MKS' and weight > 500:
-                return True
-            elif  weight > 2000:
-                return True
-            else:
-                return False
+            elif vmdoption in ['VKS', 'MKS', 'DKS']:
+                if vmdoption == 'VKS' and weight > 50:
+                    return True
+                elif vmdoption == 'MKS' and weight > 500:
+                    return True
         return False
 
     def __get_package_dimension(self, vmdoption:str, header:str) -> str:
@@ -249,7 +248,7 @@ class NLPostExporter(XlsxExporter):
             return 'No Data'
 
         if order['tracked']:
-            return 'PS4'
+            return 'PEC1'
         else:
             # PEC0 for all Untracked orders
             return 'PEC0'

@@ -153,7 +153,7 @@ class OrderData():
         country = order[self.proxy_keys['ship-country']]
 
         # conditions for specific services:
-        if order['shipping-eur'] >= 20:
+        if order['shipping-eur'] >= 15:
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
         elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU' and order['vmdoption'] != 'MKS':
