@@ -256,8 +256,10 @@ class ParseOrders():
         return True
 
     def __route_order_without_pricing(self, order:dict, skip_etonas:bool):
-        '''ruleset for routing order when no service was picked based on pricing or predefined rules in weights.py'''
-        if order[self.proxy_keys['ship-service-level']] == 'Expedited' or order['shipping-eur'] >= 10:
+        '''ruleset for routing order when no service was picked based on pricing or predefined rules in weights.py'''        
+        service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
+        
+        if order.get(service_level_proxy_key, '') == 'Expedited' or order['shipping-eur'] >= 10:
             logging.debug(f'WITHOUT PRICING: Order routed to DPDUPS')
             self.dpdups_orders.append(order)
         elif order['category'] == 'TAROT CARDS' and order[self.proxy_keys['ship-country']] in ['GB', 'UK'] and not skip_etonas:

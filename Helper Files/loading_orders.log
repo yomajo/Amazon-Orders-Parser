@@ -357,3 +357,84 @@ INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-Etonas 2021.12.09 14.11.x
 INFO:root:
 RUN ENDED in: 2.70 sec. Timestamp: 2021.12.09 14:11
 
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.09 14:33
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 134/134 new/loaded orders for further processing
+INFO:root:Loaded file contains: 134. Further processing: 134 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 16.32
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 19.57
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 17.89
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2286793697 cant calc weights. skus: ['1 vnt. RP05', '1 vnt. FHP21', '1 vnt. PAU78', '1 vnt. FDS39']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:4.48% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.09 14:38
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 134/134 new/loaded orders for further processing
+INFO:root:Loaded file contains: 134. Further processing: 134 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 18.15
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 19.75
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 15.91
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2286793697 cant calc weights. skus: ['1 vnt. RP05', '1 vnt. FHP21', '1 vnt. PAU78', '1 vnt. FDS39']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:4.48% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.44 sec. Timestamp: 2021.12.09 14:39
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.09 14:39
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 347/347 new/loaded orders for further processing
+INFO:root:Loaded file contains: 347. Further processing: 347 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: (5 vnt.) CR2032 5BL HSDC DURACELL 3V
+WARNING:root:Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: 22-A1GT-3SA1
+INFO:root:Current sku mapping dict has 1423 entries
+WARNING:root:order: 10992305896195 cant calc weights. skus: ['(8 vnt.) LR01/N 2BL E90 LR1 MN9100']
+WARNING:root:order: 06428587732107 cant calc weights. skus: ['(4 vnt.) AAA/R03P 4BL CAMELION SUPER']
+WARNING:root:order: 34035945170723 cant calc weights. skus: ['(8 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 22667691275211 cant calc weights. skus: ['(1 vnt.) 370 / 371 BAT. 1.5V SR 920 SW']
+WARNING:root:order: 64690890143643 cant calc weights. skus: ['G8-HW5L-YOO5']
+WARNING:root:order: 13788016496995 cant calc weights. skus: ['7426939246464']
+WARNING:root:order: 18954025691859 cant calc weights. skus: ['IL-HKSH-UGXV']
+WARNING:root:order: 54699955762299 cant calc weights. skus: ['(1 vnt.) 3LR12 1BL CAMELION SUPER HEAVY']
+WARNING:root:order: 32798866750971 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 30966098050331 cant calc weights. skus: ['(1 vnt.) EVE ER26500 C/LR14 3,6V']
+WARNING:root:order: 68600428114787 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 59605130230531 cant calc weights. skus: ['(5 vnt.) CR2032 5BL HSDC DURACELL 3V']
+WARNING:root:order: 62566126668715 cant calc weights. skus: ['(10 vnt.) LR1130 10BL CAMELION AG10 ALK']
+WARNING:root:order: 05424978713275 cant calc weights. skus: ['TF-FACZ-QQNR']
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+WARNING:root:order: 66254473376139 cant calc weights. skus: ['(4 vnt.) AA 4BL AKU GP ReCykoPRO 2600']
+INFO:root:4.61% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.68 sec. Timestamp: 2021.12.09 14:39
+
