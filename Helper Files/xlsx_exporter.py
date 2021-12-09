@@ -19,6 +19,7 @@ HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEAD
 PACKAGE_DIMENSIONS = {'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
                     'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
 FILL_HIGHLIGHT = openpyxl.styles.PatternFill(fill_type='solid', fgColor='F8CBAD')
+YELLOW_HIGHLIGHT = openpyxl.styles.PatternFill(fill_type='solid', fgColor='FFFF00')
 
 
 class XlsxExporter():
@@ -289,6 +290,9 @@ class EtonasExporter(XlsxExporter):
         first_name, last_name = self._get_fname_lname(order)
         product_name_proxy_key = self.proxy_keys.get('title', '')
 
+        # adding key for highlighting cell
+        export['highlight'] = True if order['tracked'] else False
+
         # Change GB to UK for Etonas
         if order[self.proxy_keys['ship-country']] == 'GB':
             order[self.proxy_keys['ship-country']] = 'UK'
@@ -330,6 +334,16 @@ class EtonasExporter(XlsxExporter):
             else:
                 export[header] = ''
         return export
+
+    def _write_orders(self, ws:object, headers:list, orders:list):
+        for row, col in self.range_generator(orders, headers):
+            working_dict = orders[row]
+            key_pointer = headers[col]
+            # offsets due to excel vs python numbering  + headers in row 1 + self.row_offset (first empty row for nlpost)
+            ws.cell(row + 2 + self.row_offset, col + 1).value = working_dict[key_pointer]
+            # highlight based on highlight key in refactored order dict
+            if working_dict['highlight'] and key_pointer == 'Tracking (0 - neregistruota, 1 - registruota)':
+                ws.cell(row + 2 + self.row_offset, col + 1).fill = YELLOW_HIGHLIGHT
 
 
 class DPDUPSExporter(XlsxExporter):

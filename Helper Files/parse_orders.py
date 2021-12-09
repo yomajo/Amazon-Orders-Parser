@@ -217,74 +217,60 @@ class ParseOrders():
             order['Vertė, eur'] = ''
         return order
 
-    def sort_orders_by_sales_channel(self, skip_etonas:bool):
+    def route_orders_to_shipping_services(self, skip_etonas:bool):
         '''choose different routing functions based on orders source (COM/EU Amazon). Performs check in the end for empty lists'''
         logging.info(f'Sorting orders by shippment company specific to {self.sales_channel} ruleset')
         for order in self.all_orders:
-            if order['shipping_service'] == 'nl':
-                self.nlpost_orders.append(order)
-            elif order['shipping_service'] == 'lp' and order['tracked']:
-                self.lp_tracked_orders.append(order)
-            elif order['shipping_service'] == 'lp' and order['tracked'] == False:
-                self.lp_orders.append(order)
-            elif order['shipping_service'] == 'dp':
-                self.dpost_orders.append(order)
-            elif order['shipping_service'] == 'etonas' and not skip_etonas:
-                self.etonas_orders.append(order)
-            elif order['shipping_service'] == 'ups' or order['shipping_service'] == 'dpd':
-                self.dpdups_orders.append(order)
+            if self.__routed_by_cheapest_or_predefined_service(order, skip_etonas):
+                continue
             else:
-                # cheapest service was not selected, defaulting to older sorting based on sales channel and order specifics
-                if self.sales_channel == 'AmazonEU':
-                    self.sort_EU_order_by_shipment_company(order, skip_etonas)
-                elif self.sales_channel == 'AmazonCOM':
-                    self.sort_COM_order_by_shipment_company(order)
-                elif self.sales_channel == 'Etsy':
-                    self.sort_etsy_order_by_shipment_company(order)
+                self.__route_order_without_pricing(order, skip_etonas)
         self.exit_no_new_orders()
     
-    def sort_EU_order_by_shipment_company(self, order:dict, skip_etonas:bool):
-        '''sorts individual order from AMAZON EU by shipment company'''
-        if order[self.proxy_keys['ship-service-level']] == 'Expedited':
-            self.dpdups_orders.append(order)
-        elif get_order_country(order, self.proxy_keys) in TRACKED_COUNTRIES:
-            if order_contains_batteries(order):
-                self.lp_tracked_orders.append(order)
-            else:
-                self.dpost_orders.append(order)
-        elif order_contains_batteries(order) or order_contains_cards_keywords(order) or get_order_country(order, self.proxy_keys) in LP_COUNTRIES:
-            self.lp_orders.append(order)
-        elif get_order_country(order, self.proxy_keys) in ['GB', 'UK']:
-            # Route Etonas shipments with DPost if flag is on.
-            if skip_etonas:
-                self.dpost_orders.append(order)
-            else:
-                if uk_order_contains_dp_keywords(order):
-                    self.dpost_orders.append(order)
-                elif uk_order_contains_lp_keywords(order):
-                    self.lp_orders.append(order)
-                else:                    
-                    self.etonas_orders.append(order)
-        
-        elif order['shipping-eur'] >= 10:
-            self.dpdups_orders.append(order)
-        else:
-            self.dpost_orders.append(order)
+    def __routed_by_cheapest_or_predefined_service(self, order:dict, skip_etonas:bool) -> bool:
+        '''routes order based on order keys: 'shipping_service', 'tracked'
+        returns True afer adding order to corresponding list via __add_order_to_service_list method'''
+        if order['shipping_service'] == 'nl':
+            return self.__add_order_to_service_list(order, self.nlpost_orders)
 
-    def sort_COM_order_by_shipment_company(self, order:dict):
-        '''sorts individual order from AMAZON COM by shipment company'''
+        elif order['shipping_service'] == 'lp' and order['tracked']:
+            return self.__add_order_to_service_list(order, self.lp_tracked_orders)
+
+        elif order['shipping_service'] == 'lp' and order['tracked'] == False:
+            return self.__add_order_to_service_list(order, self.lp_orders)
+
+        elif order['shipping_service'] == 'dp':
+            return self.__add_order_to_service_list(order, self.dpost_orders)
+
+        elif order['shipping_service'] == 'etonas' and not skip_etonas:
+            return self.__add_order_to_service_list(order, self.etonas_orders)
+
+        elif order['shipping_service'] == 'ups' or order['shipping_service'] == 'dpd':
+            return self.__add_order_to_service_list(order, self.dpdups_orders)
+        else:
+            return False
+    
+    def __add_order_to_service_list(self, order:dict, service_list:list):
+        '''adds order to service list, returns True'''
+        service_list.append(order)
+        return True
+
+    def __route_order_without_pricing(self, order:dict, skip_etonas:bool):
+        '''ruleset for routing order when no service was picked based on pricing or predefined rules in weights.py'''
         if order[self.proxy_keys['ship-service-level']] == 'Expedited' or order['shipping-eur'] >= 10:
+            logging.debug(f'WITHOUT PRICING: Order routed to DPDUPS')
             self.dpdups_orders.append(order)
-        else:
+        elif order['category'] == 'TAROT CARDS' and order[self.proxy_keys['ship-country']] in ['GB', 'UK'] and not skip_etonas:
+            logging.debug(f'WITHOUT PRICING: Order routed to ETONAS')
+            self.etonas_orders.append(order)
+        elif order['category'] in ['TAROT CARDS', 'PLAYING CARDS']:
+            logging.debug(f'WITHOUT PRICING: Order routed to DPOST')
+            self.dpost_orders.append(order)
+        elif order['tracked']:
+            logging.debug(f'WITHOUT PRICING: Order routed to LPTRACKED')
             self.lp_tracked_orders.append(order)
-
-    def sort_etsy_order_by_shipment_company(self, order:dict):
-        '''sorts individual order from Etsy by shipment company'''
-        if order['shipping-eur'] >= 21:
-            self.dpdups_orders.append(order)
-        elif order['shipping-eur'] > 0 or order['tracked']:
-            self.lp_tracked_orders.append(order)
         else:
+            logging.debug(f'WITHOUT PRICING: Order routed to LP')
             self.lp_orders.append(order)
     
     def exit_no_new_orders(self):
@@ -376,7 +362,7 @@ class ParseOrders():
         test_exports method'''
         self._prepare_filepaths()
         self.delete_old_files()
-        self.sort_orders_by_sales_channel(skip_etonas)
+        self.route_orders_to_shipping_services(skip_etonas)
         if testing:
             self.test_exports(testing, skip_etonas)
             return
