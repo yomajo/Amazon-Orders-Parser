@@ -113,16 +113,18 @@ class OrderData():
         for order in self.orders:
             qty_purchased = self.__get_order_quantity(order)
             skus = order[self.proxy_keys['sku']]
-
-            # Add brand / category data to order, using first item in sku list, edit tracked status
+            
+            # Add brand / category data to order, using first item in sku list
             order = self._add_order_brand_category_data(order, skus)
-            order = self._check_tracked_status(order)
 
             if self._validate_calculation(qty_purchased, skus):
                 order = self._calc_weight_add_data(order, qty_purchased, skus)
             else:
                 order = self._add_invalid_weight_data(order)
             
+            # edit tracked status
+            order = self._check_tracked_status(order)
+
             # pick shipping service
             if self.__eligible_for_cheapest_service_selection(order):
                 order = self._add_shipping_service(order)
@@ -144,19 +146,16 @@ class OrderData():
             order['tracked'], order['skip_service_selection'] = True, True
         elif order['shipping-eur'] > 0 or order['total-eur'] > 70:
             order['tracked'] = True
-        else:
-            pass
         return order
 
     def __is_amazon_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
         country = order[self.proxy_keys['ship-country']]
-
         # conditions for specific services:
         if order['shipping-eur'] >= 15:
             order['shipping_service'] = 'ups'
             order['tracked'], order['skip_service_selection'] = True, True
-        elif order['category'] == 'TAROT CARDS' and country == 'UK' and self.sales_channel == 'AmazonEU' and order['vmdoption'] != 'MKS':
+        elif order['category'] == 'TAROT CARDS' and country in ['GB', 'UK'] and self.sales_channel == 'AmazonEU' and order['vmdoption'] != 'MKS':
             order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         # conditions to mark as tracked:

@@ -23,10 +23,9 @@ VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-8.csv'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-11-incomplete.csv'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2021.12.06.txt'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\COM 2021.12.02.txt'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2021-12.csv'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2021.12.09.txt'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\COM 2021.12.02.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
