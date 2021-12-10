@@ -141,11 +141,11 @@ class Forex():
     def convert_to_eur(self, amount:float, currency:str):
         '''converts amount of currency to EUR, works w/ currencies in SUPPORTED_CURRENCIES'''
         currency = currency.upper()
-        if currency in SUPPORTED_CURRENCIES:
+        if currency == 'EUR':
+            return amount
+        elif currency in SUPPORTED_CURRENCIES:
             currency_adj = 'CAD' if currency == 'CDN' else currency
             return round(amount / self.rates[currency_adj], 2)
-        elif currency == 'EUR':
-            return amount
         else:
             logging.warning(f'Attempted currency conversion w/ unsupported currency: {currency}. Alerting VBA, returning original amount')
             print(VBA_FOREX_ALERT)

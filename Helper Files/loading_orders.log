@@ -438,3 +438,30 @@ INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
 INFO:root:
 RUN ENDED in: 2.68 sec. Timestamp: 2021.12.09 14:39
 
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.10 18:37
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 150/150 new/loaded orders for further processing
+INFO:root:Loaded file contains: 150. Further processing: 150 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-10
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 15.46
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 19.1
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 16.1
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2286793697 cant calc weights. skus: ['1 vnt. RP05', '1 vnt. FHP21', '1 vnt. PAU78', '1 vnt. FDS39']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:4.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.07 sec. Timestamp: 2021.12.10 18:37
+
