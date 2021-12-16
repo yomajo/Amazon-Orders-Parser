@@ -465,3 +465,172 @@ INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
 INFO:root:
 RUN ENDED in: 3.07 sec. Timestamp: 2021.12.10 18:37
 
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.15 20:07
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.15 20:13
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 200/200 new/loaded orders for further processing
+INFO:root:Loaded file contains: 200. Further processing: 200 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-15
+WARNING:root:2305993853 (to: CA) total-engineered key has new random value: 19.26
+WARNING:root:2303595221 (to: CA) total-engineered key has new random value: 18.28
+WARNING:root:2302684123 (to: BY) total-engineered key has new random value: 7.38
+WARNING:root:2301894429 (to: CA) total-engineered key has new random value: 18.92
+WARNING:root:2303298764 (to: CA) total-engineered key has new random value: 17.63
+WARNING:root:2301817266 (to: BR) total-engineered key has new random value: 9.0
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 19.98
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 16.5
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 18.29
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2286793697 cant calc weights. skus: ['1 vnt. RP05', '1 vnt. FHP21', '1 vnt. PAU78', '1 vnt. FDS39']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:3.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.63 sec. Timestamp: 2021.12.15 20:13
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.15 20:23
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:60517083935811 (to: CA) total-engineered key has new random value: 19.7
+WARNING:root:26040598541995 (to: CA) total-engineered key has new random value: 19.28
+WARNING:root:32457906145339 (to: BA) total-engineered key has new random value: 18.87
+INFO:root:Current sku mapping dict has 1416 entries
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+WARNING:root:order: 35031280572507 cant calc weights. skus: ['(4 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 58740952666603 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 53818825565299 cant calc weights. skus: ['QX-EL6R-PFP1']
+WARNING:root:order: 05700009800563 cant calc weights. skus: ['VX-X7MB-2NF5']
+WARNING:root:order: 68379864168683 cant calc weights. skus: ['(1 vnt.) BT55']
+WARNING:root:order: 40925583787355 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 68897624421483 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 10580822540315 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 31146669801315 cant calc weights. skus: ['A2-0I97-9JXW']
+WARNING:root:order: 64864762659059 cant calc weights. skus: ['VX-X7MB-2NF5']
+WARNING:root:order: 56312029534451 cant calc weights. skus: ['C4-GTDD-LP62']
+INFO:root:4.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.77 sec. Timestamp: 2021.12.15 20:23
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.16 11:16
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 200/200 new/loaded orders for further processing
+INFO:root:Loaded file contains: 200. Further processing: 200 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:2305993853 (to: CA) total-engineered key has new random value: 18.69
+WARNING:root:2303595221 (to: CA) total-engineered key has new random value: 18.94
+WARNING:root:2302684123 (to: BY) total-engineered key has new random value: 9.93
+WARNING:root:2301894429 (to: CA) total-engineered key has new random value: 17.19
+WARNING:root:2303298764 (to: CA) total-engineered key has new random value: 15.76
+WARNING:root:2301817266 (to: BR) total-engineered key has new random value: 8.75
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 18.07
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 16.67
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 15.73
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:2.50% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.90 sec. Timestamp: 2021.12.16 11:16
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.16 11:25
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 200/200 new/loaded orders for further processing
+INFO:root:Loaded file contains: 200. Further processing: 200 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:2305993853 (to: CA) total-engineered key has new random value: 16.07
+WARNING:root:2303595221 (to: CA) total-engineered key has new random value: 18.51
+WARNING:root:2302684123 (to: BY) total-engineered key has new random value: 9.39
+WARNING:root:2301894429 (to: CA) total-engineered key has new random value: 17.78
+WARNING:root:2303298764 (to: CA) total-engineered key has new random value: 15.41
+WARNING:root:2301817266 (to: BR) total-engineered key has new random value: 8.83
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 18.02
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 17.3
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 19.09
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:2.50% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.35 sec. Timestamp: 2021.12.16 11:25
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.16 11:27
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.16 11:28
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:60517083935811 (to: CA) total-engineered key has new random value: 15.24
+WARNING:root:26040598541995 (to: CA) total-engineered key has new random value: 16.69
+WARNING:root:32457906145339 (to: BA) total-engineered key has new random value: 18.94
+INFO:root:Current sku mapping dict has 1416 entries
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+WARNING:root:order: 35031280572507 cant calc weights. skus: ['(4 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 58740952666603 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 53818825565299 cant calc weights. skus: ['QX-EL6R-PFP1']
+WARNING:root:order: 68379864168683 cant calc weights. skus: ['(1 vnt.) BT55']
+WARNING:root:order: 40925583787355 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 68897624421483 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 10580822540315 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 31146669801315 cant calc weights. skus: ['A2-0I97-9JXW']
+INFO:root:3.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.60 sec. Timestamp: 2021.12.16 11:28
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.16 11:29
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---

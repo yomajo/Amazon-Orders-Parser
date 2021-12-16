@@ -42,6 +42,7 @@ CATEGORY_CRITERIAS = [
     ['fournier', 'tarot', 'FOURNIER', 'TAROT CARDS'],
     ['copag', 'casino', 'COPAG', 'TAROT CARDS'],
     ['angel', 'card', 'OTHER CARDS BRAND', 'TAROT CARDS'],
+    ['oracle', '', 'OTHER CARDS BRAND', 'TAROT CARDS'],
     ['tarot', '', 'OTHER CARDS BRAND', 'TAROT CARDS'], # Generic for Tarot cards
 
     ['copag', '', 'COPAG', 'PLAYING CARDS'],

@@ -141,8 +141,12 @@ class OrderData():
 
     def __is_etsy_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for etsy marketplace'''
+        country = order[self.proxy_keys['ship-country']]
         if order['shipping-eur'] >= 21:            
             order['shipping_service'] = 'ups'
+            order['tracked'], order['skip_service_selection'] = True, True
+        elif order['category'] == 'TAROT CARDS' and country in ['GB', 'UK'] and order['vmdoption'] != 'MKS':
+            order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         elif order['shipping-eur'] > 0 or order['total-eur'] > 70:
             order['tracked'] = True
