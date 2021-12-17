@@ -1,4 +1,4 @@
-from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, DP_KEYWORDS, LP_UK_BRANDS
+from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
 from countries import COUNTRY_CODES, GIFT_COUNTRIES
 from string import ascii_letters
 import logging
@@ -85,36 +85,6 @@ def get_total_price(order:dict, sales_channel:str, return_as_float:bool=False):
         print(VBA_ERROR_ALERT)
         sys.exit()
 
-def order_contains_batteries(order:dict) -> bool:
-    '''returns True if order['category'] is 'BATTERIES' '''
-    try:
-        return True if order['category'] == 'BATTERIES' else False
-    except Exception as e:
-        logging.critical(f'Failed in util order_contains_batteries func. order: {order}. Err: {e}')
-        return False
-
-def order_contains_cards_keywords(order:dict) -> bool:
-    '''returns True if order['category'] is 'PLAYING CARDS' or 'TAROT CARDS' '''
-    try:
-        return True if order['category'] in ['PLAYING CARDS', 'TAROT CARDS'] else False
-    except Exception as e:
-        logging.critical(f'Failed in order_contains_cards_keywords func. order: {order}. Err: {e}')
-        return False
-
-def uk_order_contains_dp_keywords(order:dict) -> bool:
-    '''returns True if order item contains country-specific keywords (uses list of brand words)'''
-    for keyword in DP_KEYWORDS:
-        if keyword in order['product-name'].upper():
-            return True
-    return False
-
-def uk_order_contains_lp_keywords(order:dict) -> bool:
-    '''returns True if order item contains country-specific keywords target for LP shippment service (uses list of brand words)'''
-    for keyword in LP_UK_BRANDS:
-        if keyword in order['product-name'].upper():
-            return True
-    return False
-
 def get_dpost_product_header_val(order:dict) -> str:
     '''returns PRODUCT header value for Deutsche Post csv'''
     try:
@@ -158,7 +128,6 @@ def get_lp_priority(order:dict) -> str:
     except Exception as e:
         logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
         return ''
-
 
 def get_order_ship_price(order:dict, proxy_keys:dict) -> float:
     '''returns order shipping price as float'''
@@ -280,6 +249,7 @@ def engineer_total(country_code:str, order_total:float, order_id:str) -> float:
         logging.error(f'engineer_total function error on order_id: {order_id}. Args: country: {country_code}, order_total: {order_total}. \
             Returning original order_total. Err: {e}')
         return order_total
+
 
 if __name__ == "__main__":
     pass

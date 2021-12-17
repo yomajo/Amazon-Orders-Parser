@@ -366,11 +366,7 @@ EXPORT_CONSTANTS = {
                 'lp' : {'headers' : LP_HEADERS, 'mapping' : LP_HEADERS_MAPPING, 'fixed' : LP_FIXED_VALUES}
                 }
 
-DP_KEYWORDS = ['BICYCLE', 'THEORY11,', 'ELLUSIONIST']
-
 EXPECTED_SALES_CHANNELS = ['AmazonCOM', 'AmazonEU', 'Etsy']
-
-LP_UK_BRANDS = ['MYSTICAL LENORMAND', 'MLLE', 'KIPPER MYSTIQUE', 'MYSTICAL KIPPER']
 
 AMAZON_KEYS = {
     'order-id' : 'order-item-id',
