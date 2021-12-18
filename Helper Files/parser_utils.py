@@ -31,7 +31,7 @@ def get_product_category_or_brand(title:str, return_brand:bool=False) -> str:
     return 'OTHER'
 
 def get_sales_channel_hs_code(order:dict, product_name_proxy_key:str):
-    '''returns HS code based on sales channel. Hardcoded for Etsy'''
+    '''returns HS code based on sales channel. Hardcoded for Etsy in case of no present title proxy key'''
     if product_name_proxy_key == '':
         return '9504 40'
     else:
@@ -40,7 +40,7 @@ def get_sales_channel_hs_code(order:dict, product_name_proxy_key:str):
         return get_hs_code(item_brand, item_category)
 
 def get_hs_code(item_brand:str, item_category:str) -> str:
-    '''returns hs code for etonas export file based on item brand and category. Updated on 2021.11'''
+    '''returns hs code based on item brand and category. Updated on 2021.11'''
     # based on brand
     if item_brand == 'BOMB COSM':
         return '330499'
@@ -113,18 +113,13 @@ def replace_phone_zero(phone_number:str) -> str:
     '''returns phone number with 00 insted of +. Example: +1-213-442 returns 001-213-442'''
     return phone_number.replace('+', '00')
 
-def get_lp_registered(order:dict) -> str:
-    '''returns 1 or 0 as string to fill in Lietuvos Pastas 'Registruota' header value'''
-    try:
-        return '1' if order['tracked'] else ''
-    except Exception as e:
-        logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
-        return ''
-
 def get_lp_priority(order:dict) -> str:
-    '''returns 1 or 0 as string to fill in Lietuvos Pastas 'Pirmenybinė/nepirmenybinė' header value'''
+    '''returns 1 or '' as string to fill in Lietuvos Pastas 'Pirmenybinis siuntimas' header value'''
     try:
-        return '1' if order['vmdoption'] != '' and order['vmdoption'] != 'VKS' else ''
+        if order['tracked']:
+            return '1'
+        else:
+            return '1' if order['vmdoption'] != '' and order['vmdoption'] != 'VKS' else ''
     except Exception as e:
         logging.critical(f'Failed in get_lp_registered_priority_value util func. Order: {order}. Err: {e}')
         return ''
@@ -249,6 +244,30 @@ def engineer_total(country_code:str, order_total:float, order_id:str) -> float:
         logging.error(f'engineer_total function error on order_id: {order_id}. Args: country: {country_code}, order_total: {order_total}. \
             Returning original order_total. Err: {e}')
         return order_total
+
+def enter_LP_address(header:str, order:dict, proxy_keys:dict) -> str:
+    '''returns address string for LP csv file'''
+    # disposable address fields (etsy has no address3)
+    address1 = order[proxy_keys['ship-address-1']]
+    address2 = order[proxy_keys['ship-address-2']]
+    add3_key = proxy_keys.get('ship-address-3','')
+    address3 = order.get(add3_key, '')
+    # country LT -> use "Gavëjo gatvė", "Adreso eilutė 1" fields for other countries use "Adreso eilutė 2", "Adreso eilutė 2"
+    if get_order_country(order, proxy_keys) == 'LT':
+        if header == 'Gavėjo gatvė':
+            return address1
+        elif header == 'Adreso eilutė 1':
+            return address2
+        else:
+            # header == Adreso eilutė 2
+            return address3
+    else:
+        if header == 'Adreso eilutė 1':
+            return address1
+        elif header == 'Adreso eilutė 2':
+            return address2 + ' ' + address3
+        else:
+            return ''
 
 
 if __name__ == "__main__":

@@ -295,54 +295,54 @@ ETONAS_HEADERS_MAPPING = {
 
 LP_HEADERS = [
     'Delivery Method',
-    'Terminalo ID',
     'Siuntos rūšis',
+    'Terminalo ID',
     'Gavėjo pavadinimas',
+    'Gavėjo įmonės pavadinimas',
     'Gavėjo gatvė',
     'Gavėjo namas',
     'Gavėjo butas',
     'Gavėjo gyvenvietė',
     'Gavėjo pašto kodas',
+    'Adreso eilutė 1',
+    'Adreso eilutė 2',
     'Gavėjo šalies kodas',
     'Gavėjo mob. tel. (370xxxxxxxx)',
     'Gavėjo el. paštas',
     'Svoris (g)',
     'Dalių skaičius',
-    'Registruota',
-    'Pirmenybinė/nepirmenybinė',
-    'Įvertinimas (Eur)',
-    'Išperkamasis mokestis (Eur)',
-    'Įteikti asmeniškai',
-    'Su įteikimo pranešimu',
-    'Gavėjo p.d. numeris',
-    'Iki pareikalavimo',
+    'Pirmenybinis siuntimas',
+    'Draudimas (Eur)',
+    'COD (Eur)',
+    'Gauti informaciją apie įteiktą siuntą (POD)',
     'Moka gavėjas',
     'Komentaras',
-    'Muitinės deklaracija turinys',
-    'Siunčiamų daiktų pavadinimas',
-    'Kiekis, vnt',
-    'Svoris (g)',
-    'Vertė, eur',
-    'Nevykus pristatymui , grąžinti siuntą po ( nurodyti dienų skaičių)'
-    ]
+    'Siuntos turinio kategorija',
+    'HS kodas',
+    'Prekių kilmės šalis',
+    'Siuntos turinio aprašymas anglų kalba',
+    'Kiekis (vnt)',
+    'Deklaruojamas siuntos svoris (g)',
+    'Deklaruojama vertė (eur)',
+    'Nepavykus pristatyti',
+]
 
 LP_HEADERS_MAPPING = {
     'Gavėjo pavadinimas' : 'recipient-name',
     'Gavėjo mob. tel. (370xxxxxxxx)' : 'buyer-phone-number',
     'Gavėjo el. paštas' : 'buyer-email',
-    'Gavėjo gatvė' : 'ship-address-1',
-    'Gavėjo namas' : 'ship-address-2',
-    'Gavėjo butas' : 'ship-address-3',
-    'Gavėjo gyvenvietė' : 'ship-city',
     'Gavėjo pašto kodas' : 'ship-postal-code',
+    'Gavėjo gyvenvietė' : 'ship-city',
     'Gavėjo šalies kodas' : 'ship-country',
-    'Kiekis, vnt' : 'quantity-purchased',
     'Svoris (g)' : 'weight',
+    'Kiekis (vnt)' : 'quantity-purchased',
+    'Deklaruojamas siuntos svoris (g)' : 'weight',
     }
 
 LP_FIXED_VALUES = {
-    'Muitinės deklaracija turinys' : 'Dovana'
+    'Siuntos turinio kategorija' : 'Dovana'
     }
+
 
 DPDUPS_HEADERS = [
     'Order ID',

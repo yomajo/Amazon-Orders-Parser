@@ -1,5 +1,5 @@
-from parser_utils import get_dpost_product_header_val, get_origin_country, shorten_word_sequence
-from parser_utils import get_lp_priority, get_lp_registered, validate_LP_siuntos_rusis_header
+from parser_utils import get_dpost_product_header_val, get_origin_country, shorten_word_sequence, enter_LP_address
+from parser_utils import get_lp_priority, validate_LP_siuntos_rusis_header, get_hs_code
 from file_utils import get_output_dir, delete_file
 from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
 from parser_constants import EXPORT_CONSTANTS
@@ -128,12 +128,6 @@ class ParseOrders():
                 export[header] = order.get(target_key, '')
 
             # DP specific headers
-            elif header == 'DECLARED_ORIGIN_COUNTRY_1':
-                # etsy - no item title, hardcoding for etsy until weight mapping
-                if title_proxy_key == '':
-                    export[header] = 'CN'
-                else:
-                    export[header] = get_origin_country(order[self.proxy_keys['title']])
             elif header == 'PRODUCT':
                 export[header] = get_dpost_product_header_val(order)
             elif header == 'CUST_REF':
@@ -142,20 +136,29 @@ class ParseOrders():
             # LP specific headers
             elif header == 'Siuntos rūšis':
                 export[header] = validate_LP_siuntos_rusis_header(order['vmdoption'], order['tracked'])
-            elif header == 'Registruota':
-                export[header] = get_lp_registered(order)
-            elif header == 'Pirmenybinė/nepirmenybinė':
+            elif header in ['Gavėjo gatvė', 'Adreso eilutė 1', 'Adreso eilutė 2']:
+                export[header] = enter_LP_address(header, order, self.proxy_keys)
+            
+            elif header == 'Pirmenybinis siuntimas':
                 export[header] = get_lp_priority(order)
+            elif header == 'HS kodas':
+                export[header] = get_hs_code(order['brand'], order['category'])
             elif header == 'Delivery Method':
                 service_level_proxy_key = self.proxy_keys.get('ship-service-level', '')
                 optional_str = ' EXPEDITED' if order.get(service_level_proxy_key, '') == 'Expedited' else ''
                 export[header] = order.get(service_level_proxy_key, '') + optional_str
 
             # Common headers
-            elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siunčiamų daiktų pavadinimas']:
+            elif header in ['DETAILED_CONTENT_DESCRIPTIONS_1', 'Siuntos turinio aprašymas anglų kalba']:
                 export[header] = order['category']
-            elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Vertė, eur']:
+            elif header in ['DECLARED_VALUE_1', 'TOTAL_VALUE', 'Deklaruojama vertė (eur)']:
                 export[header] = order['total-engineered']
+            elif header in ['DECLARED_ORIGIN_COUNTRY_1', 'Prekių kilmės šalis']:
+                # etsy - no item title, in case weight workbook missing title still:
+                if title_proxy_key == '':
+                    export[header] = 'CN'
+                else:
+                    export[header] = get_origin_country(order[self.proxy_keys['title']])
             else:
                 export[header] = ''
         return export
@@ -208,12 +211,14 @@ class ParseOrders():
 
     def __validate_lp_order(self, order : dict) -> dict:
         '''conditionally deletes some of the fields before export'''
-        # REVIEW
         if order['Gavėjo šalies kodas'].upper() in EU_COUNTRY_CODES:
-            order['Muitinės deklaracija turinys'] = ''
-            order['Siunčiamų daiktų pavadinimas'] = ''
-            order['Kiekis, vnt'] = ''
-            order['Vertė, eur'] = ''
+            order['Siuntos turinio kategorija'] = ''
+            order['HS kodas'] = ''
+            order['Prekių kilmės šalis'] = ''
+            order['Siuntos turinio aprašymas anglų kalba'] = ''
+            order['Kiekis (vnt)'] = ''
+            order['Deklaruojamas siuntos svoris (g)'] = ''
+            order['Deklaruojama vertė (eur)'] = ''
         return order
 
     def route_orders_to_shipping_services(self, skip_etonas:bool):

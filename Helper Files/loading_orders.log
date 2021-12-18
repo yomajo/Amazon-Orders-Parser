@@ -670,3 +670,88 @@ INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-DPDUPS 2021.12.17 17.41.x
 INFO:root:
 RUN ENDED in: 3.68 sec. Timestamp: 2021.12.17 17:41
 
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.18 14:38
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2021-12-17
+WARNING:root:60517083935811 (to: CA) total-engineered key has new random value: 18.4
+WARNING:root:26040598541995 (to: CA) total-engineered key has new random value: 15.86
+WARNING:root:32457906145339 (to: BA) total-engineered key has new random value: 15.21
+INFO:root:Current sku mapping dict has 1416 entries
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+WARNING:root:order: 35031280572507 cant calc weights. skus: ['(4 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 58740952666603 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 53818825565299 cant calc weights. skus: ['QX-EL6R-PFP1']
+WARNING:root:order: 68379864168683 cant calc weights. skus: ['(1 vnt.) BT55']
+WARNING:root:order: 40925583787355 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 68897624421483 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 10580822540315 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 31146669801315 cant calc weights. skus: ['A2-0I97-9JXW']
+INFO:root:3.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv created. Orders inside: 7
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv created. Orders inside: 9
+INFO:root:
+RUN ENDED in: 3.07 sec. Timestamp: 2021.12.18 14:38
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.18 14:47
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:60517083935811 (to: CA) total-engineered key has new random value: 19.88
+WARNING:root:26040598541995 (to: CA) total-engineered key has new random value: 18.41
+WARNING:root:32457906145339 (to: BA) total-engineered key has new random value: 15.3
+INFO:root:Current sku mapping dict has 1416 entries
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+WARNING:root:order: 35031280572507 cant calc weights. skus: ['(4 vnt.) CR123 2BL BAT. 3V DL123A']
+WARNING:root:order: 58740952666603 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 53818825565299 cant calc weights. skus: ['QX-EL6R-PFP1']
+WARNING:root:order: 68379864168683 cant calc weights. skus: ['(1 vnt.) BT55']
+WARNING:root:order: 40925583787355 cant calc weights. skus: ['EX141(UK)']
+WARNING:root:order: 68897624421483 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 10580822540315 cant calc weights. skus: ['(1 vnt.) CEF27 DURACELL Charger']
+WARNING:root:order: 31146669801315 cant calc weights. skus: ['A2-0I97-9JXW']
+INFO:root:3.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv created. Orders inside: 7
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv created. Orders inside: 9
+INFO:root:
+RUN ENDED in: 2.82 sec. Timestamp: 2021.12.18 14:47
+
+INFO:root:
+
+ NEW RUN STARTING: 2021.12.18 14:49
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 63/63 new/loaded orders for further processing
+INFO:root:Loaded file contains: 63. Further processing: 63 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:29055150350538 (to: CA) total-engineered key has new random value: 15.71
+WARNING:root:36436660919290 (to: CA) total-engineered key has new random value: 16.33
+WARNING:root:16493692204538 (to: CA) total-engineered key has new random value: 18.4
+WARNING:root:08920304403882 (to: CA) total-engineered key has new random value: 17.58
+WARNING:root:26984848405114 (to: CA) total-engineered key has new random value: 19.51
+WARNING:root:17546547566434 (to: CA) total-engineered key has new random value: 17.37
+INFO:root:Current sku mapping dict has 1416 entries
+WARNING:root:order: 69408295842282 cant calc weights. skus: ['(20 vnt.) LR1131 10BL L1131F VINNIC AG10']
+INFO:root:1.59% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv created. Orders inside: 21
+INFO:root:
+RUN ENDED in: 2.91 sec. Timestamp: 2021.12.18 14:49
+
