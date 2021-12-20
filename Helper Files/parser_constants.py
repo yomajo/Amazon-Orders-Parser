@@ -450,6 +450,18 @@ QUANTITY_PATTERN = {
     'Etsy' : r'^\d+\svnt.\s',
     }
 
+TRACKED_LP_SHIPMENT_TYPE = {
+    'VKS' : 'P2P_3_XS',
+    'MKS' : 'P2P_3_S',
+    'DKS' : 'P2P_3_M',
+}
+
+UNTRACKED_LP_SHIPMENT_TYPE = {
+    'VKS' : 'P2P_1_XS',
+    'MKS' : 'P2P_1_S',
+    'DKS' : 'P2P_1_M',
+}
+
 
 if __name__ == '__main__':
     pass

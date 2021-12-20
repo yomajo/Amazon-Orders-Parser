@@ -1,4 +1,4 @@
-from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS
+from parser_constants import ORIGIN_COUNTRY_CRITERIAS, CATEGORY_CRITERIAS, TRACKED_LP_SHIPMENT_TYPE, UNTRACKED_LP_SHIPMENT_TYPE
 from countries import COUNTRY_CODES, GIFT_COUNTRIES
 from string import ascii_letters
 import logging
@@ -218,13 +218,12 @@ def alert_VBA_duplicate_mapping_sku(sku_code:str):
     logging.warning(f'Duplicate SKU code found in mapping xlsx. User has been warned. SKU code found at least twice: {sku_code}')
     print(f'DUPLICATE SKU IN MAPPING: {sku_code}')
 
-def validate_LP_siuntos_rusis_header(vmdoption:str, tracked:bool):
+def get_LP_siuntos_rusis_header(vmdoption:str, tracked:bool):
     '''returns 'siuntos rusis' header value for LP csv'''
-    if vmdoption == 'VKS' and tracked:
-        return 'P2P_3_XS'
-    elif vmdoption == 'VKS' and not tracked:
-        return 'P2P_1_XS'
-    else:
+    try:
+        shipment_type_dict = TRACKED_LP_SHIPMENT_TYPE if tracked else UNTRACKED_LP_SHIPMENT_TYPE
+        return shipment_type_dict[vmdoption]
+    except:
         return vmdoption
 
 def engineer_total(country_code:str, order_total:float, order_id:str) -> float:

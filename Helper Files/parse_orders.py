@@ -1,5 +1,5 @@
 from parser_utils import get_dpost_product_header_val, get_origin_country, shorten_word_sequence, enter_LP_address
-from parser_utils import get_lp_priority, validate_LP_siuntos_rusis_header, get_hs_code
+from parser_utils import get_lp_priority, get_LP_siuntos_rusis_header, get_hs_code
 from file_utils import get_output_dir, delete_file
 from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
 from parser_constants import EXPORT_CONSTANTS
@@ -135,7 +135,7 @@ class ParseOrders():
 
             # LP specific headers
             elif header == 'Siuntos rūšis':
-                export[header] = validate_LP_siuntos_rusis_header(order['vmdoption'], order['tracked'])
+                export[header] = get_LP_siuntos_rusis_header(order['vmdoption'], order['tracked'])
             elif header in ['Gavėjo gatvė', 'Adreso eilutė 1', 'Adreso eilutė 2']:
                 export[header] = enter_LP_address(header, order, self.proxy_keys)
             
