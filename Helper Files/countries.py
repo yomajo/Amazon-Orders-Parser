@@ -11,6 +11,7 @@ GIFT_COUNTRIES = [
     'CN',
     'PE',
     'BA',
+    'IL',
 ]
 
 LP_COUNTRIES = [
