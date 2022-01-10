@@ -458,4 +458,7 @@ COUNTRY_CODES = {
     'ZENTRALAFRIKANISCHE REPUBLIK':'CF',
     'ZIMBABWE':'ZW',
     'ZYPERN':'CY',
+    'U.S. Virgin Islands':'VI',
+    'Fidschi':'FJ',
+    'Französisch-Guayana':'GF',
 }
