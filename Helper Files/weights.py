@@ -1,8 +1,7 @@
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, engineer_total
 from parser_utils import get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
-from parser_constants import QUANTITY_PATTERN
-from countries import TRACKED_COUNTRIES
+from parser_constants import QUANTITY_PATTERN, TRACKED_INNER_SALES_CHANNELS
 from file_utils import get_output_dir
 from sku_mapping import SKUMapping
 from pricing_wb import PricingWB
@@ -155,6 +154,7 @@ class OrderData():
     def __is_amazon_tracked(self, order:dict) -> dict:
         '''flips order 'tracked' bool to True if meets rules for amazon marketplace'''
         country = order[self.proxy_keys['ship-country']]
+        inner_sales_channel = order[self.proxy_keys['sales-channel']].lower()
         # conditions for specific services:
         if order['shipping-eur'] >= 15:
             order['shipping_service'] = 'ups'
@@ -163,7 +163,7 @@ class OrderData():
             order['shipping_service'] = 'etonas'
             order['tracked'], order['skip_service_selection'] = True, True
         # conditions to mark as tracked:
-        elif self.sales_channel == 'AmazonCOM' or order['total-eur'] > 70 or country in TRACKED_COUNTRIES:
+        elif inner_sales_channel in TRACKED_INNER_SALES_CHANNELS or order['total-eur'] > 70:
             order['tracked'] = True
         return order
 

@@ -462,6 +462,8 @@ UNTRACKED_LP_SHIPMENT_TYPE = {
     'DKS' : 'P2P_1_M',
 }
 
+TRACKED_INNER_SALES_CHANNELS = ['amazon.fr', 'amazon.it', 'amazon.es', 'amazon.com', 'amazon.ca', 'amazon.com.mx']
+
 
 if __name__ == '__main__':
     pass

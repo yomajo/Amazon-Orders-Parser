@@ -1,5 +1,3 @@
-TRACKED_COUNTRIES = ['ES', 'FR', 'IT']
-
 GIFT_COUNTRIES = [
     'CL',
     'CA',

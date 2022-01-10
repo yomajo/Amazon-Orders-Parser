@@ -786,3 +786,210 @@ INFO:root:CSV c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.cs
 INFO:root:
 RUN ENDED in: 2.97 sec. Timestamp: 2021.12.20 10:16
 
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:02
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 63/63 new/loaded orders for further processing
+INFO:root:Loaded file contains: 63. Further processing: 63 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:29055150350538 (to: CA) total-engineered key has new random value: 15.83
+WARNING:root:36436660919290 (to: CA) total-engineered key has new random value: 16.92
+WARNING:root:16493692204538 (to: CA) total-engineered key has new random value: 15.53
+WARNING:root:08920304403882 (to: CA) total-engineered key has new random value: 18.17
+WARNING:root:26984848405114 (to: CA) total-engineered key has new random value: 17.6
+WARNING:root:17546547566434 (to: CA) total-engineered key has new random value: 19.15
+INFO:root:Current sku mapping dict has 1354 entries
+INFO:root:0.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.71 sec. Timestamp: 2022.01.10 14:02
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:04
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 63/63 new/loaded orders for further processing
+INFO:root:Loaded file contains: 63. Further processing: 63 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:29055150350538 (to: CA) total-engineered key has new random value: 16.74
+WARNING:root:36436660919290 (to: CA) total-engineered key has new random value: 17.48
+WARNING:root:16493692204538 (to: CA) total-engineered key has new random value: 15.66
+WARNING:root:08920304403882 (to: CA) total-engineered key has new random value: 17.71
+WARNING:root:26984848405114 (to: CA) total-engineered key has new random value: 16.76
+WARNING:root:17546547566434 (to: CA) total-engineered key has new random value: 18.07
+INFO:root:Current sku mapping dict has 1354 entries
+INFO:root:0.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.65 sec. Timestamp: 2022.01.10 14:04
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:07
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 63/63 new/loaded orders for further processing
+INFO:root:Loaded file contains: 63. Further processing: 63 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:29055150350538 (to: CA) total-engineered key has new random value: 18.85
+WARNING:root:36436660919290 (to: CA) total-engineered key has new random value: 15.93
+WARNING:root:16493692204538 (to: CA) total-engineered key has new random value: 15.09
+WARNING:root:08920304403882 (to: CA) total-engineered key has new random value: 15.15
+WARNING:root:26984848405114 (to: CA) total-engineered key has new random value: 19.3
+WARNING:root:17546547566434 (to: CA) total-engineered key has new random value: 17.65
+INFO:root:Current sku mapping dict has 1354 entries
+INFO:root:0.00% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 2.63 sec. Timestamp: 2022.01.10 14:07
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:08
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 300/300 new/loaded orders for further processing
+INFO:root:Loaded file contains: 300. Further processing: 300 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:60517083935811 (to: CA) total-engineered key has new random value: 18.41
+WARNING:root:26040598541995 (to: CA) total-engineered key has new random value: 15.73
+WARNING:root:32457906145339 (to: BA) total-engineered key has new random value: 19.59
+INFO:root:Current sku mapping dict has 1354 entries
+WARNING:root:order: 40074340836875 cant calc weights. skus: ['(20 vnt.) 10 PR70 6BL everActive']
+INFO:root:0.33% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.08 sec. Timestamp: 2022.01.10 14:08
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:09
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 0/434 new/loaded orders for further processing
+INFO:root:Loaded file contains: 434. Further processing: 0 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+INFO:root:100% orders had sufficient weight / sku data!
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:No new orders for processing. Terminating, alerting VBA.
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:24
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Database has been created at c:\Coding\Amazon Orders Parser\Helper Files\orders.db
+INFO:root:Returning 434/434 new/loaded orders for further processing
+INFO:root:Loaded file contains: 434. Further processing: 434 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:2328025964 (to: CA) total-engineered key has new random value: 19.81
+WARNING:root:2326965795 (to: CA) total-engineered key has new random value: 16.55
+WARNING:root:2322904500 (to: IL) total-engineered key has new random value: 16.79
+WARNING:root:2320803831 (to: BA) total-engineered key has new random value: 16.71
+WARNING:root:2318715151 (to: BA) total-engineered key has new random value: 19.36
+WARNING:root:2318496031 (to: CA) total-engineered key has new random value: 17.27
+WARNING:root:2310739287 (to: CA) total-engineered key has new random value: 16.2
+WARNING:root:2310234697 (to: CA) total-engineered key has new random value: 16.39
+WARNING:root:2305993853 (to: CA) total-engineered key has new random value: 16.1
+WARNING:root:2303595221 (to: CA) total-engineered key has new random value: 19.24
+WARNING:root:2302684123 (to: BY) total-engineered key has new random value: 7.53
+WARNING:root:2301894429 (to: CA) total-engineered key has new random value: 15.53
+WARNING:root:2303298764 (to: CA) total-engineered key has new random value: 19.24
+WARNING:root:2301817266 (to: BR) total-engineered key has new random value: 7.06
+WARNING:root:2298078614 (to: IL) total-engineered key has new random value: 16.45
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 19.62
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 18.45
+WARNING:root:2289346362 (to: IL) total-engineered key has new random value: 16.6
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 16.29
+WARNING:root:order: 2327939044 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1040828']
+WARNING:root:order: 2326965795 cant calc weights. skus: ['1 vnt. PC03', '1 vnt. PC21', '1 vnt. PC38']
+WARNING:root:order: 2320163100 cant calc weights. skus: ['1 vnt. T1155']
+WARNING:root:order: 2314808807 cant calc weights. skus: ['1 vnt. trackeddelivery']
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:2.07% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.24 sec. Timestamp: 2022.01.10 14:25
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.01.10 14:29
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 434/434 new/loaded orders for further processing
+INFO:root:Loaded file contains: 434. Further processing: 434 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-01-07
+WARNING:root:2328025964 (to: CA) total-engineered key has new random value: 16.79
+WARNING:root:2326965795 (to: CA) total-engineered key has new random value: 17.12
+WARNING:root:2322904500 (to: IL) total-engineered key has new random value: 16.15
+WARNING:root:2320803831 (to: BA) total-engineered key has new random value: 19.35
+WARNING:root:2318715151 (to: BA) total-engineered key has new random value: 19.84
+WARNING:root:2318496031 (to: CA) total-engineered key has new random value: 16.64
+WARNING:root:2310739287 (to: CA) total-engineered key has new random value: 17.91
+WARNING:root:2310234697 (to: CA) total-engineered key has new random value: 16.7
+WARNING:root:2305993853 (to: CA) total-engineered key has new random value: 15.66
+WARNING:root:2303595221 (to: CA) total-engineered key has new random value: 17.17
+WARNING:root:2302684123 (to: BY) total-engineered key has new random value: 6.54
+WARNING:root:2301894429 (to: CA) total-engineered key has new random value: 15.19
+WARNING:root:2303298764 (to: CA) total-engineered key has new random value: 15.41
+WARNING:root:2301817266 (to: BR) total-engineered key has new random value: 6.9
+WARNING:root:2298078614 (to: IL) total-engineered key has new random value: 17.45
+WARNING:root:2293077738 (to: CA) total-engineered key has new random value: 15.37
+WARNING:root:2291365176 (to: CA) total-engineered key has new random value: 16.13
+WARNING:root:2289346362 (to: IL) total-engineered key has new random value: 17.3
+WARNING:root:2283323387 (to: CA) total-engineered key has new random value: 18.54
+WARNING:root:order: 2327939044 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1040828']
+WARNING:root:order: 2326965795 cant calc weights. skus: ['1 vnt. PC03', '1 vnt. PC21', '1 vnt. PC38']
+WARNING:root:order: 2320163100 cant calc weights. skus: ['1 vnt. T1155']
+WARNING:root:order: 2314808807 cant calc weights. skus: ['1 vnt. trackeddelivery']
+WARNING:root:order: 2296471189 cant calc weights. skus: ['1 vnt. F21816', '1 vnt. 9780764358920']
+WARNING:root:order: 2292283487 cant calc weights. skus: ['1 vnt. F28517-red', '1 vnt. F28517-blue']
+WARNING:root:order: 2288709359 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. 10022198']
+WARNING:root:order: 2289804572 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630']
+WARNING:root:order: 2288022338 cant calc weights. skus: ['1 vnt. 1040830', '1 vnt. 1034630', '1 vnt. T1147']
+INFO:root:2.07% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\Etsy-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to Etsy ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:Total of 434 new orders have been added to database, after exports were completed
+INFO:root:
+RUN ENDED in: 8.07 sec. Timestamp: 2022.01.10 14:30
+
