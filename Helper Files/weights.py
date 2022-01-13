@@ -196,7 +196,7 @@ class OrderData():
     def _validate_calculation(self, qty_purchased:int, skus:list) -> bool:
         '''returns False if: for Etsy orders, when weight can not be calculated due to various possible combinations'''
         if self.sales_channel == 'Etsy':
-            if len(skus) > 1 and qty_purchased != len(skus):
+            if len(skus) > 1 and qty_purchased > 1 and qty_purchased != len(skus):
                 logging.debug(f'Etsy order weights can\'t be calculated due to various possible combinations. Qty: {qty_purchased}, skus: {skus}')
                 return False
         return True
