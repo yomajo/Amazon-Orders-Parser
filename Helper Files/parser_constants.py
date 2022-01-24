@@ -19,23 +19,23 @@ CATEGORY_CRITERIAS = [
     ['lo scarabeo', '', 'LO SCARABEO', 'TAROT CARDS'],
     ['agm', 'cards', 'AGM', 'TAROT CARDS'],
     ['agm', 'karten', 'AGM', 'TAROT CARDS'],
-    ['solarus',	'', 'SOLARUS', 'Tarot Cards'],
-    ['animal dreaming', '',	'ANIMAL DREAMING',	'Tarot Cards'],
-    ['findhorn', '', 'FINDHORN PRESS', 'Tarot Cards'],
-    ['cico', '', 'CICO BOOKS', 'Tarot Cards'],
-    ['bear', 'company', 'BEAR & COMPANY', 'Tarot Cards'],
-    ['tarcher', '', 'TARCHER', 'Tarot Cards'],
-    ['world tree', '', 'WORLD TREE PRESS', 'Tarot Cards'],
-    ['earth dancer', '', 'EARTH DANCER', 'Tarot Cards'],
-    ['inner traditions', '', 'INNER TRADITIONS', 'Tarot Cards'],
-    ['harper', '', 'HARPER ONE', 'Tarot Cards'],
-    ['touchstone', '', 'TOUCHSTONE', 'Tarot Cards'],
-    ['destiny', '', 'DESTINY', 'Tarot Cards'],
-    ['rockpool', '', 'ROCKPOOL', 'Tarot Cards'],
-    ['music design', '', 'MUSIC DESIGN', 'Tarot Cards'],
-    ['adams media', '', 'ADAMS MEDIA',	'Tarot Cards'],
-    ['welbeck',	'',	'WELLBECK', 'Tarot Cards'],
-    ['beyond words', '', 'BEYOND WORDS', 'Tarot Cards'],
+    ['solarus',	'', 'SOLARUS', 'TAROT CARDS'],
+    ['animal dreaming', '',	'ANIMAL DREAMING', 'TAROT CARDS'],
+    ['findhorn', '', 'FINDHORN PRESS', 'TAROT CARDS'],
+    ['cico', '', 'CICO BOOKS', 'TAROT CARDS'],
+    ['bear', 'company', 'BEAR & COMPANY', 'TAROT CARDS'],
+    ['tarcher', '', 'TARCHER', 'TAROT CARDS'],
+    ['world tree', '', 'WORLD TREE PRESS', 'TAROT CARDS'],
+    ['earth dancer', '', 'EARTH DANCER', 'TAROT CARDS'],
+    ['inner traditions', '', 'INNER TRADITIONS', 'TAROT CARDS'],
+    ['harper', '', 'HARPER ONE', 'TAROT CARDS'],
+    ['touchstone', '', 'TOUCHSTONE', 'TAROT CARDS'],
+    ['destiny', '', 'DESTINY', 'TAROT CARDS'],
+    ['rockpool', '', 'ROCKPOOL', 'TAROT CARDS'],
+    ['music design', '', 'MUSIC DESIGN', 'TAROT CARDS'],
+    ['adams media', '', 'ADAMS MEDIA', 'TAROT CARDS'],
+    ['welbeck',	'',	'WELLBECK', 'TAROT CARDS'],
+    ['beyond words', '', 'BEYOND WORDS', 'TAROT CARDS'],
     ['us games', '', 'US GAMES', 'TAROT CARDS'],
     ['blue angel', '', 'BLUE ANGELS', 'TAROT CARDS'],
     ['schiffer', '', 'SCHIFFER', 'TAROT CARDS'],
@@ -464,6 +464,10 @@ UNTRACKED_LP_SHIPMENT_TYPE = {
 
 TRACKED_INNER_SALES_CHANNELS = ['amazon.fr', 'amazon.it', 'amazon.es', 'amazon.com', 'amazon.ca', 'amazon.com.mx']
 
+SKU_CATEGORY = {
+    'WZ5': 'TAROT CARDS',
+    'PAM36': 'TAROT CARDS',
+}
 
 if __name__ == '__main__':
     pass

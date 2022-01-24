@@ -1,7 +1,7 @@
 from parser_utils import get_inner_qty_sku, get_product_category_or_brand, engineer_total
 from parser_utils import get_order_ship_price, get_total_price
 from excel_utils import get_last_used_row_col, cell_to_float
-from parser_constants import QUANTITY_PATTERN, TRACKED_INNER_SALES_CHANNELS
+from parser_constants import QUANTITY_PATTERN, TRACKED_INNER_SALES_CHANNELS, SKU_CATEGORY
 from file_utils import get_output_dir
 from sku_mapping import SKUMapping
 from pricing_wb import PricingWB
@@ -174,6 +174,7 @@ class OrderData():
         title = order[self.proxy_keys['title']]
         order['brand'] = get_product_category_or_brand(title, return_brand=True)
         order['category'] = get_product_category_or_brand(title, return_brand=False)
+        order = self._find_uncategorized_by_sku(order, skus[0])        
         return order
 
     def _add_etsy_order_title(self, order:dict, skus:list) -> dict:
@@ -193,6 +194,14 @@ class OrderData():
         order['title'] = 'Title not available'
         return order
 
+    def _find_uncategorized_by_sku(self, order:dict, sku:str) -> dict:
+        '''adds order category based on SKU_CATEGORY dict if order category at this point is OTHER or PLAYING CARDS (by generic keyword)'''
+        if order['category'] in ['OTHER', 'PLAYING CARDS']:
+            _, inner_sku = get_inner_qty_sku(sku, self.pattern)
+            if inner_sku in SKU_CATEGORY:
+                order['category'] = SKU_CATEGORY[inner_sku]
+        return order
+    
     def _validate_calculation(self, qty_purchased:int, skus:list) -> bool:
         '''returns False if: for Etsy orders, when weight can not be calculated due to various possible combinations'''
         if self.sales_channel == 'Etsy':
