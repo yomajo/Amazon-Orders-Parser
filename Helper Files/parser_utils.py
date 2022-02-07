@@ -59,6 +59,8 @@ def get_hs_code(item_brand:str, item_category:str) -> str:
         return '850610'
     elif item_category == 'PLAYING CARDS' or item_category == 'TAROT CARDS':
         return '950440'
+    elif item_category == 'DICE':
+        return '95049090'
     else:
         return '950300'
 
