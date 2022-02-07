@@ -30,6 +30,15 @@ def get_product_category_or_brand(title:str, return_brand:bool=False) -> str:
             return criteria_set[return_index]
     return 'OTHER'
 
+def get_category_by_brand(brand_to_match:str) -> str:
+    '''returns category by passed brand'''
+    if brand_to_match == 'OTHER':
+        return 'OTHER'
+    for _, _, brand, category in CATEGORY_CRITERIAS:
+        if brand_to_match == brand:
+            return category
+    return 'OTHER'
+
 def get_sales_channel_hs_code(order:dict, product_name_proxy_key:str):
     '''returns HS code based on sales channel. Hardcoded for Etsy in case of no present title proxy key'''
     if product_name_proxy_key == '':

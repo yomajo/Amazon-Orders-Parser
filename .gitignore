@@ -17,4 +17,5 @@ launch.json
 *.json
 *.csv
 *.xlsx
+*.xlsm
 main.spec

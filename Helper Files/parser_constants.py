@@ -95,7 +95,8 @@ CATEGORY_CRITERIAS = [
     ['basketball', '', 'FOOTBOOL', 'FOOTBALL'],
     ['bomb cosm', '', 'BOMB COSM', 'OTHERS'],
     ['baff', '', 'GELLI BAFF', 'OTHERS'],
-    ['injinji', '', 'INJINJI', 'OTHERS']
+    ['injinji', '', 'INJINJI', 'OTHERS'],
+    ['q-workshop', '', 'Q-WORKSHOP', 'DICE']
     ]
 
 NLPOST_HEADERS = [
@@ -468,6 +469,24 @@ SKU_CATEGORY = {
     'WZ5': 'TAROT CARDS',
     'PAM36': 'TAROT CARDS',
 }
+
+READ_EXCEL_CONFIG = {
+    'SKU_MAPPING': {
+        'wb_name': 'Amazon SKU Mapping.xlsx',
+        'ws_name': 'Mapping',
+        'start_row': 2,
+        'check_integrity': True,
+        'alert_for_duplicates': True,
+        },
+    'SKU_BRAND': {
+        'wb_name': 'Storage.xlsm',
+        'ws_name': 'Storage',
+        'start_row': 1,
+        'check_integrity': False,
+        'alert_for_duplicates': False,
+    },
+}
+
 
 if __name__ == '__main__':
     pass
