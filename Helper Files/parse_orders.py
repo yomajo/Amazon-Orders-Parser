@@ -269,7 +269,7 @@ class ParseOrders():
         elif order['category'] == 'TAROT CARDS' and order[self.proxy_keys['ship-country']] in ['GB', 'UK'] and not skip_etonas:
             logging.debug(f'WITHOUT PRICING: Order routed to ETONAS')
             self.etonas_orders.append(order)
-        elif order['category'] in ['TAROT CARDS', 'PLAYING CARDS']:
+        elif order['category'] in ['TAROT CARDS', 'PLAYING CARDS', 'DICE']:
             logging.debug(f'WITHOUT PRICING: Order routed to DPOST')
             self.dpost_orders.append(order)
         elif order['tracked']:

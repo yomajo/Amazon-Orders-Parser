@@ -1,22 +1,20 @@
-from parser_utils import get_inner_qty_sku, get_product_category_or_brand, engineer_total
-from parser_utils import get_order_ship_price, get_total_price
-from excel_utils import get_last_used_row_col, cell_to_float
-from parser_constants import QUANTITY_PATTERN, TRACKED_INNER_SALES_CHANNELS, SKU_CATEGORY
-from file_utils import get_output_dir
-from sku_mapping import SKUMapping
-from pricing_wb import PricingWB
-from datetime import datetime
-from forex import Forex
 import openpyxl
 import logging
 import os
+from datetime import datetime
+
+from parser_utils import get_inner_qty_sku, get_product_category_or_brand, engineer_total
+from parser_utils import get_order_ship_price, get_total_price, get_category_by_brand
+from excel_utils import get_last_used_row_col, cell_to_float
+from file_utils import get_output_dir
+from sku_mapping import ReadExcelFile
+from pricing_wb import PricingWB
+from forex import Forex
+from parser_constants import QUANTITY_PATTERN, TRACKED_INNER_SALES_CHANNELS, SKU_CATEGORY, READ_EXCEL_CONFIG
 
 
 # GLOBAL VARIABLES
 WB_NAME = 'WEIGHTS.xlsx'
-WEIGHT_WB_PATH = os.path.join(get_output_dir(client_file=False), WB_NAME)
-SKU_MAPPING_WB_NAME = 'Amazon SKU Mapping.xlsx'
-SKU_MAPPING_WB_PATH = os.path.join(get_output_dir(client_file=False), SKU_MAPPING_WB_NAME)
 
 
 class OrderData():
@@ -46,8 +44,8 @@ class OrderData():
         
         self.weight_data = self._parse_weights_wb()
         if self.sales_channel != 'Etsy':    
-            self.sku_mapping = SKUMapping(SKU_MAPPING_WB_PATH).read_sku_mapping_to_dict()
-
+            self.sku_mapping = ReadExcelFile(READ_EXCEL_CONFIG['SKU_MAPPING']).get_ws_data()
+        self.sku_brand = ReadExcelFile(READ_EXCEL_CONFIG['SKU_BRAND']).get_ws_data()
         self.no_matching_skus = []
         self.invalid_weight_orders = 0
 
@@ -69,15 +67,16 @@ class OrderData():
 
     def _parse_weights_wb(self) -> dict:
         '''returns weights data as dict from reading excel workbook'''
-        ws = self._get_weight_ws()
+        weight_wb_path = os.path.join(get_output_dir(client_file=False), WB_NAME)
+        ws = self._get_weight_ws(weight_wb_path)
         ws_limits = get_last_used_row_col(ws)
         weight_data = self._get_ws_data(ws, ws_limits)
         self.wb.close()
         return weight_data
 
-    def _get_weight_ws(self):
+    def _get_weight_ws(self, wb_path:str):
         '''returns ws object'''
-        self.wb = openpyxl.load_workbook(WEIGHT_WB_PATH)
+        self.wb = openpyxl.load_workbook(wb_path)
         ws = self.wb['Weight']
         return ws
     
@@ -174,6 +173,7 @@ class OrderData():
         title = order[self.proxy_keys['title']]
         order['brand'] = get_product_category_or_brand(title, return_brand=True)
         order['category'] = get_product_category_or_brand(title, return_brand=False)
+        order = self._add_brand_by_direct_sku(order, skus[0])
         order = self._find_uncategorized_by_sku(order, skus[0])        
         return order
 
@@ -194,6 +194,14 @@ class OrderData():
         order['title'] = 'Title not available'
         return order
 
+    def _add_brand_by_direct_sku(self, order:dict, sku:str) -> dict:
+        '''add order brand and category by directly (if found) using self.sku_brand (Storage.xlsm)'''
+        if order['category'] in ['OTHER']:
+            _, inner_sku = get_inner_qty_sku(sku, self.pattern)
+            order['brand'] = self.sku_brand.get(inner_sku, 'OTHER')
+            order['category'] = get_category_by_brand(order['brand'])
+        return order
+    
     def _find_uncategorized_by_sku(self, order:dict, sku:str) -> dict:
         '''adds order category based on SKU_CATEGORY dict if order category at this point is OTHER or PLAYING CARDS (by generic keyword)'''
         if order['category'] in ['OTHER', 'PLAYING CARDS']:
@@ -253,7 +261,7 @@ class OrderData():
     def _get_potential_package_weight(self, order:dict, sku_weight_data:dict) -> float:
         '''returns package weight as float based on product category'''
         try:
-            if order['category'] =='PLAYING CARDS' or order['category'] =='TAROT CARDS':
+            if order['category'] in ['PLAYING CARDS', 'TAROT CARDS', 'DICE']:
                 return float(sku_weight_data['Package DP'])
             else:
                 return float(sku_weight_data['Package LP'])
