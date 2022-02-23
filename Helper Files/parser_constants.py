@@ -468,6 +468,7 @@ TRACKED_INNER_SALES_CHANNELS = ['amazon.fr', 'amazon.it', 'amazon.es', 'amazon.c
 SKU_CATEGORY = {
     'WZ5': 'TAROT CARDS',
     'PAM36': 'TAROT CARDS',
+    'SWT80': 'TAROT CARDS',
 }
 
 READ_EXCEL_CONFIG = {

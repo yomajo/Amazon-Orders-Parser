@@ -5333,3 +5333,91 @@ INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
 INFO:root:
 RUN ENDED in: 3.08 sec. Timestamp: 2022.01.24 11:31
 
+INFO:root:
+
+ NEW RUN STARTING: 2022.02.23 10:51
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 345/345 new/loaded orders for further processing
+INFO:root:Loaded file contains: 345. Further processing: 345 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-02-22
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 66211572748939 cant calc weights. skus: ['9O-38DV-NRGG']
+WARNING:root:order: 09949679702883 cant calc weights. skus: ['(8 vnt.) AA 4BL ENERGIZER Power Plus']
+WARNING:root:order: 58325095016739 cant calc weights. skus: ['(8 vnt.) AA 4BL ENERGIZER Power Plus']
+WARNING:root:order: 69770253274211 cant calc weights. skus: ['5Z-C7W6-G6KU']
+WARNING:root:order: 65109187399515 cant calc weights. skus: ['(1 vnt.) LAD. DURACELL CEF14']
+WARNING:root:order: 20896743592491 cant calc weights. skus: ['(2 vnt.) LR754 2BL CAMELION ALK LR48 AG5']
+WARNING:root:order: 38261664145059 cant calc weights. skus: ['9C-60PV-HIS0']
+WARNING:root:order: 08135782497291 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:order: 62965944629587 cant calc weights. skus: ['XA-NYA3-4NPK']
+WARNING:root:order: 26626016820763 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: NL. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: LP. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: DP. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: ETONAS. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: DPD. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: UPS. Returning None. Err: Row or column values must be at least 1
+WARNING:root:order: 54720308184827 cant calc weights. skus: ['(10 vnt.) CR2032 5BL Maxell HOLOGRAM']
+WARNING:root:order: 70036512978235 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:order: 25810303720235 cant calc weights. skus: ['(16 vnt.) L91 4BL R6 ENERGIZER LITOWA UL']
+WARNING:root:order: 05894721927339 cant calc weights. skus: ['(5 vnt.) CR2032 5BL Maxell']
+WARNING:root:order: 04536717948699 cant calc weights. skus: ['N0-I7QJ-BL7F']
+WARNING:root:order: 58837798873227 cant calc weights. skus: ['5Z-C7W6-G6KU']
+WARNING:root:order: 68995095246243 cant calc weights. skus: ['pagan cats old']
+WARNING:root:order: 35135814308139 cant calc weights. skus: ['E7-FZT1-M8KI']
+WARNING:root:order: 05042472202915 cant calc weights. skus: ['0I-IBKL-OZW0']
+INFO:root:5.51% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.53 sec. Timestamp: 2022.02.23 10:51
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.02.23 10:59
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 345/345 new/loaded orders for further processing
+INFO:root:Loaded file contains: 345. Further processing: 345 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 66211572748939 cant calc weights. skus: ['9O-38DV-NRGG']
+WARNING:root:order: 09949679702883 cant calc weights. skus: ['(8 vnt.) AA 4BL ENERGIZER Power Plus']
+WARNING:root:order: 58325095016739 cant calc weights. skus: ['(8 vnt.) AA 4BL ENERGIZER Power Plus']
+WARNING:root:order: 69770253274211 cant calc weights. skus: ['5Z-C7W6-G6KU']
+WARNING:root:order: 65109187399515 cant calc weights. skus: ['(1 vnt.) LAD. DURACELL CEF14']
+WARNING:root:order: 20896743592491 cant calc weights. skus: ['(2 vnt.) LR754 2BL CAMELION ALK LR48 AG5']
+WARNING:root:order: 38261664145059 cant calc weights. skus: ['9C-60PV-HIS0']
+WARNING:root:order: 08135782497291 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:order: 62965944629587 cant calc weights. skus: ['XA-NYA3-4NPK']
+WARNING:root:order: 26626016820763 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: NL. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: LP. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: DP. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: ETONAS. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: DPD. Returning None. Err: Row or column values must be at least 1
+WARNING:root:Failed to retrieve pricing for order id: 13034113309643 service: UPS. Returning None. Err: Row or column values must be at least 1
+WARNING:root:order: 54720308184827 cant calc weights. skus: ['(10 vnt.) CR2032 5BL Maxell HOLOGRAM']
+WARNING:root:order: 70036512978235 cant calc weights. skus: ['(4 vnt.) L91 4BL R6 ENERGIZER LITOWA ULT']
+WARNING:root:order: 25810303720235 cant calc weights. skus: ['(16 vnt.) L91 4BL R6 ENERGIZER LITOWA UL']
+WARNING:root:order: 05894721927339 cant calc weights. skus: ['(5 vnt.) CR2032 5BL Maxell']
+WARNING:root:order: 04536717948699 cant calc weights. skus: ['N0-I7QJ-BL7F']
+WARNING:root:order: 58837798873227 cant calc weights. skus: ['5Z-C7W6-G6KU']
+WARNING:root:order: 68995095246243 cant calc weights. skus: ['pagan cats old']
+WARNING:root:order: 35135814308139 cant calc weights. skus: ['E7-FZT1-M8KI']
+WARNING:root:order: 05042472202915 cant calc weights. skus: ['0I-IBKL-OZW0']
+INFO:root:5.51% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.39 sec. Timestamp: 2022.02.23 10:59
+
