@@ -86,6 +86,7 @@ CATEGORY_CRITERIAS = [
     ['li-ion', '', 'LI-ION', 'BATTERIES'],
     ['camelion', '', 'CAMELION', 'BATTERIES'],
     ['philips', '', 'PHILIPS', 'BATTERIES'],
+    ['pila', '', 'ZBATTERY BRAND', 'BATTERIES'],
     ['batt', '', 'ZBATTERY BRAND', 'BATTERIES'],
 
     ['FOOTBALL', '', 'FOOTBOOL', 'FOOTBALL'],

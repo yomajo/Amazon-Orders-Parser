@@ -5421,3 +5421,184 @@ INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
 INFO:root:
 RUN ENDED in: 3.39 sec. Timestamp: 2022.02.23 10:59
 
+INFO:root:
+
+ NEW RUN STARTING: 2022.03.10 15:11
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 120/120 new/loaded orders for further processing
+INFO:root:Loaded file contains: 120. Further processing: 120 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-03-09
+WARNING:root:33870616349882 (to: CA) total-engineered key has new random value: 17.97
+WARNING:root:40905130940314 (to: CA) total-engineered key has new random value: 15.82
+WARNING:root:19341579367858 (to: CA) total-engineered key has new random value: 18.81
+WARNING:root:16138249767370 (to: IL) total-engineered key has new random value: 17.51
+WARNING:root:06502457608650 (to: BR) total-engineered key has new random value: 6.5
+WARNING:root:37601407124562 (to: BR) total-engineered key has new random value: 8.95
+WARNING:root:49352791755538 (to: CA) total-engineered key has new random value: 16.89
+WARNING:root:36456353474914 (to: CA) total-engineered key has new random value: 15.18
+WARNING:root:65011179926490 (to: BR) total-engineered key has new random value: 8.47
+WARNING:root:65062022730434 (to: CN) total-engineered key has new random value: 19.06
+WARNING:root:62882937816682 (to: CA) total-engineered key has new random value: 15.49
+WARNING:root:38876206878666 (to: CA) total-engineered key has new random value: 15.89
+WARNING:root:57846420314402 (to: CA) total-engineered key has new random value: 15.55
+WARNING:root:20027118305050 (to: IL) total-engineered key has new random value: 19.73
+WARNING:root:07351892673282 (to: CA) total-engineered key has new random value: 16.83
+WARNING:root:37204393687626 (to: CA) total-engineered key has new random value: 17.17
+WARNING:root:03971624246794 (to: CA) total-engineered key has new random value: 16.84
+WARNING:root:55413306568602 (to: BR) total-engineered key has new random value: 8.35
+WARNING:root:60780650830554 (to: CA) total-engineered key has new random value: 15.47
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:05808951793938 (to: CA) total-engineered key has new random value: 16.27
+WARNING:root:01578683692298 (to: CA) total-engineered key has new random value: 15.91
+WARNING:root:15141939102338 (to: CA) total-engineered key has new random value: 18.0
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 42192914781250 cant calc weights. skus: ['(4 vnt.) AAA BL4 500mah Energizer']
+INFO:root:0.83% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 3.72 sec. Timestamp: 2022.03.10 15:12
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.03.10 15:14
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 120/120 new/loaded orders for further processing
+INFO:root:Loaded file contains: 120. Further processing: 120 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:33870616349882 (to: CA) total-engineered key has new random value: 15.71
+WARNING:root:40905130940314 (to: CA) total-engineered key has new random value: 17.72
+WARNING:root:19341579367858 (to: CA) total-engineered key has new random value: 16.02
+WARNING:root:16138249767370 (to: IL) total-engineered key has new random value: 18.16
+WARNING:root:06502457608650 (to: BR) total-engineered key has new random value: 6.08
+WARNING:root:37601407124562 (to: BR) total-engineered key has new random value: 8.86
+WARNING:root:49352791755538 (to: CA) total-engineered key has new random value: 15.6
+WARNING:root:36456353474914 (to: CA) total-engineered key has new random value: 17.68
+WARNING:root:65011179926490 (to: BR) total-engineered key has new random value: 9.17
+WARNING:root:65062022730434 (to: CN) total-engineered key has new random value: 17.75
+WARNING:root:62882937816682 (to: CA) total-engineered key has new random value: 15.24
+WARNING:root:38876206878666 (to: CA) total-engineered key has new random value: 16.69
+WARNING:root:57846420314402 (to: CA) total-engineered key has new random value: 17.66
+WARNING:root:20027118305050 (to: IL) total-engineered key has new random value: 17.16
+WARNING:root:07351892673282 (to: CA) total-engineered key has new random value: 16.25
+WARNING:root:37204393687626 (to: CA) total-engineered key has new random value: 19.63
+WARNING:root:03971624246794 (to: CA) total-engineered key has new random value: 16.13
+WARNING:root:55413306568602 (to: BR) total-engineered key has new random value: 6.68
+WARNING:root:60780650830554 (to: CA) total-engineered key has new random value: 17.12
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:05808951793938 (to: CA) total-engineered key has new random value: 16.15
+WARNING:root:01578683692298 (to: CA) total-engineered key has new random value: 16.5
+WARNING:root:15141939102338 (to: CA) total-engineered key has new random value: 18.85
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 42192914781250 cant calc weights. skus: ['(4 vnt.) AAA BL4 500mah Energizer']
+INFO:root:0.83% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonCOM-NLPost 2022.03.10 15.14.xlsx created. Orders inside: 54
+INFO:root:
+RUN ENDED in: 3.34 sec. Timestamp: 2022.03.10 15:14
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.03.25 14:12
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 120/120 new/loaded orders for further processing
+INFO:root:Loaded file contains: 120. Further processing: 120 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-03-24
+WARNING:root:33870616349882 (to: CA) total-engineered key has new random value: 16.74
+WARNING:root:40905130940314 (to: CA) total-engineered key has new random value: 15.33
+WARNING:root:19341579367858 (to: CA) total-engineered key has new random value: 17.9
+WARNING:root:16138249767370 (to: IL) total-engineered key has new random value: 15.61
+WARNING:root:06502457608650 (to: BR) total-engineered key has new random value: 8.98
+WARNING:root:37601407124562 (to: BR) total-engineered key has new random value: 9.74
+WARNING:root:49352791755538 (to: CA) total-engineered key has new random value: 15.76
+WARNING:root:36456353474914 (to: CA) total-engineered key has new random value: 15.98
+WARNING:root:65011179926490 (to: BR) total-engineered key has new random value: 8.42
+WARNING:root:65062022730434 (to: CN) total-engineered key has new random value: 19.42
+WARNING:root:62882937816682 (to: CA) total-engineered key has new random value: 17.43
+WARNING:root:38876206878666 (to: CA) total-engineered key has new random value: 17.3
+WARNING:root:57846420314402 (to: CA) total-engineered key has new random value: 17.34
+WARNING:root:20027118305050 (to: IL) total-engineered key has new random value: 15.13
+WARNING:root:07351892673282 (to: CA) total-engineered key has new random value: 19.06
+WARNING:root:37204393687626 (to: CA) total-engineered key has new random value: 18.72
+WARNING:root:03971624246794 (to: CA) total-engineered key has new random value: 19.44
+WARNING:root:42971562144834 (to: CA) total-engineered key has new random value: 15.67
+WARNING:root:55413306568602 (to: BR) total-engineered key has new random value: 9.27
+WARNING:root:60780650830554 (to: CA) total-engineered key has new random value: 16.71
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:Attempted currency conversion w/ unsupported currency: . Alerting VBA, returning original amount
+WARNING:root:05808951793938 (to: CA) total-engineered key has new random value: 17.47
+WARNING:root:01578683692298 (to: CA) total-engineered key has new random value: 18.04
+WARNING:root:15141939102338 (to: CA) total-engineered key has new random value: 16.05
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 42192914781250 cant calc weights. skus: ['(4 vnt.) AAA BL4 500mah Energizer']
+INFO:root:0.83% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:Same Buyer Orders have been written to c:\Coding\Amazon Orders Parser\AmazonCOM-Same Buyer 2022.03.25 14.12.txt and being showed to client
+WARNING:root:Replacement order(s) exported to file: c:\Coding\Amazon Orders Parser\AmazonCOM-Replacement Orders 2022.03.25 14.12.txt
+INFO:root:
+RUN ENDED in: 3.48 sec. Timestamp: 2022.03.25 14:12
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.03.25 14:17
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args---
+INFO:root:Returning 120/120 new/loaded orders for further processing
+INFO:root:Loaded file contains: 120. Further processing: 120 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+WARNING:root:33870616349882 (to: CA) total-engineered key has new random value: 19.55
+WARNING:root:40905130940314 (to: CA) total-engineered key has new random value: 15.8
+WARNING:root:19341579367858 (to: CA) total-engineered key has new random value: 17.11
+WARNING:root:16138249767370 (to: IL) total-engineered key has new random value: 17.66
+WARNING:root:06502457608650 (to: BR) total-engineered key has new random value: 9.41
+WARNING:root:37601407124562 (to: BR) total-engineered key has new random value: 8.23
+WARNING:root:49352791755538 (to: CA) total-engineered key has new random value: 15.13
+WARNING:root:36456353474914 (to: CA) total-engineered key has new random value: 15.89
+WARNING:root:65011179926490 (to: BR) total-engineered key has new random value: 6.16
+WARNING:root:65062022730434 (to: CN) total-engineered key has new random value: 18.0
+WARNING:root:62882937816682 (to: CA) total-engineered key has new random value: 17.32
+WARNING:root:38876206878666 (to: CA) total-engineered key has new random value: 18.45
+WARNING:root:57846420314402 (to: CA) total-engineered key has new random value: 19.32
+WARNING:root:20027118305050 (to: IL) total-engineered key has new random value: 15.18
+WARNING:root:07351892673282 (to: CA) total-engineered key has new random value: 17.9
+WARNING:root:37204393687626 (to: CA) total-engineered key has new random value: 15.14
+WARNING:root:03971624246794 (to: CA) total-engineered key has new random value: 17.02
+WARNING:root:42971562144834 (to: CA) total-engineered key has new random value: 17.85
+WARNING:root:55413306568602 (to: BR) total-engineered key has new random value: 7.47
+WARNING:root:60780650830554 (to: CA) total-engineered key has new random value: 18.52
+WARNING:root:05808951793938 (to: CA) total-engineered key has new random value: 16.94
+WARNING:root:01578683692298 (to: CA) total-engineered key has new random value: 17.48
+WARNING:root:15141939102338 (to: CA) total-engineered key has new random value: 15.34
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1388 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 42192914781250 cant calc weights. skus: ['(4 vnt.) AAA BL4 500mah Energizer']
+INFO:root:0.83% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonCOM-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonCOM ruleset
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:Same Buyer Orders have been written to c:\Coding\Amazon Orders Parser\AmazonCOM-Same Buyer 2022.03.25 14.17.txt and being showed to client
+WARNING:root:Replacement order(s) exported to file: c:\Coding\Amazon Orders Parser\AmazonCOM-Replacement Orders 2022.03.25 14.17.txt
+INFO:root:
+RUN ENDED in: 3.00 sec. Timestamp: 2022.03.25 14:17
+

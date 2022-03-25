@@ -71,6 +71,12 @@ def delete_file(file_abspath:str):
     except Exception as e:
         logging.warning(f'Unexpected err: {e} while flushing db old records, deleting file: {file_abspath}')
 
+def export_as_textfile(fname:str, items:list):
+    '''simple txt export utility, writes each list item to new line'''
+    with open(fname, 'w', encoding='utf-8') as f:
+        for item in items:
+            f.write(f'{item}\n')
+
 
 if __name__ == '__main__':
     pass

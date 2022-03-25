@@ -139,9 +139,10 @@ class Forex():
             return None
     
     def convert_to_eur(self, amount:float, currency:str):
-        '''converts amount of currency to EUR, works w/ currencies in SUPPORTED_CURRENCIES'''
+        '''converts amount of currency to EUR, works w/ currencies in SUPPORTED_CURRENCIES
+        NOTE: silently returns original amount for Amazon replacement orders (empty currency)'''
         currency = currency.upper()
-        if currency == 'EUR':
+        if currency == 'EUR' or currency == '':
             return amount
         elif currency in SUPPORTED_CURRENCIES:
             currency_adj = 'CAD' if currency == 'CDN' else currency

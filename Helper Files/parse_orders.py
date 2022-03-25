@@ -1,6 +1,6 @@
 from parser_utils import get_dpost_product_header_val, get_origin_country, shorten_word_sequence, enter_LP_address
 from parser_utils import get_lp_priority, get_LP_siuntos_rusis_header, get_hs_code
-from file_utils import get_output_dir, delete_file
+from file_utils import get_output_dir, delete_file, export_as_textfile
 from xlsx_exporter import EtonasExporter, NLPostExporter, DPDUPSExporter
 from parser_constants import EXPORT_CONSTANTS
 from countries import EU_COUNTRY_CODES
@@ -16,6 +16,7 @@ VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
 VBA_NO_NEW_JOB = 'NO NEW JOB'
 VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_DPOST_CHARLIMIT_ALERT = 'DPOST_CHARLIMIT_WARNING'
+VBA_REPLACEMENT_ALERT = 'REPLACEMENT ORDER PRESENT'
 DPOST_NAME_CHARLIMIT = 30
 DPOST_ADDRESS_CHARLIMIT = 40
 
@@ -44,6 +45,10 @@ class ParseOrders():
         self.nlpost_orders = []
         self.dpdups_orders = []
 
+    def export_txt_files(self):
+        self.export_same_buyer_details()
+        if self.sales_channel in ['AmazonCOM', 'AmazonEU']:
+            self.export_replacement_orders()
 
     def export_same_buyer_details(self):
         '''exports orders data made by same person'''
@@ -74,6 +79,23 @@ class ParseOrders():
             if len(recipient_name_keys_orders[name_key]) == 1:
                 recipient_name_keys_orders.pop(name_key, None)
         return recipient_name_keys_orders
+
+    def export_replacement_orders(self):
+        '''collect and export txt file FOR AMAZON orders'''
+        replacement_orders = self._collect_replacement_order_ids()
+        if replacement_orders:
+            export_as_textfile(self.replacement_filename, replacement_orders)
+            logging.warning(f'Replacement order(s) exported to file: {self.replacement_filename}')
+            print(VBA_REPLACEMENT_ALERT)
+
+    def _collect_replacement_order_ids(self):
+        '''returns list of order ids that dont have currency and has total-eur as 0'''
+        replacement_order_ids = []
+        for order in self.all_orders:
+            if order[self.proxy_keys['currency']] == '' and order['total-eur'] == 0:
+                order_id = order[self.proxy_keys['order-id']]
+                replacement_order_ids.append(order_id)
+        return replacement_order_ids
 
     def export_csv(self, csv_filename : str, headers : list, contents : list, delimiter:str=';'):
         '''exports data to csv details provided as func. args, don't export empty files'''
@@ -294,6 +316,7 @@ class ParseOrders():
         lp_output_dir = get_output_dir(client_file=False)
         date_stamp = datetime.today().strftime("%Y.%m.%d %H.%M")
         self.same_buyers_filename = os.path.join(output_dir, f'{self.sales_channel}-Same Buyer {date_stamp}.txt')
+        self.replacement_filename = os.path.join(output_dir, f'{self.sales_channel}-Replacement Orders {date_stamp}.txt')
         self.etonas_filename = os.path.join(output_dir, f'{self.sales_channel}-Etonas {date_stamp}.xlsx')
         self.nlpost_filename = os.path.join(output_dir, f'{self.sales_channel}-NLPost {date_stamp}.xlsx')
         self.dpost_filename = os.path.join(output_dir, f'{self.sales_channel}-DPost {date_stamp}.csv')
@@ -352,7 +375,7 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        # self.export_same_buyer_details()
+        self.export_txt_files()
         # self.export_dpost()
         # self.export_lp()
         # self.export_lp_tracked()
@@ -372,7 +395,7 @@ class ParseOrders():
         if testing:
             self.test_exports(testing, skip_etonas)
             return
-        self.export_same_buyer_details()
+        self.export_txt_files()
         self.export_dpost()
         self.export_lp()
         self.export_lp_tracked()

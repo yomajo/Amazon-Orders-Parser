@@ -15,7 +15,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = False
-SALES_CHANNEL = 'AmazonEU'
+SALES_CHANNEL = 'AmazonCOM'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -24,8 +24,8 @@ VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
     # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2022-1 24.csv'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.02.23.txt'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\COM 2021.12.02.txt'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.02.23.txt'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\COM 2022.03.10.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
