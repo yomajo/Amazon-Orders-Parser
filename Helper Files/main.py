@@ -15,7 +15,7 @@ import os
 
 # GLOBAL VARIABLES
 TESTING = False
-SALES_CHANNEL = 'AmazonCOM'
+SALES_CHANNEL = 'AmazonEU'
 SKIP_ETONAS_FLAG = False
 EXPECTED_SYS_ARGS = 4
 VBA_ERROR_ALERT = 'ERROR_CALL_DADDY'
@@ -23,9 +23,8 @@ VBA_KEYERROR_ALERT = 'ERROR_IN_SOURCE_HEADERS'
 VBA_OK = 'EXPORTED_SUCCESSFULLY'
 
 if is_windows_machine():
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2022-1 24.csv'
-    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.02.23.txt'
-    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\COM 2022.03.10.txt'
+    # ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Etsy\EtsySoldOrders2022-4 (2).csv'
+    ORDERS_SOURCE_FILE = r'C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.01.25.txt'
 else:
     ORDERS_SOURCE_FILE = r'/home/devyo/Coding/Git/Amazon Orders Parser/Amazon exports/Collected exports/run4.txt'
 
@@ -71,8 +70,8 @@ def clean_orders(orders:list, sales_channel:str, proxy_keys:dict) -> list:
 def parse_args(testing=False):
     '''returns arguments passed from VBA or hardcoded test environment'''
     if testing:
-        print('--- RUNNING IN TESTING MODE. Using hardcoded args---')
-        logging.warning('--- RUNNING IN TESTING MODE. Using hardcoded args---')
+        print(f'--- RUNNING IN TESTING MODE. Using hardcoded args: {SALES_CHANNEL}; {ORDERS_SOURCE_FILE}; {SKIP_ETONAS_FLAG} ---')
+        logging.warning(f'--- RUNNING IN TESTING MODE. Using hardcoded args: {SALES_CHANNEL}; {ORDERS_SOURCE_FILE}; {SKIP_ETONAS_FLAG} ---')
         assert SALES_CHANNEL in EXPECTED_SALES_CHANNELS, f'Unexpected sales_channel value passed from VBA side: {SALES_CHANNEL}'
         return ORDERS_SOURCE_FILE, SALES_CHANNEL, SKIP_ETONAS_FLAG
 

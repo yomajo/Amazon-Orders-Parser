@@ -251,6 +251,12 @@ class ParseOrders():
                 continue
             else:
                 self.__route_order_without_pricing(order, skip_etonas)
+        logging.info(f'{len(self.nlpost_orders)} orders to nlpost')
+        logging.info(f'{len(self.lp_orders)} orders to lp (untracked)')
+        logging.info(f'{len(self.lp_tracked_orders)} orders to lp_tracked')
+        logging.info(f'{len(self.dpost_orders)} orders to dpost')
+        logging.info(f'{len(self.etonas_orders)} orders to etonas')
+        logging.info(f'{len(self.dpdups_orders)} orders to ups / dpd')
         self.exit_no_new_orders()
     
     def __routed_by_cheapest_or_predefined_service(self, order:dict, skip_etonas:bool) -> bool:
@@ -375,11 +381,11 @@ class ParseOrders():
         '''customize what shall happen when testing=True'''
         print(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
         logging.info(f'TESTING FLAG IS: {testing}. Refer to test_exports in parse_orders.py')
-        self.export_txt_files()
+        # self.export_txt_files()
         # self.export_dpost()
         # self.export_lp()
         # self.export_lp_tracked()
-        # self.export_etonas()
+        self.export_etonas()
         # self.export_nlpost()
         # self.export_dpdups()
         # self.push_orders_to_db()

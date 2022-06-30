@@ -174,30 +174,28 @@ NLPOST_HEADERS_MAPPING = {
 }
 
 ETONAS_HEADERS = [
-    'Address_line_1',
-    'Address_line_2',
-    'Address_line_3',
-    'Address_line_4',
-    'Postcode',
-    'First_name',
-    'Last_name',
+    'Company name',
+    'First name',
+    'Last name',
+    'Phone',
     'Email',
-    'Weight(Kg)',
-    'Compensation()',
-    'Signature(y/n)',
-    'Reference',
-    'Contents',
-    'Delivery_phone',
-    'Buyer Country',
-    'Tracking (0 - neregistruota, 1 - registruota)',
-    'PackageType (DP Jeigu maza pakuote)',
-    'Amount',
-    'Price per quantity',
-    'GLS',
-    'HS',
-    'Origin',
-    'Currency'
-    ]
+    'Country',
+    'Address line 1',
+    'Address line 2',
+    'Address line 3',
+    'City',
+    'Zip code',
+    'Weight',
+    'Reference number',
+    'Description',
+    'Unit count',
+    'Unit price',
+    'Unit weight',
+    'HS code',
+    'Origin Country',
+    'Service provider',
+    'Service type',
+]
 
 DPOST_HEADERS = [
     'PRODUCT',
@@ -282,18 +280,16 @@ DPOST_FIXED_VALUES = {
     }
 
 ETONAS_HEADERS_MAPPING = {
-    'Address_line_1' : 'ship-address-1',
-    'Address_line_2' : 'ship-address-2',
-    'Address_line_3' : 'ship-city',
-    'Address_line_4' : 'ship-state',
-    'Postcode' : 'ship-postal-code',
     'Email' : 'buyer-email',
-    'Delivery_phone' : 'buyer-phone-number',
-    'Buyer Country': 'ship-country',
-    'Currency' : 'currency',
-    'Amount' : 'quantity-purchased',
-    'Contents' : 'category',
-    }
+    'Phone' : 'buyer-phone-number',
+    'Description' : 'category',
+    'Unit count' : 'quantity-purchased',
+    'Zip code' : 'ship-postal-code',
+    'Country': 'ship-country',
+    'City':'ship-city',
+    'Address line 1' : 'ship-address-1',
+    'Address line 2' : 'ship-address-2',
+}
 
 LP_HEADERS = [
     'Delivery Method',

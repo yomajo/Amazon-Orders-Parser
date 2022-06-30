@@ -289,6 +289,7 @@ class EtonasExporter(XlsxExporter):
         export = {}
         first_name, last_name = self._get_fname_lname(order)
         product_name_proxy_key = self.proxy_keys.get('title', '')
+        order_weight_kg = self._get_weight_in_kg(order)
 
         # adding key for highlighting cell
         export['highlight'] = True if order['tracked'] else False
@@ -303,36 +304,53 @@ class EtonasExporter(XlsxExporter):
                 target_key = self.proxy_keys.get(ETONAS_HEADERS_MAPPING[header], '')
                 export[header] = order.get(target_key, '')
 
-                # warn in VBA if char limit per cell is exceeded in Etonas address lines 1/2/3/4
-                if 'address' in header.lower() and len(export[header]) > ETONAS_CHARLIMIT_PER_CELL:
-                    logging.warning(f'Order with key {header} and value {export[header]} triggered VBA warning for charlimit set by Etonas')
-                    print(VBA_ETONAS_CHARTLIMIT_ALERT)
+            elif header == 'Address line 3':
+                # etsy has no address3 field
+                export[header] = order.get('ship-address-3', '')        
             
-            elif header == 'First_name':
+            elif header == 'First name':
                 export[header] = first_name
-            elif header == 'Last_name':
+            
+            elif header == 'Last name':
                 export[header] = last_name
-            elif header == 'GLS':
-                # fixed value, group if more fixed values were to emerge in future
-                export[header] = '0'
-            elif header == 'Tracking (0 - neregistruota, 1 - registruota)':
-                export[header] = int(order['tracked'])
-            elif header == 'HS':
+            
+            elif header == 'HS code':
                 export[header] = get_sales_channel_hs_code(order, product_name_proxy_key)
-            elif header == 'Origin':
+            
+            elif header == 'Origin Country':
                 if product_name_proxy_key == '':
                     export[header] = 'CN'
                 else:
                     export[header] = get_origin_country(order[product_name_proxy_key])
-            elif header == 'Currency':
-                target_key = self.proxy_keys['currency']
-                export[header] = order[target_key].lower()
-            elif header == 'Price per quantity':
+            
+            elif header == 'Unit price':
                 export[header] = order['total-engineered']
-            elif header == 'Weight(Kg)':
-                export[header] = self._get_weight_in_kg(order)
+            
+            elif header == 'Weight':
+                export[header] = order_weight_kg
+            
+            elif header == 'Unit weight':
+                if isinstance(order_weight_kg, float):
+                    export[header] = round(order_weight_kg / int(order[self.proxy_keys['quantity-purchased']]), 3)
+                else:
+                    export[header] = ''
+            
+            elif header == 'Service provider':
+                if order[self.proxy_keys['ship-country']] in ['UK', 'GB']:
+                    export[header] = 'Evri'
+                else:
+                    export[header] = 'Postnl'
+            
+            elif header == 'Service type':
+                export[header] = 'track' if order['tracked'] else 'non'
+            
             else:
                 export[header] = ''
+
+            # warn in VBA if char limit per cell is exceeded in Etonas address lines 1/2/3
+            if 'address' in header.lower() and len(export[header]) > ETONAS_CHARLIMIT_PER_CELL:
+                logging.warning(f'Order with key {header} and value {export[header]} triggered VBA warning for charlimit set by Etonas')
+                print(VBA_ETONAS_CHARTLIMIT_ALERT)
         return export
 
     def _write_orders(self, ws:object, headers:list, orders:list):
@@ -342,7 +360,7 @@ class EtonasExporter(XlsxExporter):
             # offsets due to excel vs python numbering  + headers in row 1 + self.row_offset (first empty row for nlpost)
             ws.cell(row + 2 + self.row_offset, col + 1).value = working_dict[key_pointer]
             # highlight based on highlight key in refactored order dict
-            if working_dict['highlight'] and key_pointer == 'Tracking (0 - neregistruota, 1 - registruota)':
+            if working_dict['highlight'] and key_pointer == 'Service type':
                 ws.cell(row + 2 + self.row_offset, col + 1).fill = YELLOW_HIGHLIGHT
 
 
