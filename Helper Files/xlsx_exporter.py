@@ -342,7 +342,7 @@ class EtonasExporter(XlsxExporter):
                     export[header] = 'Postnl'
             
             elif header == 'Service type':
-                export[header] = 'track' if order['tracked'] else 'non'
+                export[header] = 'track' if order['tracked'] else ''
             
             else:
                 export[header] = ''
