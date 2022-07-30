@@ -195,6 +195,7 @@ ETONAS_HEADERS = [
     'Origin Country',
     'Service provider',
     'Service type',
+    'InsuranceAmount',
 ]
 
 DPOST_HEADERS = [
