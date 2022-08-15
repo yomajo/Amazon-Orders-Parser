@@ -1,10 +1,11 @@
+import logging
+import sys
+import openpyxl
+from parser_utils import get_origin_country, get_sales_channel_hs_code
 from parser_constants import NLPOST_HEADERS, NLPOST_HEADERS_MAPPING, NLPOST_FIXED_VALUES
 from parser_constants import ETONAS_HEADERS, ETONAS_HEADERS_MAPPING
 from parser_constants import DPDUPS_HEADERS, DPDUPS_HEADERS_MAPPING
-from parser_utils import get_origin_country, get_sales_channel_hs_code
-import logging
-import openpyxl
-import sys
+
 
 # GLOBAL VARIABLES
 ETONAS_CHARLIMIT_PER_CELL = 32
@@ -16,8 +17,9 @@ VBA_MISSING_WEIGHT_DATA_ALERT = 'ETONAS/NLPOST MISSING_WEIGHT_WARNING'
 HEADER_SETTINGS = {'etonas': {'headers' : ETONAS_HEADERS, 'mapping': ETONAS_HEADERS_MAPPING},
                 'dpdups' : {'headers' : DPDUPS_HEADERS, 'mapping': DPDUPS_HEADERS_MAPPING},
                 'nlpost': {'headers' : NLPOST_HEADERS, 'mapping': NLPOST_HEADERS_MAPPING, 'fixed': NLPOST_FIXED_VALUES}}
-PACKAGE_DIMENSIONS = {'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
-                    'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
+PACKAGE_DIMENSIONS = {
+    'DKS': {'X': '20', 'Y': '15', 'Z': '10'},
+    'MKS': {'X': '15', 'Y': '10', 'Z': '2'}}
 FILL_HIGHLIGHT = openpyxl.styles.PatternFill(fill_type='solid', fgColor='F8CBAD')
 YELLOW_HIGHLIGHT = openpyxl.styles.PatternFill(fill_type='solid', fgColor='FFFF00')
 
@@ -175,7 +177,7 @@ class NLPostExporter(XlsxExporter):
     def prepare_nlpost_order_contents(self, order:dict) -> dict:
         '''returns ready-to-write order data dict based on NLPost file headers'''
         export = {}
-        # add 'highglight' key
+        # add 'highlight' key
         export['highlight'] = self.__highlight_order_row(order['weight'], order['vmdoption'])
         for header in NLPOST_HEADERS:
             if header in NLPOST_FIXED_VALUES.keys():
@@ -185,8 +187,8 @@ class NLPostExporter(XlsxExporter):
                 target_key = self.proxy_keys.get(NLPOST_HEADERS_MAPPING[header], '')
                 raw_target_value = order.get(target_key, '')
 
-                if header == 'Receiver postal code' or header == 'Receiver phone':
-                    # strip special chars from postal code and phone number
+                if header == 'Receiver phone':
+                    # strip special chars from phone number
                     export[header] = self.__strip_special_nlpost_chars(raw_target_value)
                 elif header == 'Description':
                     export[header] = self.__make_batteries_alkaline(raw_target_value)
