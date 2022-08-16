@@ -386,7 +386,7 @@ class ParseOrders():
         # self.export_lp()
         # self.export_lp_tracked()
         # self.export_etonas()
-        self.export_nlpost()
+        # self.export_nlpost()
         # self.export_dpdups()
         # self.push_orders_to_db()
         self.db_client.session.close()

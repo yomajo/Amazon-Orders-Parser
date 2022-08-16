@@ -288,6 +288,7 @@ COUNTRY_CODES = {
     'MICRONESIA':'FM',
     'MIKRONESIEN':'FM',
     'MYANMAR':'MM',
+    'MYANMAR (BURMA)':'MM',
     'MOLDAWIEN':'MD',
     'MOLDOVA':'MD',
     'MOLDAU':'MD',
