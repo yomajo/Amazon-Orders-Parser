@@ -58,6 +58,7 @@ CATEGORY_CRITERIAS = [
     ['hoyle', '', 'BICYCLE', 'PLAYING CARDS'],
     ['tally', '', 'BICYCLE', 'PLAYING CARDS'],
     ['art of play', '', 'ART OF PLAY', 'PLAYING CARDS'],
+    ['difatta', '', 'DIFATTA', 'PLAYING CARDS'],
     ['cartes', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # Additional for amazon
     ['cards', '', 'OTHER CARDS BRAND', 'PLAYING CARDS'], # another generic for playing cards
     
@@ -97,7 +98,8 @@ CATEGORY_CRITERIAS = [
     ['bomb cosm', '', 'BOMB COSM', 'OTHERS'],
     ['baff', '', 'GELLI BAFF', 'OTHERS'],
     ['injinji', '', 'INJINJI', 'OTHERS'],
-    ['q-workshop', '', 'Q-WORKSHOP', 'DICE']
+    ['q-workshop', '', 'Q-WORKSHOP', 'DICE'],
+    ['stainless', 'time for machine', 'TIME FOR MACHINE', 'METAL MODEL'],
     ]
 
 NLPOST_HEADERS = [

@@ -60,3 +60,169 @@ INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
 INFO:root:
 RUN ENDED in: 6.29 sec. Timestamp: 2022.08.16 09:50
 
+INFO:root:
+
+ NEW RUN STARTING: 2022.09.15 09:57
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args: AmazonEU; C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.09.13.txt; False ---
+INFO:root:Returning 352/352 new/loaded orders for further processing
+INFO:root:Loaded file contains: 352. Further processing: 352 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-09-14
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1512 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 28953164174363 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 49308822161819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 19046715459971 cant calc weights. skus: ['OJ-17M0-11PP']
+WARNING:root:order: 05030031978939 cant calc weights. skus: ['(5 vnt.) 23A 5BL L1028 VINNIC']
+WARNING:root:order: 65939653811819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 17874209569523 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 16579365208539 cant calc weights. skus: ['(5 vnt.) CR2025 5BL PROCELL 3V LITHIUM']
+WARNING:root:order: 06796629331219 cant calc weights. skus: ['(2 vnt.) LR626 2BL AG4 CAMELION ALK LR66']
+WARNING:root:order: 30747776284091 cant calc weights. skus: ['(5 vnt.) CR1620 5BL CAMELION LITHIUM 3V']
+WARNING:root:order: 19587447218211 cant calc weights. skus: ['(10 vnt.) LR754 10BL CAMELION ALK LR48']
+INFO:root:2.84% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:176 orders to nlpost
+INFO:root:12 orders to lp (untracked)
+INFO:root:13 orders to lp_tracked
+INFO:root:116 orders to dpost
+INFO:root:24 orders to etonas
+INFO:root:11 orders to ups / dpd
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 7.86 sec. Timestamp: 2022.09.15 09:57
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.09.15 09:59
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args: AmazonEU; C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.09.13.txt; False ---
+INFO:root:Returning 352/352 new/loaded orders for further processing
+INFO:root:Loaded file contains: 352. Further processing: 352 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1512 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 28953164174363 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 49308822161819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 19046715459971 cant calc weights. skus: ['OJ-17M0-11PP']
+WARNING:root:order: 05030031978939 cant calc weights. skus: ['(5 vnt.) 23A 5BL L1028 VINNIC']
+WARNING:root:order: 65939653811819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 17874209569523 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 16579365208539 cant calc weights. skus: ['(5 vnt.) CR2025 5BL PROCELL 3V LITHIUM']
+WARNING:root:order: 06796629331219 cant calc weights. skus: ['(2 vnt.) LR626 2BL AG4 CAMELION ALK LR66']
+WARNING:root:order: 30747776284091 cant calc weights. skus: ['(5 vnt.) CR1620 5BL CAMELION LITHIUM 3V']
+WARNING:root:order: 19587447218211 cant calc weights. skus: ['(10 vnt.) LR754 10BL CAMELION ALK LR48']
+INFO:root:2.84% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+INFO:root:10 skus without complete weight data or amazon mapping were written to txt file: c:\Coding\Amazon Orders Parser\Not matching SKUs 2022.09.15 09.59.txt
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:176 orders to nlpost
+INFO:root:12 orders to lp (untracked)
+INFO:root:13 orders to lp_tracked
+INFO:root:116 orders to dpost
+INFO:root:24 orders to etonas
+INFO:root:11 orders to ups / dpd
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 8.07 sec. Timestamp: 2022.09.15 09:59
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.09.15 10:20
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args: AmazonEU; C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.09.13.txt; False ---
+INFO:root:Returning 352/352 new/loaded orders for further processing
+INFO:root:Loaded file contains: 352. Further processing: 352 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1512 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 28953164174363 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 49308822161819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 19046715459971 cant calc weights. skus: ['OJ-17M0-11PP']
+WARNING:root:order: 05030031978939 cant calc weights. skus: ['(5 vnt.) 23A 5BL L1028 VINNIC']
+WARNING:root:order: 65939653811819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 17874209569523 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 16579365208539 cant calc weights. skus: ['(5 vnt.) CR2025 5BL PROCELL 3V LITHIUM']
+WARNING:root:order: 06796629331219 cant calc weights. skus: ['(2 vnt.) LR626 2BL AG4 CAMELION ALK LR66']
+WARNING:root:order: 30747776284091 cant calc weights. skus: ['(5 vnt.) CR1620 5BL CAMELION LITHIUM 3V']
+WARNING:root:order: 19587447218211 cant calc weights. skus: ['(10 vnt.) LR754 10BL CAMELION ALK LR48']
+INFO:root:2.84% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+INFO:root:10 skus without complete weight data or amazon mapping were written to txt file: c:\Coding\Amazon Orders Parser\Not matching SKUs 2022.09.15 10.21.txt
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:176 orders to nlpost
+INFO:root:12 orders to lp (untracked)
+INFO:root:13 orders to lp_tracked
+INFO:root:116 orders to dpost
+INFO:root:24 orders to etonas
+INFO:root:11 orders to ups / dpd
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+INFO:root:
+RUN ENDED in: 35.53 sec. Timestamp: 2022.09.15 10:21
+
+INFO:root:
+
+ NEW RUN STARTING: 2022.09.15 10:22
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args: AmazonEU; C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.09.13.txt; False ---
+INFO:root:Returning 352/352 new/loaded orders for further processing
+INFO:root:Loaded file contains: 352. Further processing: 352 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1512 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 28953164174363 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 49308822161819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 19046715459971 cant calc weights. skus: ['OJ-17M0-11PP']
+WARNING:root:order: 05030031978939 cant calc weights. skus: ['(5 vnt.) 23A 5BL L1028 VINNIC']
+WARNING:root:order: 65939653811819 cant calc weights. skus: ['(20 vnt.) LR1154 10BL CAMELION AG13 ALK.']
+WARNING:root:order: 17874209569523 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+INFO:root:
+
+ NEW RUN STARTING: 2022.09.30 10:00
+WARNING:root:--- RUNNING IN TESTING MODE. Using hardcoded args: AmazonEU; C:\Coding\Ebay\Working\Backups\Amazon exports\EU 2022.09.30.txt; False ---
+INFO:root:Returning 361/361 new/loaded orders for further processing
+INFO:root:Loaded file contains: 361. Further processing: 361 orders
+INFO:root:Passing new orders to add category, brand, (/mapped) weight data
+INFO:root:Updating FX rates json...
+INFO:root:FX rates have been updated. Last update date: 2022-09-29
+WARNING:root:68311630986043 (to: CA) total-engineered key has new random value: 19.89
+INFO:root:Successfuly read Amazon SKU Mapping.xlsx. Returning dict with 1512 entries
+INFO:root:Successfuly read Storage.xlsm. Returning dict with 1914 entries
+WARNING:root:order: 02502066675675 cant calc weights. skus: ['(1 vnt.) VARTA LCS SMART CHARGER&4 AA']
+WARNING:root:order: 28725161419707 cant calc weights. skus: ['(1 vnt.) VARTA 16701 indestr keychain']
+WARNING:root:order: 24750409930907 cant calc weights. skus: ['(10 vnt.) LR754 10BL CAMELION ALK LR48']
+WARNING:root:order: 29767403659219 cant calc weights. skus: ['(1 vnt.) 317 1BL VARTA  SR62']
+WARNING:root:order: 17609435588795 cant calc weights. skus: ['(5 vnt.) CR1620 5BL CAMELION LITHIUM 3V']
+WARNING:root:order: 36708604758363 cant calc weights. skus: ['(10 vnt.) LR1131 10BL L1131F VINNIC AG10']
+WARNING:root:order: 11309346678555 cant calc weights. skus: ['(5 vnt.) CR1620 5BL CAMELION LITHIUM 3V']
+WARNING:root:order: 65732906571563 cant calc weights. skus: ['(20 vnt.) LR1131 10BL L1131F VINNIC AG10']
+WARNING:root:order: 63124641184851 cant calc weights. skus: ['73-LEY4-5MEU']
+WARNING:root:order: 28306448774515 cant calc weights. skus: ['(5 vnt.) A27 5BL CAMELION LR27A ALK. 12V']
+WARNING:root:order: 50477660480595 cant calc weights. skus: ['PG-FQ4U-H1VH']
+WARNING:root:order: 59759996243851 cant calc weights. skus: ['(50 vnt.) LR1131 10BL L1131F VINNIC AG10']
+WARNING:root:order: 11917588323643 cant calc weights. skus: ['(5 vnt.) 23A 5BL L1028 VINNIC']
+WARNING:root:order: 44883297217075 cant calc weights. skus: ['A7-U7UM-B5M1']
+WARNING:root:order: 10410981155995 cant calc weights. skus: ['IA-6V4Y-MHK6']
+INFO:root:4.16% orders contain SKU's that are invalid for weight calculation
+WARNING:root:TESTING MODE. Unmapped sku export disabled. orders exported to json
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP.csv, but apparently human has taken care of it first. (File not found)
+WARNING:root:Tried deleting file: c:\Coding\Amazon Orders Parser\Helper Files\AmazonEU-LP-Tracked.csv, but apparently human has taken care of it first. (File not found)
+INFO:root:Sorting orders by shippment company specific to AmazonEU ruleset
+INFO:root:172 orders to nlpost
+INFO:root:11 orders to lp (untracked)
+INFO:root:22 orders to lp_tracked
+INFO:root:120 orders to dpost
+INFO:root:26 orders to etonas
+INFO:root:10 orders to ups / dpd
+INFO:root:TESTING FLAG IS: True. Refer to test_exports in parse_orders.py
+WARNING:root:Order with key Address line 2 and value Flat F, 17/F, Tower 1, The Astrid triggered VBA warning for charlimit set by Etonas
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-Etonas 2022.09.30 10.00.xlsx created. Orders inside: 26
+INFO:root:XLSX c:\Coding\Amazon Orders Parser\AmazonEU-DPDUPS 2022.09.30 10.00.xlsx created. Orders inside: 10
+INFO:root:
+RUN ENDED in: 5.04 sec. Timestamp: 2022.09.30 10:00
+

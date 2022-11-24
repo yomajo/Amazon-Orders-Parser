@@ -330,10 +330,15 @@ class OrderData():
     
     def __filter_eligible_offers(self, order:dict, service_offers:dict) -> dict:
         '''selectively remove services not compatible with order contents / shipping rules'''
+        country = order[self.proxy_keys['ship-country']]
         if order['category'] == 'BATTERIES':
-            # only allow lp / nlpost to be selected from
-            service_offers['dp'] = service_offers['etonas'] = service_offers['dpd'] = service_offers['ups'] = None
-        if order[self.proxy_keys['ship-country']] == 'UK':
+            # only allow lp / nlpost / dp to be selected from
+            service_offers['etonas'] = service_offers['dpd'] = service_offers['ups'] = None
+            # remove dp for non DE countries
+            if country != 'DE':
+                service_offers['dp'] = None
+
+        if country == 'UK':
             service_offers['etonas'] = None
         return service_offers
 

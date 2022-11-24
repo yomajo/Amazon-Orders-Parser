@@ -61,6 +61,8 @@ def get_hs_code(item_brand:str, item_category:str) -> str:
         return '950440'
     elif item_category == 'DICE':
         return '950490'
+    elif item_category == 'METAL MODEL':
+        return '95030070'
     else:
         return '950300'
 
