@@ -162,6 +162,7 @@ NLPOST_FIXED_VALUES = {
 
 # corresponding to proxy keys for etsy / amazon
 NLPOST_HEADERS_MAPPING = {
+    'Receiver company name' : 'recipient-name',
     'Receiver name' : 'recipient-name',
     'Receiver city' : 'ship-city',
     'Receiver postal code' : 'ship-postal-code',
